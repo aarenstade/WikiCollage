@@ -1,0 +1,14 @@
+.elementContainer {
+  position: absolute;
+  color: white;
+}
+
+.elementHeader {
+  position: absolute;
+  top: -20px;
+}
+
+.elementContainer textarea {
+  background: none;
+  color: white;
+}
