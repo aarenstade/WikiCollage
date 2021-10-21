@@ -2,8 +2,11 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  --global-font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Droid Sans, Helvetica Neue,
+    sans-serif;
+
+  font-family: var(--global-font-family);
 }
 
 a {
@@ -13,4 +16,20 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+input {
+  font-family: var(--global-font-family);
+  outline: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+textarea {
+  font-family: var(--global-font-family);
+  outline: none;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
