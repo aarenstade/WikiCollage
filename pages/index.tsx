@@ -6,7 +6,7 @@ import { DATABASE_REF } from "../client/firebase";
 import { get } from "firebase/database";
 import Canvas from "../components/Canvas";
 import styles from "../styles/Home.module.css";
-import MainView from "../views/MainView";
+import GlobalCollabView from "../views/GlobalCollabView";
 
 const Home: NextPage = () => {
   const [latestSubmission, setLatestSubmission] = useState(null);
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  return <div className={styles.container}>{latestSubmission ? <MainView /> : <p>Loading...</p>}</div>;
+  return <div className={styles.container}>{latestSubmission ? <GlobalCollabView /> : <p>Loading...</p>}</div>;
 };
 
 export default Home;
