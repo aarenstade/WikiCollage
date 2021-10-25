@@ -1,11 +1,12 @@
-import { createContext, MutableRefObject, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CanvasElementItem } from "../types/elements";
 import CanvasAdd from "./CanvasAdd";
 import { useRecoilState } from "recoil";
 import { ElementListState, SelectedElementIdState } from "../data/atoms";
 import CanvasElement from "./CanvasElement";
 import { Submission } from "../types/canvas";
-import { useCanvas } from "../views/MainView";
+import { useCanvas } from "../views/GlobalCollabView";
+import styles from "./Canvas.module.css";
 
 export const useFullCanvas = () => {
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -72,11 +73,13 @@ const Canvas = () => {
   };
 
   return (
-    <div>
+    <div id="mural-root">
       {modify.active && <CanvasAdd modify={modify} onAdd={() => setModify({ ...modify, active: false })} />}
-      {elementsList.map((element: CanvasElementItem, i: number) => (
-        <CanvasElement key={i} id={i} element={element} onSave={(e) => saveElement(i, e)} />
-      ))}
+      <div id="elements-root" className={styles.elements}>
+        {elementsList.map((element: CanvasElementItem, i: number) => (
+          <CanvasElement key={i} id={i} element={element} onSave={(e) => saveElement(i, e)} />
+        ))}
+      </div>
       <canvas ref={canvas?.ref} style={{ zIndex: 3 }} onClick={handleCanvasClick} />
     </div>
   );
