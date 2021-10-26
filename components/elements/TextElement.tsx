@@ -1,7 +1,7 @@
 import { useEffect, VFC } from "react";
-import { FONTS, TEXT_COLORS } from "../../styles/text";
 import { CanvasElementItem } from "../../types/elements";
-import { nextInArray } from "../../utils";
+import { nextInArrayRotate } from "../../utils";
+import { FONTS, TEXT_COLORS } from "../../styles/text";
 
 interface TextElementProps {
   element: CanvasElementItem;
@@ -11,17 +11,17 @@ interface TextElementProps {
 
 const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
   useEffect(() => {
-    const fontSize = element.width ? element.width / 10 : 16;
+    const fontSize = element.width ? element.width / 8 : 16;
     onUpdate({ ...element, textParams: { ...element.textParams, fontSize } });
   }, [element.width, element.height]);
 
   const rotateFont = (e: React.MouseEvent) => {
-    let newFont = nextInArray(FONTS, element.textParams?.fontFamily);
+    let newFont = nextInArrayRotate(FONTS, element.textParams?.fontFamily);
     onUpdate({ ...element, textParams: { ...element.textParams, fontFamily: newFont } });
   };
 
   const rotateColor = (e: React.MouseEvent) => {
-    let newColor = nextInArray(TEXT_COLORS, element.textParams?.color);
+    let newColor = nextInArrayRotate(TEXT_COLORS, element.textParams?.color);
     onUpdate({ ...element, textParams: { ...element.textParams, color: newColor } });
   };
 
@@ -35,12 +35,12 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
           autoFocus
           style={{
             ...element.textParams,
-            width: element.width,
-            height: element.height,
+            width: element.scaledWidth,
+            height: element.scaledHeight,
             resize: "none",
           }}
         />
-        <div style={{ display: "absolute", bottom: "-20px" }}>
+        <div style={{ marginBottom: "-50px" }}>
           <button onClick={rotateFont}>Font</button>
           <button onClick={rotateColor}>Color</button>
         </div>
@@ -51,8 +51,8 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
       <div
         style={{
           ...element.textParams,
-          width: element.width,
-          height: element.height,
+          width: element.scaledWidth,
+          height: element.scaledHeight,
           overflowWrap: "anywhere",
           overflow: "clip",
         }}
