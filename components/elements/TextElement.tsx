@@ -10,10 +10,19 @@ interface TextElementProps {
 }
 
 const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
+  // useEffect(() => {
+  //   const fontSize = element.width ? element.width / 8 : 16;
+  //   onUpdate({ ...element, textParams: { ...element.textParams, fontSize } });
+  // }, [element.width, element.height]);
+
   useEffect(() => {
-    const fontSize = element.width ? element.width / 8 : 16;
-    onUpdate({ ...element, textParams: { ...element.textParams, fontSize } });
-  }, [element.width, element.height]);
+    if (element.textParams?.fontSize && element.scaledHeight && element.scaledWidth) {
+      const numOfChars = element.data.length;
+      const elementArea = element.scaledWidth * element.scaledHeight;
+      const fontSize = Math.sqrt(Math.round(elementArea / numOfChars));
+      onUpdate({ ...element, textParams: { ...element.textParams, fontSize } });
+    }
+  }, [element.scaledHeight, element.scaledWidth, element.data]);
 
   const rotateFont = (e: React.MouseEvent) => {
     let newFont = nextInArrayRotate(FONTS, element.textParams?.fontFamily);
