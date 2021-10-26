@@ -1,4 +1,4 @@
-export function nextInArray<T>(array: T[], item: T) {
+export function nextInArrayRotate<T>(array: T[], item: T) {
   const index = array.indexOf(item);
   if (index + 1 > array.length - 1) {
     return array[0];

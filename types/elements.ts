@@ -12,9 +12,13 @@ export interface CanvasElementItem {
   id?: number;
   type: CanvasElementType;
   data: string;
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
+  scaledWidth?: number;
+  scaledHeight?: number;
   x: number;
   y: number;
+  relativeX?: number;
+  relativeY?: number;
   textParams?: CSSProperties;
 }

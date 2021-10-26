@@ -1,0 +1,12 @@
+.full {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.menuLayer button {
+  position: fixed;
+  z-index: 6;
+  left: 0;
+  margin: 10px;
+}

@@ -1,25 +1,19 @@
-import Canvas, { useFullCanvas } from "../components/Canvas";
-import { convertBase64ToBytes, uploadImage } from "../image-utils";
-import { v4 } from "uuid";
-import styles from "./GlobalCollabView.module.css";
-import { createContext, MutableRefObject, useContext, useState } from "react";
-import { set } from "@firebase/database";
-import { DATABASE_REF, STORAGE_REF } from "../client/firebase";
-import { getDownloadURL } from "@firebase/storage";
-
-import html2canvas from "html2canvas";
+import { useState, VFC } from "react";
 import { useRecoilState } from "recoil";
 import { SelectedElementIdState } from "../data/atoms";
 
-interface CanvasContextInterface {
-  ref: MutableRefObject<HTMLCanvasElement | null>;
+import MuralLayer from "../layers/MuralLayer";
+import ElementsLayer from "../layers/ElementsLayer";
+import MenuLayer from "../layers/MenuLayer";
+
+import html2canvas from "html2canvas";
+import { Submission } from "../types/canvas";
+
+interface Props {
+  submission: Submission;
 }
 
-export const CanvasContext = createContext<CanvasContextInterface | null>(null);
-export const useCanvas = () => useContext(CanvasContext);
-
-const GlobalCollabView = () => {
-  const canvas = useFullCanvas();
+const GlobalCollabView: VFC<Props> = ({ submission }) => {
   const [processing, setProcessing] = useState(false);
   const [selectedId, setSelectedId] = useRecoilState(SelectedElementIdState);
 
@@ -28,10 +22,10 @@ const GlobalCollabView = () => {
     setSelectedId(null);
     const elementsRoot = document.getElementById("elements-root");
     const muralRoot = document.getElementById("mural-root");
-    if (elementsRoot && muralRoot && canvas.ref.current) {
+    if (elementsRoot && muralRoot) {
       elementsRoot.style["backgroundColor"] = "black";
-      elementsRoot.style["width"] = `${canvas.ref.current.width}px`;
-      elementsRoot.style["height"] = `${canvas.ref.current.height}px`;
+      elementsRoot.style["width"] = `${window.innerWidth}px`;
+      elementsRoot.style["height"] = `${window.innerHeight}px`;
 
       const muralRes = await html2canvas(muralRoot);
       const elementsRes = await html2canvas(elementsRoot);
@@ -74,14 +68,11 @@ const GlobalCollabView = () => {
   };
 
   return (
-    <CanvasContext.Provider value={canvas}>
-      <div className={styles.globalCollabView}>
-        <Canvas />
-        <button className={styles.submitButton} onClick={handleSubmit} disabled={processing}>
-          {processing ? "..." : "Submit"}
-        </button>
-      </div>
-    </CanvasContext.Provider>
+    <div>
+      <MenuLayer />
+      <ElementsLayer />
+      <MuralLayer mural={submission.mural} />
+    </div>
   );
 };
 
