@@ -1,5 +1,11 @@
 import { atom, selector, DefaultValue } from "recoil";
 import { CanvasElementItem } from "../types/elements";
+import { ViewControl } from "../types/view";
+
+export const ViewControlState = atom<ViewControl>({
+  key: "ViewControlState",
+  default: { x: 0, y: 0, scale: 1 },
+});
 
 export const ElementListState = atom<CanvasElementItem[]>({
   key: "ElementListState",
