@@ -8,6 +8,7 @@ import styles from "./CanvasElement.module.css";
 import TextElement from "./elements/TextElement";
 import useViewControl from "../hooks/useViewControl";
 import useSelectedElement from "../hooks/useSelectedElement";
+import ImageElement from "./elements/ImageElement";
 
 const cornerHandle = {
   backgroundColor: "white",
@@ -28,17 +29,20 @@ interface CanvasElementProps {
   id: number;
   element: CanvasElementItem;
   onSave: (e: CanvasElementItem) => void;
+  onDelete: () => void;
 }
 
 interface CanvasElementHeaderProps {
   id: number;
   onSave: () => void;
+  onDelete: () => void;
 }
 
-const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onSave }) => {
+const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onSave, onDelete }) => {
   const element = useSelectedElement(id);
   return (
     <div className={styles.elementHeader}>
+      {element.editing && <button onClick={() => onDelete()}>Delete</button>}
       {element.selected && !element.editing && (
         <button onClick={() => element.setId({ id, editing: true })}>Edit</button>
       )}
@@ -47,7 +51,7 @@ const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onSave }) => {
   );
 };
 
-const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
+const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete }) => {
   const rndRef = useRef<any>();
 
   const viewControl = useViewControl();
@@ -99,7 +103,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
       onDragStop={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
       resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
-      style={{ zIndex: 3 }}
+      style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
       disabled={selection.selected}
     >
       <div
@@ -110,9 +114,12 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
         }}
         onDoubleClick={() => selection.setId({ id, editing: true })}
       >
-        <CanvasElementHeader id={id} onSave={handleSave} />
+        <CanvasElementHeader id={id} onSave={handleSave} onDelete={onDelete} />
         {element.type === "text" && (
           <TextElement editing={selection.editing} element={localElement} onUpdate={(e) => setLocalElement(e)} />
+        )}
+        {element.type === "image" && (
+          <ImageElement editing={selection.editing} element={localElement} onUpdate={(e) => setLocalElement(e)} />
         )}
         {/* {element.type === "draw" && <DrawElement element={localElement} onDraw={(e) => setLocalElement(e)} />} */}
       </div>

@@ -35,6 +35,13 @@ const ElementsLayer = () => {
     setSelectedId(null);
   };
 
+  const deleteElement = (i: number) => {
+    let newElements = [...elementsList];
+    newElements.splice(i, 1);
+    setElementsList(newElements);
+    setSelectedId(null);
+  };
+
   return (
     <div
       className={styles.full}
@@ -48,7 +55,13 @@ const ElementsLayer = () => {
     >
       {modify.active && <CanvasAdd modify={modify} onAdd={() => setModify({ ...modify, active: false })} />}
       {elementsList.map((element: CanvasElementItem, i: number) => (
-        <CanvasElement key={i} id={i} element={element} onSave={(e) => saveElement(i, e)} />
+        <CanvasElement
+          key={i}
+          id={i}
+          element={element}
+          onSave={(e) => saveElement(i, e)}
+          onDelete={() => deleteElement(i)}
+        />
       ))}
       <canvas ref={canvas?.ref} onClick={handleClick} />
     </div>
