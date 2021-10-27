@@ -1,4 +1,5 @@
 import { getDownloadURL, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 import { STORAGE_REF } from "./client/firebase";
 
 export const convertBase64ToBytes = (img: string | ArrayBuffer): ArrayBuffer | Uint8Array => {
@@ -33,4 +34,11 @@ export const uploadImage = async (file: ArrayBuffer | Uint8Array, path: string):
     console.log(`ERROR: ${error}`);
     return null;
   }
+};
+
+export const createFullPath = (storagePath: string, mimeType: string) => {
+  const pathsplit = storagePath.split("/");
+  const ext = mimeType.split("/")[1];
+  const filename = `${v4()}.${ext}`;
+  return pathsplit[pathsplit.length - 1] === "/" ? `${storagePath}${filename}` : `${storagePath}/${filename}`;
 };

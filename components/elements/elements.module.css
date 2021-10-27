@@ -1,0 +1,24 @@
+.elementBottomButtons {
+  display: inline-flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.elementBottomButtonsStack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.imageElement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imageData * {
+  position: relative;
+  width: auto;
+  height: 100%;
+}

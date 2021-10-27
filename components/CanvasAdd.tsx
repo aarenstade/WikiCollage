@@ -55,6 +55,14 @@ const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
   const [elementList, setElementList] = useRecoilState(ElementListState);
   const [_, setSelectedElementId] = useRecoilState(SelectedElementIdState);
 
+  const addAndSelectNewElement = (e: CanvasElementItem) => {
+    let newElements = [...elementList];
+    newElements.push(e);
+    setSelectedElementId({ id: elementList.length, editing: true });
+    setElementList(newElements);
+    onAdd();
+  };
+
   const handleDraw = (e: any) => {
     // TODO
     // append new draw item to ElementListState
@@ -64,8 +72,8 @@ const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
   const handleText = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    const width = 150;
-    const height = 50;
+    const width = 300;
+    const height = 100;
 
     const newTextElement: CanvasElementItem = {
       type: "text",
@@ -77,24 +85,30 @@ const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
       x: Math.round(modify.x / view.view.scale),
       y: Math.round(modify.y / view.view.scale),
       textParams: {
-        fontSize: 16,
+        fontSize: 60,
         fontFamily: FONTS[0],
         color: TEXT_COLORS[0],
         fontWeight: "normal",
       },
     };
-    console.log(`adding: ${newTextElement}`);
-    let newElements = [...elementList];
-    newElements.push(newTextElement);
-    setSelectedElementId({ id: elementList.length, editing: true });
-    setElementList(newElements);
-    onAdd();
+    addAndSelectNewElement(newTextElement);
   };
 
   const handleImage = (e: any) => {
-    // TODO
-    // append new image item to ElementListState
-    // set SelectedElement to this with editing = true
+    e.preventDefault();
+    let width = 200,
+      height = 200;
+    const newImageElement: CanvasElementItem = {
+      type: "image",
+      data: "",
+      width: width / view.view.scale,
+      height: height / view.view.scale,
+      scaledWidth: width,
+      scaledHeight: height,
+      x: Math.round(modify.x / view.view.scale),
+      y: Math.round(modify.y / view.view.scale),
+    };
+    addAndSelectNewElement(newImageElement);
   };
 
   return (
