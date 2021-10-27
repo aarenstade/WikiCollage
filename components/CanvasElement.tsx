@@ -33,6 +33,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
   const rndRef = useRef<any>();
 
   const viewControl = useViewControl();
+
   const [localElement, setLocalElement] = useState(element);
   const [selectedId, setSelectedId] = useRecoilState(SelectedElementIdState);
 
@@ -64,7 +65,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
     rndRef.current.updatePosition({ x: relativeX, y: relativeY });
   }, [viewControl.view.scale]);
 
-  const handleDrag = (d: any) => {
+  const updatePosition = (d: any) => {
     const { x, y } = d;
     const scale = viewControl.view.scale;
     const absX = Math.round(x / scale);
@@ -92,10 +93,10 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
         x: localElement.x,
         y: localElement.y,
       }}
-      onDragStop={(_, d) => handleDrag(d)}
-      onResize={(_, ref) => handleResize(ref)}
+      onDragStop={(_, d) => updatePosition(d)}
+      onResize={(_, direction, ref) => handleResize(ref)}
       resizeHandleStyles={isSelected() ? resizeHandleStyles : {}}
-      style={{ zIndex: 6 }}
+      style={{ zIndex: 3 }}
       disabled={selectedId?.id === id ? false : true}
     >
       <div

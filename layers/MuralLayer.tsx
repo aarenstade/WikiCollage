@@ -22,7 +22,15 @@ const MuralLayer: VFC<Props> = ({ mural }) => {
 
   return (
     <div className={styles.full}>
-      <img src={mural} alt="mural" style={{ zIndex: 6, width: `${dimension * viewControl.view.scale}px` }} />
+      {/* <img src={mural} alt="mural" style={{ zIndex: 1, width: `${dimension * viewControl.view.scale}px` }} /> */}
+      <div
+        style={{
+          zIndex: 1,
+          backgroundColor: "darkolivegreen",
+          width: `${dimension * viewControl.view.scale}px`,
+          height: `${dimension * viewControl.view.scale}px`,
+        }}
+      />
     </div>
   );
 };

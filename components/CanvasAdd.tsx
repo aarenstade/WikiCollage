@@ -1,6 +1,7 @@
 import { VFC } from "react";
 import { useRecoilState } from "recoil";
 import { ElementListState, SelectedElementIdState } from "../data/atoms";
+import useViewControl from "../services/ViewControl";
 import { FONTS, TEXT_COLORS } from "../styles/text";
 import { CanvasElementItem } from "../types/elements";
 import styles from "./CanvasAdd.module.css";
@@ -50,6 +51,7 @@ interface CanvasAddProps {
 }
 
 const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
+  const view = useViewControl();
   const [elementList, setElementList] = useRecoilState(ElementListState);
   const [selectedElementId, setSelectedElementId] = useRecoilState(SelectedElementIdState);
 
@@ -59,14 +61,21 @@ const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
     // set SelectedElement to this with editing = true
   };
 
-  const handleText = (e: any) => {
+  const handleText = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    const width = 150;
+    const height = 50;
+
     const newTextElement: CanvasElementItem = {
       type: "text",
       data: "Text Here",
-      width: 150,
-      height: 50,
-      x: modify.x,
-      y: modify.y,
+      width: width / view.view.scale,
+      height: height / view.view.scale,
+      scaledWidth: width,
+      scaledHeight: height,
+      x: Math.round(modify.x / view.view.scale),
+      y: Math.round(modify.y / view.view.scale),
       textParams: {
         fontSize: 16,
         fontFamily: FONTS[0],
