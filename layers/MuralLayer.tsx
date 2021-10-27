@@ -2,7 +2,7 @@
 // this layer loads the underlying mural image
 
 import { VFC } from "react";
-import useViewControl from "../services/ViewControl";
+import useViewControl from "../hooks/useViewControl";
 
 import styles from "../styles/layers.module.css";
 
@@ -12,7 +12,7 @@ interface Props {
 
 const MuralLayer: VFC<Props> = ({ mural }) => {
   const viewControl = useViewControl();
-  const dimension = 10000;
+  const dimension = 8000;
 
   // TODO (optimization)
 

@@ -1,7 +1,7 @@
 import { VFC } from "react";
 import { useRecoilState } from "recoil";
 import { ElementListState, SelectedElementIdState } from "../data/atoms";
-import useViewControl from "../services/ViewControl";
+import useViewControl from "../hooks/useViewControl";
 import { FONTS, TEXT_COLORS } from "../styles/text";
 import { CanvasElementItem } from "../types/elements";
 import styles from "./CanvasAdd.module.css";
@@ -53,7 +53,7 @@ interface CanvasAddProps {
 const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
   const view = useViewControl();
   const [elementList, setElementList] = useRecoilState(ElementListState);
-  const [selectedElementId, setSelectedElementId] = useRecoilState(SelectedElementIdState);
+  const [_, setSelectedElementId] = useRecoilState(SelectedElementIdState);
 
   const handleDraw = (e: any) => {
     // TODO

@@ -8,7 +8,7 @@ import MenuLayer from "../layers/MenuLayer";
 
 import html2canvas from "html2canvas";
 import { Submission } from "../types/canvas";
-import useViewControl from "../services/ViewControl";
+import useViewControl from "../hooks/useViewControl";
 
 interface Props {
   submission: Submission;

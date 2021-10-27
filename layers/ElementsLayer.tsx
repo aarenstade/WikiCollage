@@ -8,7 +8,7 @@ import CanvasElement from "../components/CanvasElement";
 import styles from "../styles/layers.module.css";
 import useFullCanvas from "../hooks/useFullCanvas";
 import CanvasAdd from "../components/CanvasAdd";
-import useViewControl from "../services/ViewControl";
+import useViewControl from "../hooks/useViewControl";
 
 const ElementsLayer = () => {
   const view = useViewControl();
@@ -41,8 +41,8 @@ const ElementsLayer = () => {
       id="elements-root"
       style={{
         zIndex: 2,
-        width: 10000 * view.view.scale,
-        height: 10000 * view.view.scale,
+        width: 8000 * view.view.scale,
+        height: 8000 * view.view.scale,
         backgroundColor: "green",
       }}
     >

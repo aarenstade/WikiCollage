@@ -6,7 +6,7 @@ import { SelectedElementIdState } from "../data/atoms";
 import styles from "./CanvasElement.module.css";
 
 import TextElement from "./elements/TextElement";
-import useViewControl from "../services/ViewControl";
+import useViewControl from "../hooks/useViewControl";
 import useSelectedElement from "../hooks/useSelectedElement";
 
 const cornerHandle = {
