@@ -7,6 +7,8 @@ body {
     sans-serif;
 
   font-family: var(--global-font-family);
+
+  background-color: black;
 }
 
 a {
