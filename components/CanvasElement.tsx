@@ -7,6 +7,7 @@ import styles from "./CanvasElement.module.css";
 
 import TextElement from "./elements/TextElement";
 import useViewControl from "../services/ViewControl";
+import useSelectedElement from "../hooks/useSelectedElement";
 
 const cornerHandle = {
   backgroundColor: "white",
@@ -29,30 +30,32 @@ interface CanvasElementProps {
   onSave: (e: CanvasElementItem) => void;
 }
 
+interface CanvasElementHeaderProps {
+  id: number;
+  onSave: () => void;
+}
+
+const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onSave }) => {
+  const element = useSelectedElement(id);
+  return (
+    <div className={styles.elementHeader}>
+      {element.selected && !element.editing && (
+        <button onClick={() => element.setId({ id, editing: true })}>Edit</button>
+      )}
+      {element.selected && element.editing && <button onClick={() => onSave()}>Save</button>}
+    </div>
+  );
+};
+
 const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
   const rndRef = useRef<any>();
 
   const viewControl = useViewControl();
+  const selection = useSelectedElement(id);
 
   const [localElement, setLocalElement] = useState(element);
-  const [selectedId, setSelectedId] = useRecoilState(SelectedElementIdState);
 
-  const isSelected = () => (selectedId?.id === id ? true : false);
-  const isEditing = () => (selectedId?.id === id && selectedId?.editing ? true : false);
-
-  const handleSave = (e: React.MouseEvent) => {
-    onSave(localElement);
-    setTimeout(() => setSelectedId(null), 50);
-  };
-
-  const ElementHeader = () => {
-    return (
-      <div className={styles.elementHeader}>
-        {isSelected() && !isEditing() && <button onClick={() => setSelectedId({ id, editing: true })}>Edit</button>}
-        {isSelected() && isEditing() && <button onClick={handleSave}>Save</button>}
-      </div>
-    );
-  };
+  const handleSave = () => onSave(localElement);
 
   useEffect(() => {
     const scale = viewControl.view.scale;
@@ -95,9 +98,9 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
       }}
       onDragStop={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
-      resizeHandleStyles={isSelected() ? resizeHandleStyles : {}}
+      resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
       style={{ zIndex: 3 }}
-      disabled={selectedId?.id === id ? false : true}
+      disabled={selection.selected}
     >
       <div
         className={styles.elementContainer}
@@ -105,11 +108,11 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave }) => {
           width: localElement.scaledWidth,
           height: localElement.scaledHeight,
         }}
-        onDoubleClick={() => setSelectedId({ id, editing: true })}
+        onDoubleClick={() => selection.setId({ id, editing: true })}
       >
-        <ElementHeader />
+        <CanvasElementHeader id={id} onSave={handleSave} />
         {element.type === "text" && (
-          <TextElement editing={isEditing()} element={localElement} onUpdate={(e) => setLocalElement(e)} />
+          <TextElement editing={selection.editing} element={localElement} onUpdate={(e) => setLocalElement(e)} />
         )}
         {/* {element.type === "draw" && <DrawElement element={localElement} onDraw={(e) => setLocalElement(e)} />} */}
       </div>
