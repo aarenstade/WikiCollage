@@ -1,10 +1,12 @@
 .elementContainer {
   color: white;
-  background-color: blue;
 }
 
 .elementHeader {
   position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   top: -20px;
 }
 

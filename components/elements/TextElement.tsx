@@ -3,6 +3,8 @@ import { CanvasElementItem } from "../../types/elements";
 import { nextInArrayRotate } from "../../utils";
 import { FONTS, TEXT_COLORS } from "../../styles/text";
 
+import styles from "./elements.module.css";
+
 interface TextElementProps {
   element: CanvasElementItem;
   editing: boolean;
@@ -10,11 +12,6 @@ interface TextElementProps {
 }
 
 const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
-  // useEffect(() => {
-  //   const fontSize = element.width ? element.width / 8 : 16;
-  //   onUpdate({ ...element, textParams: { ...element.textParams, fontSize } });
-  // }, [element.width, element.height]);
-
   useEffect(() => {
     if (element.textParams?.fontSize && element.scaledHeight && element.scaledWidth) {
       const numOfChars = element.data.length;
@@ -49,7 +46,7 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
             resize: "none",
           }}
         />
-        <div style={{ marginBottom: "-50px" }}>
+        <div className={styles.elementBottomButtons}>
           <button onClick={rotateFont}>Font</button>
           <button onClick={rotateColor}>Color</button>
         </div>
