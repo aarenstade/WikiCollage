@@ -1,6 +1,8 @@
+import axios from "axios";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import { STORAGE_REF } from "./client/firebase";
+import { BASE_URL } from "./config";
 
 export const convertBase64ToBytes = (img: string | ArrayBuffer): ArrayBuffer | Uint8Array => {
   if (img instanceof ArrayBuffer) return img;
@@ -24,6 +26,13 @@ export const convertImageToBase64 = (img: ArrayBuffer | Uint8Array): string => {
   return window.btoa(b64Image);
 };
 
+export const createFullPath = (storagePath: string, mimeType: string) => {
+  const pathsplit = storagePath.split("/");
+  const ext = mimeType.split("/")[1];
+  const filename = `${v4()}.${ext}`;
+  return pathsplit[pathsplit.length - 1] === "/" ? `${storagePath}${filename}` : `${storagePath}/${filename}`;
+};
+
 export const uploadImage = async (file: ArrayBuffer | Uint8Array, path: string): Promise<string | null> => {
   try {
     const ref = STORAGE_REF(path);
@@ -36,9 +45,40 @@ export const uploadImage = async (file: ArrayBuffer | Uint8Array, path: string):
   }
 };
 
-export const createFullPath = (storagePath: string, mimeType: string) => {
-  const pathsplit = storagePath.split("/");
-  const ext = mimeType.split("/")[1];
-  const filename = `${v4()}.${ext}`;
-  return pathsplit[pathsplit.length - 1] === "/" ? `${storagePath}${filename}` : `${storagePath}/${filename}`;
+export const convertAllHtmlImagesToBase64 = (clone: Document) => {
+  const pendingImagesPromises = [];
+  const pendingPromisesData: any[] = [];
+
+  const images = clone.getElementsByTagName("img");
+
+  for (let i = 0; i < images.length; i += 1) {
+    // First we create an empty promise for each image
+    const promise = new Promise((resolve, reject) => {
+      pendingPromisesData.push({
+        index: i,
+        resolve,
+        reject,
+      });
+    });
+    // We save the promise for later resolve them
+    pendingImagesPromises.push(promise);
+  }
+
+  for (let i = 0; i < images.length; i += 1) {
+    axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url: images[i].src }, method: "POST" })
+      .then((response) => {
+        const data = response.data;
+        const pending = pendingPromisesData.find((p) => p.index === i);
+        images[i].src = data;
+        pending.resolve(data);
+      })
+      .catch((e) => {
+        const pending = pendingPromisesData.find((p) => p.index === i);
+        images[i].remove();
+        pending.reject(e);
+      });
+  }
+
+  // This will resolve only when all the promises resolve
+  return Promise.all(pendingImagesPromises);
 };
