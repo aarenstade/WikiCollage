@@ -26,7 +26,7 @@ const MuralLayer: VFC<Props> = ({ mural }) => {
       <div
         style={{
           zIndex: 1,
-          backgroundColor: "darkolivegreen",
+          backgroundColor: "var(--background-color)",
           width: `${dimension * viewControl.view.scale}px`,
           height: `${dimension * viewControl.view.scale}px`,
         }}
