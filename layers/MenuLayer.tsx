@@ -4,11 +4,12 @@ import useViewControl from "../hooks/useViewControl";
 import { useRecoilState } from "recoil";
 import { SelectedElementIdState } from "../data/atoms";
 import html2canvas from "html2canvas";
-import { convertBase64ToBytes, uploadImage } from "../image-utils";
+import { convertAllHtmlImagesToBase64, convertBase64ToBytes, uploadImage } from "../image-utils";
 import { v4 } from "uuid";
 import { getDownloadURL } from "firebase/storage";
 import { DATABASE_REF, STORAGE_REF } from "../client/firebase";
 import { set } from "firebase/database";
+import Popup from "../components/Popup";
 
 interface MenuLayerProps {}
 
@@ -28,7 +29,12 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
     setProcessing(true);
     const elementsRoot = document.getElementById("elements-root");
     if (elementsRoot) {
-      const elementsRes = await html2canvas(elementsRoot);
+      const elementsRes = await html2canvas(elementsRoot, {
+        // proxy: BASE_URL,
+        foreignObjectRendering: true,
+        allowTaint: true,
+        onclone: async (clone) => await convertAllHtmlImagesToBase64(clone),
+      });
       const base64 = elementsRes.toDataURL("image/png");
       const bytes = convertBase64ToBytes(base64);
 
@@ -36,8 +42,12 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
       const filename = `layer_${layer_id}.jpg`;
       const storagePath = `/layers/${filename}`;
 
+      console.log({ storagePath });
+
       await uploadImage(bytes, storagePath);
       const layer = await getDownloadURL(STORAGE_REF(storagePath));
+      console.log({ layer });
+      window.open(layer, "_blank");
       await set(DATABASE_REF(`/latest_submission`), {
         layer,
         name: layer_id,
@@ -46,8 +56,23 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
       });
 
       setProcessing(false);
+      setReady(false);
     }
   };
+
+  if (ready) {
+    return (
+      <Popup onToggle={() => setReady(false)}>
+        {!processing && (
+          <div>
+            <h3>Are You Ready to Upload?</h3>
+            <button onClick={handleSubmit}>Submit</button>
+          </div>
+        )}
+        {processing && <p>Processing...</p>}
+      </Popup>
+    );
+  }
 
   return (
     <div className={styles.menuLayer}>
@@ -60,11 +85,6 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
       {!ready && (
         <button style={{ bottom: 0, right: 0 }} onClick={handleReady}>
           Prepare for Submission
-        </button>
-      )}
-      {ready && (
-        <button style={{ bottom: 0, right: 0 }} onClick={handleSubmit}>
-          {processing ? "..." : "Submit"}
         </button>
       )}
     </div>
