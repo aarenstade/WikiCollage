@@ -22,6 +22,7 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
   const handleReady = () => {
     setReady(true);
     setSelectedId(null);
+    view.setScale(1);
   };
 
   const handleSubmit = async (e: React.MouseEvent) => {
@@ -31,6 +32,9 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
     if (elementsRoot) {
       const elementsRes = await html2canvas(elementsRoot, {
         // proxy: BASE_URL,
+        width: 8000,
+        height: 8000,
+        backgroundColor: null,
         foreignObjectRendering: true,
         allowTaint: true,
         onclone: async (clone) => await convertAllHtmlImagesToBase64(clone),
@@ -39,7 +43,7 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
       const bytes = convertBase64ToBytes(base64);
 
       const layer_id = v4();
-      const filename = `layer_${layer_id}.jpg`;
+      const filename = `layer_${layer_id}.png`;
       const storagePath = `/layers/${filename}`;
 
       console.log({ storagePath });
