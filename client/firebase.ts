@@ -6,7 +6,7 @@ import { firebaseConfig } from "../firebase-client";
 
 const app = initializeApp(firebaseConfig);
 
-const storage = getStorage(app, "gs://just-a-box-app.appspot.com");
+const storage = getStorage(app, "gs://visual-collab.appspot.com");
 export const STORAGE_REF = (path: string) => stRef(storage, path);
 
 const database = getDatabase(app);
