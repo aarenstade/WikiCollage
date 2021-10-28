@@ -50,7 +50,7 @@ const ElementsLayer = () => {
         zIndex: 2,
         width: 8000 * view.view.scale,
         height: 8000 * view.view.scale,
-        backgroundColor: "green",
+        border: "2px solid white",
       }}
     >
       {modify.active && <CanvasAdd modify={modify} onAdd={() => setModify({ ...modify, active: false })} />}
