@@ -100,7 +100,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
         x: localElement.x,
         y: localElement.y,
       }}
-      onDragStop={(_, d) => updatePosition(d)}
+      onDrag={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
       resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
       style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
