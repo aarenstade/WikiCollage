@@ -12,7 +12,7 @@ interface Props {
 
 const MuralLayer: VFC<Props> = ({ mural }) => {
   const viewControl = useViewControl();
-  const dimension = 8000;
+  const dimension = 5000;
 
   // TODO (optimization)
 

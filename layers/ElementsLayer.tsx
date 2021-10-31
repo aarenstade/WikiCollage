@@ -48,8 +48,8 @@ const ElementsLayer = () => {
       id="elements-root"
       style={{
         zIndex: 2,
-        width: 8000 * view.view.scale,
-        height: 8000 * view.view.scale,
+        width: 5000 * view.view.scale,
+        height: 5000 * view.view.scale,
         border: "2px solid white",
       }}
     >
