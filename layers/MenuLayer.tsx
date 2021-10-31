@@ -10,6 +10,8 @@ import { getDownloadURL } from "firebase/storage";
 import { DATABASE_REF, STORAGE_REF } from "../client/firebase";
 import { set } from "firebase/database";
 import Popup from "../components/Popup";
+import axios from "axios";
+import { BASE_URL } from "../config";
 
 interface MenuLayerProps {}
 
@@ -17,6 +19,7 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
   const view = useViewControl();
   const [ready, setReady] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [message, setMessage] = useState("");
   const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
 
   const handleReady = () => {
@@ -27,38 +30,47 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
 
   const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault();
+
     setProcessing(true);
     const elementsRoot = document.getElementById("elements-root");
+
     if (elementsRoot) {
+      setMessage("Gathering Elements...");
       const elementsRes = await html2canvas(elementsRoot, {
-        // proxy: BASE_URL,
-        width: 8000,
-        height: 8000,
+        allowTaint: true,
         backgroundColor: null,
         foreignObjectRendering: true,
-        allowTaint: true,
         onclone: async (clone) => await convertAllHtmlImagesToBase64(clone),
       });
-      const base64 = elementsRes.toDataURL("image/png");
+      const base64 = elementsRes.toDataURL("image/png", 0.25);
       const bytes = convertBase64ToBytes(base64);
 
       const layer_id = v4();
       const filename = `layer_${layer_id}.png`;
       const storagePath = `/layers/${filename}`;
 
-      console.log({ storagePath });
-
+      setMessage("Uploading Elements...");
       await uploadImage(bytes, storagePath);
       const layer = await getDownloadURL(STORAGE_REF(storagePath));
       console.log({ layer });
-      window.open(layer, "_blank");
+
+      setMessage("Merging Layer...");
+      const muralStoragePath = await axios({
+        url: `${BASE_URL}/api/merge-mural`,
+        method: "POST",
+        data: { url: layer },
+      });
+
+      setMessage("Finalizing...");
+      const muralUrl = await getDownloadURL(STORAGE_REF(muralStoragePath.data));
       await set(DATABASE_REF(`/latest_submission`), {
         layer,
         name: layer_id,
         timestamp: Date.now(),
-        mural: "TODO",
+        mural: muralUrl,
       });
 
+      window.open(muralUrl, "_blank");
       setProcessing(false);
       setReady(false);
     }
@@ -74,12 +86,14 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
           </div>
         )}
         {processing && <p>Processing...</p>}
+        {message && <p>{message}</p>}
       </Popup>
     );
   }
 
   return (
     <div className={styles.menuLayer}>
+      <p style={{ backgroundColor: "white" }}>Scale: {view.view.scale}</p>
       <button style={{ top: 0 }} onClick={() => view.zoomIn()}>
         Zoom In
       </button>
