@@ -18,6 +18,6 @@ if (!admin.apps.length) {
   //   }
 }
 
-export const ADMIN_ST = admin.storage().bucket("gs://just-a-box-app.appspot.com");
+export const ADMIN_ST = admin.storage().bucket("gs://visual-collab.appspot.com");
 export const ADMIN_RTDB = admin.database();
 export const ADMIN_AUTH = admin.auth();
