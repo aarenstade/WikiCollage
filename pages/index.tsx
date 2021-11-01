@@ -16,6 +16,7 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
+      {/* TODO better loading icon */}
       {latestSubmission ? <GlobalCollabView submission={latestSubmission} /> : <p>Loading...</p>}
     </div>
   );

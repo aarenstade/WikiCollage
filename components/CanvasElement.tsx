@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState, VFC } from "react";
 import { CanvasElementItem } from "../types/elements";
 import { Rnd } from "react-rnd";
-import { useRecoilState } from "recoil";
-import { SelectedElementIdState } from "../data/atoms";
 import styles from "./CanvasElement.module.css";
 
 import TextElement from "./elements/TextElement";

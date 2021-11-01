@@ -10,4 +10,3 @@ export const STORAGE_REF = (path: string) => stRef(storage, path);
 
 const database = getDatabase(app);
 export const DATABASE_REF = (path: string) => dbRef(database, path);
-// const analytics = getAnalytics(app);

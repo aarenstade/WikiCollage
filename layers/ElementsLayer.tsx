@@ -9,13 +9,14 @@ import styles from "../styles/layers.module.css";
 import useFullCanvas from "../hooks/useFullCanvas";
 import CanvasAdd from "../components/CanvasAdd";
 import useViewControl from "../hooks/useViewControl";
+import { MURAL_DIMENSION } from "../config";
 
 const ElementsLayer = () => {
   const view = useViewControl();
   const canvas = useFullCanvas();
 
   const [elementsList, setElementsList] = useRecoilState(ElementListState);
-  const [selectedId, setSelectedId] = useRecoilState(SelectedElementIdState);
+  const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
   const [modify, setModify] = useState({ active: false, x: 0, y: 0 });
 
   const handleClick = (e: React.MouseEvent) => {
@@ -48,8 +49,8 @@ const ElementsLayer = () => {
       id="elements-root"
       style={{
         zIndex: 2,
-        width: 5000 * view.view.scale,
-        height: 5000 * view.view.scale,
+        width: MURAL_DIMENSION * view.view.scale,
+        height: MURAL_DIMENSION * view.view.scale,
         border: "2px solid white",
       }}
     >

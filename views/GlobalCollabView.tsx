@@ -1,14 +1,9 @@
-import React, { useState, VFC } from "react";
-import { useRecoilState } from "recoil";
-import { SelectedElementIdState } from "../data/atoms";
+import React, { VFC } from "react";
 
 import MuralLayer from "../layers/MuralLayer";
 import ElementsLayer from "../layers/ElementsLayer";
 import MenuLayer from "../layers/MenuLayer";
-
-import html2canvas from "html2canvas";
 import { Submission } from "../types/canvas";
-import useViewControl from "../hooks/useViewControl";
 
 interface Props {
   submission: Submission;

@@ -2,6 +2,7 @@
 // this layer loads the underlying mural image
 
 import { VFC } from "react";
+import { MURAL_DIMENSION } from "../config";
 import useViewControl from "../hooks/useViewControl";
 
 import styles from "../styles/layers.module.css";
@@ -12,17 +13,10 @@ interface Props {
 
 const MuralLayer: VFC<Props> = ({ mural }) => {
   const viewControl = useViewControl();
-  const dimension = 5000;
-
-  // TODO (optimization)
-
-  // when view control changes, calculate set of visible squares of mural
-  // select those images to request and display only
-  // (for now were just loading the entire image)
 
   return (
     <div className={styles.full}>
-      <img src={mural} alt="mural" style={{ zIndex: 1, width: `${dimension * viewControl.view.scale}px` }} />
+      <img src={mural} alt="mural" style={{ zIndex: 1, width: `${MURAL_DIMENSION * viewControl.view.scale}px` }} />
     </div>
   );
 };

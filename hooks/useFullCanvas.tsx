@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
+// canvas within ElementsLayer that responds to click events
+
 export const useFullCanvas = () => {
   const ref = useRef<HTMLCanvasElement | null>(null);
-  const [windowDimensions, setWindowDimensions] = useState({ width: 500, height: 500 });
+  const [windowDimensions, setWindowDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
 
   const updateWidthAndHeight = () => setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
 

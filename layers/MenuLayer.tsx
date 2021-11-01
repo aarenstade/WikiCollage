@@ -50,10 +50,6 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
 
       if (elementRoot) {
         setMessage(`Handling Element ${i + 1}/${elementsList.length}...`);
-        console.log(element.data);
-        // get as canvas element, convert any img tags to base64
-
-        console.log({ element });
         const elementCanvas = await html2canvas(elementRoot, {
           backgroundColor: null,
           scale: 1,
@@ -94,7 +90,6 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
       data: { elements: elementObjects },
     });
 
-    console.log({ muralRes });
     const muralUri = muralRes.data;
     const newMuralUri = await getDownloadURL(STORAGE_REF(muralUri));
 
@@ -103,8 +98,7 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
       timestamp: Date.now(),
       mural: newMuralUri,
     });
-
-    console.log({ newMuralUri });
+    // TODO show new mural in dedicated page with social links and sharability
   };
 
   if (ready) {
