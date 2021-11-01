@@ -12,7 +12,7 @@ interface Props {
 
 const MuralLayer: VFC<Props> = ({ mural }) => {
   const viewControl = useViewControl();
-  const dimension = 8000;
+  const dimension = 5000;
 
   // TODO (optimization)
 
@@ -22,15 +22,7 @@ const MuralLayer: VFC<Props> = ({ mural }) => {
 
   return (
     <div className={styles.full}>
-      {/* <img src={mural} alt="mural" style={{ zIndex: 1, width: `${dimension * viewControl.view.scale}px` }} /> */}
-      <div
-        style={{
-          zIndex: 1,
-          backgroundColor: "var(--background-color)",
-          width: `${dimension * viewControl.view.scale}px`,
-          height: `${dimension * viewControl.view.scale}px`,
-        }}
-      />
+      <img src={mural} alt="mural" style={{ zIndex: 1, width: `${dimension * viewControl.view.scale}px` }} />
     </div>
   );
 };

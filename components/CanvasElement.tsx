@@ -62,12 +62,16 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
   const handleSave = () => onSave(localElement);
 
   useEffect(() => {
+    if (!selection.editing) onSave(localElement);
+  }, [selection.editing]);
+
+  useEffect(() => {
     const scale = viewControl.view.scale;
     const scaledWidth = localElement.width * scale;
     const scaledHeight = localElement.height * scale;
     const relativeX = localElement.x * scale;
     const relativeY = localElement.y * scale;
-    setLocalElement({ ...localElement, scaledWidth, scaledHeight, relativeX, relativeY });
+    setLocalElement({ ...localElement, scaledWidth, scaledHeight });
     rndRef.current.updateSize({ width: scaledWidth, height: scaledHeight });
     rndRef.current.updatePosition({ x: relativeX, y: relativeY });
   }, [viewControl.view.scale]);
@@ -100,11 +104,12 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
         x: localElement.x,
         y: localElement.y,
       }}
-      onDragStop={(_, d) => updatePosition(d)}
+      onDrag={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
+      enableResizing={selection.editing}
       resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
       style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
-      disabled={selection.selected}
+      disableDragging={!selection.editing}
     >
       <div
         className={styles.elementContainer}

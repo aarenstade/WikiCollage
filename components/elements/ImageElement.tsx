@@ -33,7 +33,7 @@ const ImageData: VFC<ImageDataProps> = ({ element, loading }) => {
         alt="image"
         onDragStart={(e) => e.preventDefault()}
         style={{
-          width: "auto",
+          width: element.scaledWidth,
           height: element.scaledHeight,
         }}
       />

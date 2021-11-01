@@ -18,7 +18,5 @@ export interface CanvasElementItem {
   scaledHeight?: number;
   x: number;
   y: number;
-  relativeX?: number;
-  relativeY?: number;
   textParams?: CSSProperties;
 }

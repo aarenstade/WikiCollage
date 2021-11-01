@@ -48,20 +48,16 @@ const ElementsLayer = () => {
       id="elements-root"
       style={{
         zIndex: 2,
-        width: 8000 * view.view.scale,
-        height: 8000 * view.view.scale,
+        width: 5000 * view.view.scale,
+        height: 5000 * view.view.scale,
         border: "2px solid white",
       }}
     >
       {modify.active && <CanvasAdd modify={modify} onAdd={() => setModify({ ...modify, active: false })} />}
       {elementsList.map((element: CanvasElementItem, i: number) => (
-        <CanvasElement
-          key={i}
-          id={i}
-          element={element}
-          onSave={(e) => saveElement(i, e)}
-          onDelete={() => deleteElement(i)}
-        />
+        <div key={i} id={`canvas-element-${i}`}>
+          <CanvasElement id={i} element={element} onSave={(e) => saveElement(i, e)} onDelete={() => deleteElement(i)} />
+        </div>
       ))}
       <canvas ref={canvas?.ref} onClick={handleClick} />
     </div>

@@ -2,9 +2,10 @@
   position: absolute;
   top: 0;
   left: 0;
+  background-color: none;
 }
 
-.menuLayer button {
+.menuLayer * {
   position: fixed;
   z-index: 6;
   left: 0;
