@@ -4,6 +4,18 @@ import { v4 } from "uuid";
 import { STORAGE_REF } from "./client/firebase";
 import { BASE_URL } from "./config";
 
+export function encodeImageFileAsURL(e: HTMLInputElement): string | null {
+  if (e.files) {
+    var file = e.files[0];
+    var reader = new FileReader();
+    let res: string | ArrayBuffer | null = null;
+    reader.onloadend = () => (res = reader.result);
+    reader.readAsDataURL(file);
+    if (typeof res === "string") return res;
+  }
+  return null;
+}
+
 export const convertBase64ToBytes = (img: string | ArrayBuffer): ArrayBuffer | Uint8Array => {
   if (img instanceof ArrayBuffer) return img;
   var arr = img.split(",");
@@ -49,7 +61,8 @@ export const convertAllHtmlImagesToBase64 = (clone: Document) => {
   const pendingImagesPromises = [];
   const pendingPromisesData: any[] = [];
 
-  const images = clone.getElementsByTagName("img");
+  const imageNodes = clone.getElementsByTagName("img");
+  const images = Array.from(imageNodes).filter((img) => !img.src.startsWith("data:image"));
 
   for (let i = 0; i < images.length; i += 1) {
     // First we create an empty promise for each image

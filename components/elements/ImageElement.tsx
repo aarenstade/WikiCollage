@@ -57,28 +57,19 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
 
   const onSelectFile = (e: any) => {
     const files = e.target.files;
-
-    if (files[0].size > MAX_FILE_SIZE) {
+    if (files && files.length > 0 && files[0].size > MAX_FILE_SIZE) {
       alert("File is bigger than 3.0MB");
       return;
     }
 
-    if (files && files.length > 0) {
-      setLoading(true);
-      const reader = new FileReader();
-      reader.addEventListener("load", async () => {
-        const result = reader.result;
-        if (result) {
-          const img: ArrayBuffer | Uint8Array = convertBase64ToBytes(result);
-          // TODO sub path of current wiki page
-          const fullPath = createFullPath(`/tmp/${v4()}`, files[0].type);
-          const res = await uploadImage(img, fullPath);
-          if (res) onUpdate({ ...element, data: res });
-          setLoading(false);
-        }
-      });
-      reader.readAsDataURL(files[0]);
-    }
+    setLoading(true);
+    const reader = new FileReader();
+    reader.addEventListener("load", async () => {
+      const result = reader.result;
+      if (result && typeof result === "string") onUpdate({ ...element, data: result });
+      setLoading(false);
+    });
+    reader.readAsDataURL(files[0]);
   };
 
   if (editing) {
