@@ -57,7 +57,10 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
 
   const [localElement, setLocalElement] = useState(element);
 
-  const handleSave = () => onSave(localElement);
+  const handleSave = () => {
+    onSave(localElement);
+    selection.setId(null);
+  };
 
   useEffect(() => {
     if (!selection.editing) onSave(localElement);
@@ -95,6 +98,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
 
   return (
     <Rnd
+      id={`canvas-element-${id}`}
       ref={rndRef}
       default={{
         width: localElement.width || "auto",
@@ -104,9 +108,9 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
       }}
       onDrag={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
-      enableResizing={selection.editing}
       resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
       style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
+      enableResizing={selection.editing}
       disableDragging={!selection.editing}
     >
       <div

@@ -50,10 +50,12 @@ const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
       x: Math.round(modify.x / view.view.scale),
       y: Math.round(modify.y / view.view.scale),
       textParams: {
-        fontSize: 60,
+        fontSize: "60px",
         fontFamily: FONTS[0],
         color: TEXT_COLORS[0],
         fontWeight: "normal",
+        margin: "0",
+        padding: "0",
       },
     };
     addAndSelectNewElement(newTextElement);

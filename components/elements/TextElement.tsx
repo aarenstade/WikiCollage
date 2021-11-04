@@ -4,6 +4,7 @@ import { nextInArrayRotate } from "../../utils";
 import { FONTS, TEXT_COLORS } from "../../styles/text";
 
 import styles from "./elements.module.css";
+import useViewControl from "../../hooks/useViewControl";
 
 interface TextElementProps {
   element: CanvasElementItem;
@@ -12,14 +13,18 @@ interface TextElementProps {
 }
 
 const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
+  const view = useViewControl();
+
   useEffect(() => {
     if (element.textParams?.fontSize && element.scaledHeight && element.scaledWidth) {
       const numOfChars = element.data.length;
       const elementArea = element.scaledWidth * element.scaledHeight;
-      const fontSize = Math.sqrt(Math.round(elementArea / numOfChars));
+      const newFontSize = Math.round(Math.sqrt(elementArea / numOfChars));
+      const scaledMax = Math.round(190 * view.view.scale);
+      const fontSize = `${newFontSize > scaledMax ? scaledMax : newFontSize}px`;
       onUpdate({ ...element, textParams: { ...element.textParams, fontSize } });
     }
-  }, [element.scaledHeight, element.scaledWidth, element.data]);
+  }, [element.scaledHeight, element.scaledWidth, element.data, view.view.scale]);
 
   const rotateFont = (e: React.MouseEvent) => {
     let newFont = nextInArrayRotate(FONTS, element.textParams?.fontFamily);
@@ -33,13 +38,15 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
 
   if (editing) {
     return (
-      <div>
+      <div style={{ width: element.scaledWidth, height: element.scaledHeight, overflow: "clip" }}>
         <textarea
+          autoFocus
           name="text-field"
           value={element.data}
           onChange={(e) => onUpdate({ ...element, data: e.target.value })}
-          autoFocus
+          disabled={!editing}
           style={{
+            overflowWrap: "anywhere",
             ...element.textParams,
             width: element.scaledWidth,
             height: element.scaledHeight,
@@ -57,13 +64,12 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
       <div
         style={{
           ...element.textParams,
+          overflowWrap: "anywhere",
           width: element.scaledWidth,
           height: element.scaledHeight,
-          overflowWrap: "anywhere",
-          overflow: "clip",
         }}
       >
-        {element.data}
+        <p>{element.data}</p>
       </div>
     );
   }
