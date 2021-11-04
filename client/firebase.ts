@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getStorage, ref as stRef } from "firebase/storage";
 import { getDatabase, ref as dbRef } from "firebase/database";
 import { firebaseConfig } from "../firebase-client";
+import { getAuth } from "firebase/auth";
 
 const app = initializeApp(firebaseConfig);
 
@@ -10,3 +11,5 @@ export const STORAGE_REF = (path: string) => stRef(storage, path);
 
 const database = getDatabase(app);
 export const DATABASE_REF = (path: string) => dbRef(database, path);
+
+export const auth = getAuth();
