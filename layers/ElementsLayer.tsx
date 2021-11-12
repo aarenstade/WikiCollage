@@ -6,7 +6,6 @@ import { CanvasElementItem } from "../types/elements";
 import CanvasElement from "../components/CanvasElement";
 
 import styles from "../styles/layers.module.css";
-import useFullCanvas from "../hooks/useFullCanvas";
 import CanvasAdd from "../components/CanvasAdd";
 import useViewControl from "../hooks/useViewControl";
 import { MURAL_DIMENSION } from "../config";
@@ -14,7 +13,6 @@ import TouchLayer from "./TouchLayer";
 
 const ElementsLayer = () => {
   const view = useViewControl();
-  const canvas = useFullCanvas();
 
   const [elementsList, setElementsList] = useRecoilState(ElementListState);
   const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
@@ -54,7 +52,13 @@ const ElementsLayer = () => {
         height: MURAL_DIMENSION * view.view.scale,
       }}
     >
-      {modify.active && <CanvasAdd modify={modify} onAdd={() => setModify({ ...modify, active: false })} />}
+      {modify.active && (
+        <CanvasAdd
+          modify={modify}
+          setActive={(a) => setModify({ ...modify, active: a })}
+          onAdd={() => setModify({ ...modify, active: false })}
+        />
+      )}
       {elementsList.map((element: CanvasElementItem, i: number) => (
         <CanvasElement
           key={i}

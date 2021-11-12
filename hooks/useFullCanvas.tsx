@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// CURRENTLY NOT IN USE ANYWHERE
+
 // canvas within ElementsLayer that responds to click events
 
 export const useFullCanvas = () => {

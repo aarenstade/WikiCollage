@@ -46,23 +46,21 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
     e.preventDefault();
     // upload and assemble element list to merge with previous mural
     const elementObjects: ElementToEmbed[] = [];
+    setElementPreview("");
 
     for (let i = 0; i < elementsList.length; i++) {
       const element = elementsList[i];
       const elementRoot = document.getElementById(`canvas-element-${i}`);
+      console.log("got element");
       if (elementRoot) {
         setMessage(`Handling Element ${i + 1}/${elementsList.length}...`);
-
-        const p = elementRoot.getElementsByTagName("p");
-        if (p[0]) p[0].style.transform = `translateY(-${element.textParams?.fontSize}px)`;
+        elementRoot.style["backgroundColor"] = "blue";
 
         const elementCanvas = await html2canvas(elementRoot, {
           backgroundColor: null,
           scale: 1,
           width: element.width,
           height: element.height,
-          windowWidth: element.width,
-          windowHeight: element.height,
           onclone: async (clone) => await convertAllHtmlImagesToBase64(clone),
         });
         const base64 = elementCanvas.toDataURL("image/png", 0.8);

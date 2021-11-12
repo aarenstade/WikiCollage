@@ -111,7 +111,6 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
       resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
       style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
       enableResizing={selection.editing}
-      disableDragging={!selection.editing}
     >
       <div
         className={styles.elementContainer}

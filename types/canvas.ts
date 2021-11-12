@@ -1,5 +1,5 @@
 export interface Submission {
-  layer: string;
+  layer?: string;
   mural: string;
   name: string;
   timestamp: string;
