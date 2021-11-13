@@ -1,4 +1,4 @@
-import { VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
 import { ElementListState, SelectedElementIdState } from "../data/atoms";
 import useViewControl from "../hooks/useViewControl";
@@ -12,10 +12,11 @@ interface CanvasAddProps {
     x: number;
     y: number;
   };
+  setActive: (a: boolean) => void;
   onAdd: () => void;
 }
 
-const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
+const CanvasAdd: VFC<CanvasAddProps> = ({ modify, setActive, onAdd }) => {
   const view = useViewControl();
   const [elementList, setElementList] = useRecoilState(ElementListState);
   const [_, setSelectedElementId] = useRecoilState(SelectedElementIdState);
@@ -50,7 +51,7 @@ const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
       x: Math.round(modify.x / view.view.scale),
       y: Math.round(modify.y / view.view.scale),
       textParams: {
-        fontSize: "60px",
+        fontSize: "40px",
         fontFamily: FONTS[0],
         color: TEXT_COLORS[0],
         fontWeight: "normal",
@@ -79,7 +80,11 @@ const CanvasAdd: VFC<CanvasAddProps> = ({ modify, onAdd }) => {
   };
 
   return (
-    <div className={styles.tooltip} style={{ top: modify.y, left: modify.x }}>
+    <div
+      className={styles.tooltip}
+      style={{ top: modify.y, left: modify.x }}
+      onMouseLeave={() => setTimeout(() => setActive(!modify.active), 180)}
+    >
       <ul>
         {/* TODO draw */}
         {/* <li onClick={handleDraw}>Draw</li> */}
