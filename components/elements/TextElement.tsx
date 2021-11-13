@@ -19,9 +19,7 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
     if (element.textParams?.fontSize && element.scaledHeight && element.scaledWidth) {
       const numOfChars = element.data.length;
       const elementArea = element.scaledWidth * element.scaledHeight;
-      const newFontSize = Math.round(Math.sqrt(elementArea / numOfChars));
-      const scaledMax = Math.round(190 * view.view.scale);
-      const fontSize = `${newFontSize > scaledMax ? scaledMax : newFontSize}px`;
+      const fontSize = Math.round(Math.sqrt(elementArea / numOfChars));
       onUpdate({ ...element, textParams: { ...element.textParams, fontSize } });
     }
   }, [element.scaledHeight, element.scaledWidth, element.data, view.view.scale]);
@@ -38,7 +36,7 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
 
   if (editing) {
     return (
-      <div style={{ width: element.scaledWidth, height: element.scaledHeight, overflow: "clip" }}>
+      <div>
         <textarea
           autoFocus
           name="text-field"
@@ -53,23 +51,24 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
             resize: "none",
           }}
         />
-        <div className={styles.elementBottomButtons}>
-          <button onClick={rotateFont}>Font</button>
-          <button onClick={rotateColor}>Color</button>
-        </div>
+        {editing && (
+          <div className={styles.elementBottomButtons}>
+            <button onClick={rotateFont}>Font</button>
+            <button onClick={rotateColor}>Color</button>
+          </div>
+        )}
       </div>
     );
   } else {
     return (
       <div
         style={{
-          ...element.textParams,
           overflowWrap: "anywhere",
           width: element.scaledWidth,
           height: element.scaledHeight,
         }}
       >
-        <p>{element.data}</p>
+        <h1 style={{ overflowWrap: "anywhere", ...element.textParams }}>{element.data}</h1>
       </div>
     );
   }
