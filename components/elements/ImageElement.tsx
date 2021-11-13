@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
+import axios from "axios";
 import { useState, VFC } from "react";
 import { v4 } from "uuid";
-import { MAX_FILE_SIZE } from "../../config";
-import { convertBase64ToBytes, createFullPath, uploadImage } from "../../image-utils";
+import { BASE_URL, MAX_FILE_SIZE } from "../../config";
 import { CanvasElementItem } from "../../types/elements";
 import styles from "./elements.module.css";
 
@@ -55,6 +55,26 @@ const ImageData: VFC<ImageDataProps> = ({ element, loading }) => {
 const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) => {
   const [loading, setLoading] = useState(false);
 
+  const onInputUrl = async (url: string) => {
+    const matchUrl = (val: string) =>
+      val.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    if (matchUrl(url)) {
+      console.log("matched");
+      let data = url;
+      try {
+        setLoading(true);
+        const res = await axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url }, method: "POST" });
+        console.log(`res length: ${res.data.length}`);
+        if (res.data) data = res.data;
+      } catch (error) {
+        console.log({ error });
+      } finally {
+        setLoading(false);
+        onUpdate({ ...element, data });
+      }
+    }
+  };
+
   const onSelectFile = (e: any) => {
     const files = e.target.files;
     if (files && files.length > 0 && files[0].size > MAX_FILE_SIZE) {
@@ -90,12 +110,7 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
             className={styles.imageInput}
             onChange={(e) => onSelectFile(e)}
           />
-          <input
-            name="image-url"
-            type="text"
-            placeholder="Image Url"
-            onChange={(e) => onUpdate({ ...element, data: e.target.value })}
-          />
+          <input name="image-url" type="text" placeholder="Image Url" onChange={(e) => onInputUrl(e.target.value)} />
         </div>
       </div>
     );
