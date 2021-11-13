@@ -3,7 +3,7 @@ import React, { VFC } from "react";
 import MuralLayer from "../layers/MuralLayer";
 import ElementsLayer from "../layers/ElementsLayer";
 import MenuLayer from "../layers/MenuLayer";
-import { Submission } from "../types/canvas";
+import { Submission } from "../types/schemas";
 
 interface Props {
   submission: Submission;
