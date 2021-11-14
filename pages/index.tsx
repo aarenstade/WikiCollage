@@ -1,23 +1,19 @@
-import type { NextPage } from "next";
-import { useEffect, useState } from "react";
-import { DATABASE_REF } from "../client/firebase";
-import { get } from "firebase/database";
+import { VFC } from "react";
 import styles from "../styles/Home.module.css";
 import GlobalCollabView from "../views/GlobalCollabView";
+import { useAuth } from "../services/AuthProvider";
+import { AdditionItem } from "../types/schemas";
 
-const Home: NextPage = () => {
-  const [latestSubmission, setLatestSubmission] = useState(null);
+interface HomeProps {
+  addition?: AdditionItem;
+}
 
-  useEffect(() => {
-    get(DATABASE_REF(`/latest_submission/`))
-      .then((res) => res.exists() && setLatestSubmission(res.val()))
-      .catch((err) => console.log(err));
-  }, []);
+const Home: VFC<HomeProps> = ({ addition }) => {
+  const auth = useAuth();
 
   return (
     <div className={styles.container}>
-      {/* TODO better loading icon */}
-      {latestSubmission ? <GlobalCollabView submission={latestSubmission} /> : <p>Loading...</p>}
+      {addition && auth?.user ? <GlobalCollabView addition={addition} /> : <p>Loading...</p>}
     </div>
   );
 };
