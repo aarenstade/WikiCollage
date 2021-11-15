@@ -1,38 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, VFC } from "react";
-import styles from "../styles/layers.module.css";
+import React, { useState } from "react";
 import useViewControl from "../hooks/useViewControl";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { ElementListState, SelectedElementIdState } from "../data/atoms";
-import html2canvas from "html2canvas";
-import { convertAllHtmlImagesToBase64, convertBase64ToBytes, uploadImage } from "../image-utils";
-import { v4 } from "uuid";
-import { getDownloadURL } from "firebase/storage";
-import { DATABASE_REF, STORAGE_REF } from "../client/firebase";
-import { set } from "firebase/database";
+import { CollageState, ElementListState, SelectedElementIdState } from "../data/atoms";
+import { ElementToEmbed } from "../types/elements";
+import { AdditionItem } from "../types/schemas";
+import { now } from "mongoose";
+import { useAuth } from "../services/AuthProvider";
+import { useRouter } from "next/dist/client/router";
+import { UploadStatus } from "../types/general";
+import { convertBase64ToBytes, uploadImage } from "../image-utils";
+import { buildImageFromElement, embedNewMural, insertNewAddition } from "../upload";
+
 import Popup from "../components/Popup";
-import axios from "axios";
-import { BASE_URL } from "../config";
+import styles from "../styles/layers.module.css";
 
-interface ElementToEmbed {
-  uri: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-interface MenuLayerProps {}
-
-const MenuLayer: VFC<MenuLayerProps> = ({}) => {
+const MenuLayer = () => {
+  const auth = useAuth();
+  const router = useRouter();
   const view = useViewControl();
+  const collage = useRecoilValue(CollageState);
+  const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
+
+  const [creator, setCreator] = useState("");
+  const [description, setDescription] = useState("");
+
   const [ready, setReady] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [elementPreview, setElementPreview] = useState("");
-  const [finalMural, setFinalMural] = useState("");
-  const [message, setMessage] = useState("");
-  const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>({ message: "Starting Upload..." });
 
   const elementsList = useRecoilValue(ElementListState);
 
@@ -42,96 +37,73 @@ const MenuLayer: VFC<MenuLayerProps> = ({}) => {
     view.setScale(1);
   };
 
-  const handleSubmit = async (e: React.MouseEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // upload and assemble element list to merge with previous mural
-    const elementObjects: ElementToEmbed[] = [];
-    setElementPreview("");
+    try {
+      if (auth?.token) {
+        setProcessing(true);
+        setUploadStatus({ message: "Starting Upload..." });
 
-    for (let i = 0; i < elementsList.length; i++) {
-      const element = elementsList[i];
-      const elementRoot = document.getElementById(`canvas-element-${i}`);
-      console.log("got element");
-      if (elementRoot) {
-        setMessage(`Handling Element ${i + 1}/${elementsList.length}...`);
-        elementRoot.style["backgroundColor"] = "blue";
+        let elementObjects: ElementToEmbed[] = [];
 
-        const elementCanvas = await html2canvas(elementRoot, {
-          backgroundColor: null,
-          scale: 1,
-          width: element.width,
-          height: element.height,
-          onclone: async (clone) => await convertAllHtmlImagesToBase64(clone),
-        });
-        const base64 = elementCanvas.toDataURL("image/png", 0.8);
-        const bytes = convertBase64ToBytes(base64);
-        setElementPreview(base64);
+        for (let i = 0; i < elementsList.length; i++) {
+          const base64 = await buildImageFromElement(elementsList[i]);
+          if (base64) {
+            setUploadStatus({ message: `Processing Element ${i} of ${elementsList.length}...`, image: base64 });
+            const bytes = convertBase64ToBytes(base64);
+            const uri = await uploadImage(bytes, `tmp/${elementsList[i].html_id}.png`);
+            if (uri) {
+              const { x, y, width, height } = elementsList[i];
+              elementObjects.push({ uri, x, y, width, height });
+            }
+          }
+        }
 
-        // upload element content data
-        setMessage(`Uploading Element ${i + 1}/${elementsList.length}...`);
-        const elementId = v4();
-        const storagePath = `/tmp/${elementId}.jpg`;
-        await uploadImage(bytes, storagePath);
-        const uri = await getDownloadURL(STORAGE_REF(storagePath));
+        setUploadStatus({ message: "Embedding..." });
+        const mural = await embedNewMural(auth.token, elementObjects);
+        if (mural) {
+          setUploadStatus({ message: "Processing...", image: mural });
 
-        // append to objects
-        elementObjects.push({
-          uri,
-          x: element.x,
-          y: element.y,
-          width: element.width,
-          height: element.height,
-        });
+          const addition: AdditionItem = { url: mural, creator, description, timestamp: now() };
+          const addition_id = await insertNewAddition(auth.token, addition);
+
+          setUploadStatus({ ...uploadStatus, message: "Success!" });
+          setProcessing(false);
+          router.push(`/success?id=${addition_id}&topic=${collage.topic?.topic}&image=${mural}`);
+        }
       }
+    } catch (error) {
+      setUploadStatus({ message: `Uh oh... an error occurred: ${error}`, image: "" });
+      console.error({ error });
     }
-
-    setMessage(`Merging With Mural...`);
-    // send objects to merge-mural
-    const muralRes = await axios({
-      url: `${BASE_URL}/api/merge-mural`,
-      method: "POST",
-      data: { elements: elementObjects },
-    });
-
-    const muralPath = muralRes.data;
-    const newMuralUri = await getDownloadURL(STORAGE_REF(muralPath));
-
-    await set(DATABASE_REF(`/latest_submission`), {
-      name: `${v4()}`,
-      timestamp: Date.now(),
-      mural: newMuralUri,
-    });
-
-    setFinalMural(newMuralUri);
-    setSuccess(true);
-    setProcessing(false);
-    setReady(false);
-    // TODO show new mural in dedicated page with social links and sharability
   };
-
-  if (success) {
-    return (
-      <Popup onToggle={() => setSuccess(!success)}>
-        <h3>Success - Mural Merged!</h3>
-        <div style={{ backgroundColor: "black" }}>
-          <img src={finalMural} alt="Mural" width="300px" height="auto" />
-        </div>
-      </Popup>
-    );
-  }
 
   if (ready) {
     return (
       <Popup onToggle={() => setReady(false)}>
         {!processing && (
           <div>
-            <h3>Are You Ready to Upload?</h3>
-            <button onClick={handleSubmit}>Submit</button>
+            <h3>Upload Your Additions</h3>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="creator"
+                placeholder="Your Name"
+                required
+                onChange={(e) => setCreator(e.target.value)}
+              />
+              <textarea
+                name="description"
+                placeholder="Describe what you added..."
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <button type="submit">Submit</button>
+            </form>
           </div>
         )}
         {processing && <p>Processing...</p>}
-        {message && <p>{message}</p>}
-        {elementPreview && <img src={elementPreview} alt="element" width="300px" height="auto" />}
+        {processing && <p>{uploadStatus.message}</p>}
+        {processing && uploadStatus.image && <img src={uploadStatus.image} alt="element" width="300px" height="auto" />}
       </Popup>
     );
   }
