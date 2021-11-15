@@ -5,7 +5,7 @@ import MenuLayer from "../layers/MenuLayer";
 import { AdditionItem } from "../types/schemas";
 
 interface Props {
-  addition: AdditionItem;
+  addition: AdditionItem | null;
 }
 
 const GlobalCollabView: VFC<Props> = ({ addition }) => {
@@ -13,7 +13,7 @@ const GlobalCollabView: VFC<Props> = ({ addition }) => {
     <div>
       <MenuLayer />
       <ElementsLayer />
-      <MuralLayer mural={addition.url} />
+      <MuralLayer mural={addition?.url} />
     </div>
   );
 };
