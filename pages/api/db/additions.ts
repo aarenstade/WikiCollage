@@ -15,15 +15,18 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     const page = parseInt(req.query.page.toString());
 
     const additions = await Addition.find()
-      .where({ topic_id: { $eq: topic_id } })
+      .where({ topic_id })
       .sort({ timestamp: "desc" })
       .limit(limit)
-      .skip(page * limit);
-
-    console.log({ additions });
+      .skip(page * limit)
+      .lean();
 
     if (additions.length > 0) {
-      res.status(200).send(additions);
+      if (additions.length > 1) {
+        res.status(200).send(additions);
+      } else {
+        res.status(200).send({ ...additions[0] });
+      }
     } else {
       res.status(200).send([]);
     }

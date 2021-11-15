@@ -16,7 +16,7 @@ async function downloadImage(url: string, path: string) {
 const imageToBase64Handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const url = req.body.url.toString();
-    const path = `/tmp/${v4()}.png`;
+    const path = `tmp/${v4()}.png`;
 
     await downloadImage(url.toString(), path);
 
