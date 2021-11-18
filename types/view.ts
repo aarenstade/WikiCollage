@@ -3,3 +3,8 @@ export interface ViewControl {
   y: number;
   scale: number;
 }
+
+export interface Pos {
+  x: number;
+  y: number;
+}

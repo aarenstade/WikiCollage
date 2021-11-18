@@ -11,3 +11,14 @@
   left: 0;
   margin: 10px;
 }
+
+.touchLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+}
+
+.touchLayer:hover {
+  cursor: crosshair;
+}
