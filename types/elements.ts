@@ -10,6 +10,7 @@ export interface TextElementParams {
 
 export interface CanvasElementItem {
   id?: number;
+  html_id: string;
   type: CanvasElementType;
   data: string;
   width: number;
@@ -19,4 +20,12 @@ export interface CanvasElementItem {
   x: number;
   y: number;
   textParams?: CSSProperties;
+}
+
+export interface ElementToEmbed {
+  uri: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }

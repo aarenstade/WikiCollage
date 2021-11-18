@@ -1,20 +1,19 @@
 import React, { VFC } from "react";
-
 import MuralLayer from "../layers/MuralLayer";
 import ElementsLayer from "../layers/ElementsLayer";
 import MenuLayer from "../layers/MenuLayer";
-import { Submission } from "../types/schemas";
+import { AdditionItem } from "../types/schemas";
 
 interface Props {
-  submission: Submission;
+  addition: AdditionItem | null;
 }
 
-const GlobalCollabView: VFC<Props> = ({ submission }) => {
+const GlobalCollabView: VFC<Props> = ({ addition }) => {
   return (
     <div>
       <MenuLayer />
       <ElementsLayer />
-      <MuralLayer mural={submission.mural} />
+      <MuralLayer mural={addition?.url} />
     </div>
   );
 };
