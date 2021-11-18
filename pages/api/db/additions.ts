@@ -21,6 +21,8 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       .skip(page * limit)
       .lean();
 
+    console.log({ additions });
+
     if (additions.length > 0) {
       if (additions.length > 1) {
         res.status(200).send(additions);
@@ -40,31 +42,24 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
 // INPUT --> body: {addition {AdditionItem}, topic?: {TopicItem}}
 handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    console.log("inserting new addition");
     const addition: AdditionItem = req.body.addition;
-    console.log({ addition });
-    if (addition.topic_id) {
-      // existing topic
-      const additionInsert = await new Addition(addition).save();
-      if (additionInsert.errors) res.status(500).send(JSON.stringify(additionInsert.errors));
-      res.status(200).send({ _id: additionInsert._id });
-    } else {
-      // new topic
-      let topicData: TopicItem = req.body.topic;
-      const topicInsert = await new Topic(topicData).save();
-      console.log({ topicInsert });
+    let topic_id = addition.topic_id || "";
 
-      if (topicInsert._id) {
-        const additionInsert = await new Addition({ ...addition, topic_id: topicInsert._id }).save();
-        if (additionInsert.errors) res.status(500).send(JSON.stringify(additionInsert.errors));
-        console.log({ additionInsert });
-        res.status(200).send({ _id: additionInsert._id });
-      } else {
-        res.status(500).send("Error inserting topic...");
-      }
+    if (!addition.topic_id) {
+      const topic: TopicItem = req.body.topic;
+      const topicInsert = await new Topic(topic).save();
+      topic_id = topicInsert._id;
     }
+
+    const newAddition = { ...addition, topic_id };
+    const additionInsert = await new Addition(newAddition).save();
+    if (additionInsert.errors) res.status(500).send(JSON.stringify(additionInsert.errors));
+
+    res.status(200).send({ _id: additionInsert._id, topic_id: additionInsert.topic_id });
   } catch (error) {
     console.error({ error });
-    res.status(500).send(error);
+    res.status(500).send(null);
   }
 });
 

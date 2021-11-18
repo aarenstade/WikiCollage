@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { CollageState } from "../data/atoms";
 import { useAuth } from "../services/AuthProvider";
@@ -8,7 +8,9 @@ import { AdditionItem, TopicItem } from "../types/schemas";
 
 const fetchTopicAndAdditions = async (
   token: string,
-  topicString: string
+  topicString: string,
+  page: number = 0,
+  limit: number = 1
 ): Promise<{ topic: TopicItem | null; addition: AdditionItem | null }> => {
   let topic;
   let addition;
@@ -18,7 +20,7 @@ const fetchTopicAndAdditions = async (
       const topicRes = await fetchTopic(token, topicString);
       topic = topicRes.data;
 
-      const additionRes = await fetchAdditions(token, topic._id);
+      const additionRes = await fetchAdditions(token, topic._id, page, limit);
       addition = additionRes.data;
     }
   } catch (error) {
@@ -28,15 +30,18 @@ const fetchTopicAndAdditions = async (
   return { topic, addition };
 };
 
-const useCollage = (topicString?: string): Collage => {
+const useCollage = (topicString?: string, page?: number, limit?: number): Collage => {
   const auth = useAuth();
   const [collage, setCollage] = useRecoilState(CollageState);
 
   useEffect(() => {
     if (auth?.token && topicString) {
-      fetchTopicAndAdditions(auth.token, topicString).then((res) =>
-        setCollage({ topic: res.topic, addition: res.addition, loading: false })
-      );
+      fetchTopicAndAdditions(auth.token, topicString, page, limit).then((res) => {
+        const topic: TopicItem = res.topic
+          ? { ...res.topic, topic: topicString }
+          : { topic: topicString, created_at: new Date(), updated_at: new Date() };
+        setCollage({ topic, addition: res.addition, loading: false });
+      });
     }
   }, [auth?.token, topicString]);
 

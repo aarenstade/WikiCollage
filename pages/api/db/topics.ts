@@ -8,7 +8,7 @@ const handler = apiHandler();
 // INPUT --> ?topic={String}
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   const topic = req.query.topic.toString();
-  const response: TopicItem | null = await Topic.findOne({ topic: { $regex: `/${topic}/i` } }).lean();
+  const response: TopicItem | null = await Topic.findOne({ topic: { $regex: topic } });
   res.send(response);
 });
 

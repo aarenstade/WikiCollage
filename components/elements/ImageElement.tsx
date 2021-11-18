@@ -56,23 +56,28 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
   const [loading, setLoading] = useState(false);
 
   const onInputUrl = async (url: string) => {
+    let data = url;
+
     const matchUrl = (val: string) =>
       val.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    const matchBase64 = (val: string) => val.startsWith("data:image");
+
+    const finish = (data?: string) => {
+      setLoading(false);
+      data && onUpdate({ ...element, data });
+      return;
+    };
+
+    setLoading(true);
     if (matchUrl(url)) {
-      console.log("matched");
-      let data = url;
-      try {
-        setLoading(true);
-        const res = await axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url }, method: "POST" });
-        console.log(`res length: ${res.data.length}`);
-        if (res.data) data = res.data;
-      } catch (error) {
-        console.log({ error });
-      } finally {
-        setLoading(false);
-        onUpdate({ ...element, data });
-      }
+      const res = await axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url }, method: "POST" });
+      if (res.data) data = res.data;
+      finish(data);
     }
+
+    if (matchBase64(url)) finish(data);
+
+    finish();
   };
 
   const onSelectFile = (e: any) => {
