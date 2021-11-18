@@ -3,12 +3,8 @@ import { v4 } from "uuid";
 import { ElementListState, SelectedElementIdState } from "../data/atoms";
 import { FONTS, TEXT_COLORS } from "../styles/text";
 import { CanvasElementItem } from "../types/elements";
+import { Pos } from "../types/view";
 import useViewControl from "./useViewControl";
-
-interface Pos {
-  x: number;
-  y: number;
-}
 
 interface UseElementsHook {
   elements: CanvasElementItem[];
