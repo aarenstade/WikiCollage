@@ -1,35 +1,23 @@
-import { useEffect, useState, VFC } from "react";
-import { useAuth } from "../services/AuthProvider";
-import { AdditionItem } from "../types/schemas";
-import { fetchAdditions } from "../services/fetch";
-
-import GlobalCollabView from "../views/GlobalCollabView";
+import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { DATABASE_REF } from "../client/firebase";
+import { get } from "firebase/database";
 import styles from "../styles/Home.module.css";
+import GlobalCollabView from "../views/GlobalCollabView";
 
-import { WIKI_COLLAGE_HOME_TOPIC_ID } from "../config";
-
-interface HomeProps {
-  addition?: AdditionItem;
-}
-
-const Home: VFC<HomeProps> = () => {
-  const auth = useAuth();
-  const [addition, setAddition] = useState<AdditionItem | null>(null);
+const Home: NextPage = () => {
+  const [latestSubmission, setLatestSubmission] = useState(null);
 
   useEffect(() => {
-    if (auth?.token) {
-      fetchAdditions(auth.token, WIKI_COLLAGE_HOME_TOPIC_ID)
-        .then((res) => {
-          console.log({ res });
-          if (res.data) setAddition(res.data);
-        })
-        .catch((err) => console.error({ err }));
-    }
-  }, [auth?.token]);
+    get(DATABASE_REF(`/latest_submission/`))
+      .then((res) => res.exists() && setLatestSubmission(res.val()))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className={styles.container}>
-      {addition && auth?.user ? <GlobalCollabView addition={addition} /> : <p>Loading...</p>}
+      {/* TODO better loading icon */}
+      {latestSubmission ? <GlobalCollabView submission={latestSubmission} /> : <p>Loading...</p>}
     </div>
   );
 };

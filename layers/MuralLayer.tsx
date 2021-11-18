@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
+// this layer loads the underlying mural image
+
 import { VFC } from "react";
+import { MURAL_DIMENSION } from "../config";
 import useViewControl from "../hooks/useViewControl";
+
 import styles from "../styles/layers.module.css";
 
-import { DEFAULT_MURAL_BACKGROUND_COLOR, MURAL_DIMENSION } from "../config";
-
 interface Props {
-  mural?: string;
+  mural: string;
 }
 
 const MuralLayer: VFC<Props> = ({ mural }) => {
@@ -14,17 +16,7 @@ const MuralLayer: VFC<Props> = ({ mural }) => {
 
   return (
     <div className={styles.full}>
-      {mural ? (
-        <img src={mural} alt="mural" style={{ zIndex: 1, width: `${MURAL_DIMENSION * viewControl.view.scale}px` }} />
-      ) : (
-        <div
-          style={{
-            backgroundColor: DEFAULT_MURAL_BACKGROUND_COLOR,
-            width: `${MURAL_DIMENSION * viewControl.view.scale}px`,
-            height: `${MURAL_DIMENSION * viewControl.view.scale}px`,
-          }}
-        />
-      )}
+      <img src={mural} alt="mural" style={{ zIndex: 1, width: `${MURAL_DIMENSION * viewControl.view.scale}px` }} />
     </div>
   );
 };

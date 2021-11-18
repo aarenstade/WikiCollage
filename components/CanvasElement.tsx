@@ -98,7 +98,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
 
   return (
     <Rnd
-      id={element.html_id}
+      id={`canvas-element-${id}`}
       ref={rndRef}
       default={{
         width: localElement.width || "auto",

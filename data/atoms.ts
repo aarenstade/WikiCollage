@@ -1,13 +1,6 @@
 import { atom, selector, DefaultValue } from "recoil";
-import { Collage } from "../types/collage";
 import { CanvasElementItem } from "../types/elements";
 import { ViewControl } from "../types/view";
-import { defaultCollage } from "./defaults";
-
-export const CollageState = atom<Collage>({
-  key: "CollageState",
-  default: defaultCollage,
-});
 
 export const ViewControlState = atom<ViewControl>({
   key: "ViewControlState",
