@@ -5,10 +5,21 @@ import { authPostRequest } from "./client/requests";
 import { BASE_URL } from "./config";
 import { convertAllHtmlImagesToBase64, convertBase64ToBytes } from "./image-utils";
 import { CanvasElementItem, ElementToEmbed } from "./types/elements";
-import { AdditionItem } from "./types/schemas";
+import { AdditionItem, TopicItem } from "./types/schemas";
+
+// what would it take to perform all of this serverside?
+
+// html2canvas --> sending html element parameters in some schema then rebuilding server side?
+
+// but all the database updates and stuff?
+// well we'd have to authenticate the server
+// it just all takes server requests
+
+// id like to optimize this flow,
 
 export const buildImageFromElement = async (element: CanvasElementItem): Promise<string | null> => {
   const elementRoot = document.getElementById(element.html_id);
+  console.log({ elementRoot });
   if (elementRoot) {
     elementRoot.style["backgroundColor"] = "blue";
 
@@ -25,12 +36,12 @@ export const buildImageFromElement = async (element: CanvasElementItem): Promise
   return null;
 };
 
-export const embedNewMural = async (token: string, elementObjects: ElementToEmbed[]) => {
-  const muralRes = await authPostRequest(token, `${BASE_URL}/api/merge-mural`, { elements: elementObjects });
+export const embedNewMural = async (token: string, elementObjects: ElementToEmbed[], collage?: string) => {
+  const muralRes = await authPostRequest(token, `${BASE_URL}/api/merge-mural`, { elements: elementObjects, collage });
   if (muralRes.data) return await getDownloadURL(STORAGE_REF(muralRes.data));
 };
 
-export const insertNewAddition = async (token: string, addition: AdditionItem) => {
-  const response = await authPostRequest(token, `${BASE_URL}/api/db/additions`, { addition });
-  if (response.data) return response.data._id;
+export const insertNewAddition = async (token: string, addition: AdditionItem, topic: TopicItem | null) => {
+  const response = await authPostRequest(token, `${BASE_URL}/api/db/additions`, { addition, topic });
+  if (response.data) return response.data;
 };
