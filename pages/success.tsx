@@ -18,7 +18,7 @@ const SuccessPage = () => {
   return (
     <div>
       <h1>Thank You!</h1>
-      <p>Your addition {topic && `to "${topic}"`} was recieved and embedded into the collage.</p>
+      <p>Your additions {topic && `to "${topic}"`} was recieved and embedded into the collage.</p>
       {collage.addition?.url && <img src={collage.addition.url} alt="Collage" width="500px" />}
       <p>
         Check it out: <a href={finalLink}>{finalLink}</a>

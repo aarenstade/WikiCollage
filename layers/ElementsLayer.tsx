@@ -10,6 +10,7 @@ import CanvasAdd from "../components/CanvasAdd";
 import useViewControl from "../hooks/useViewControl";
 import { MURAL_DIMENSION } from "../config";
 import TouchLayer from "./TouchLayer";
+import useElements from "../hooks/useElements";
 
 const ElementsLayer = () => {
   const view = useViewControl();
@@ -18,14 +19,17 @@ const ElementsLayer = () => {
   const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
   const [modify, setModify] = useState({ active: false, x: 0, y: 0 });
 
+  const elements = useElements();
+
   const handleClick = (e: React.MouseEvent) => {
-    console.log("handleClick");
-    if (modify.active) {
-      setModify({ ...modify, active: false });
-    } else {
-      setModify({ active: true, x: e.pageX, y: e.pageY });
-      setSelectedId(null);
-    }
+    elements.addImageElement({ x: e.pageX, y: e.pageY });
+
+    // if (modify.active) {
+    //   setModify({ ...modify, active: false });
+    // } else {
+    //   setModify({ active: true, x: e.pageX, y: e.pageY });
+    //   setSelectedId(null);
+    // }
   };
 
   const saveElement = (i: number, e: CanvasElementItem) => {
@@ -52,13 +56,13 @@ const ElementsLayer = () => {
         height: MURAL_DIMENSION * view.view.scale,
       }}
     >
-      {modify.active && (
+      {/* {modify.active && (
         <CanvasAdd
           modify={modify}
           setActive={(a) => setModify({ ...modify, active: a })}
           onAdd={() => setModify({ ...modify, active: false })}
         />
-      )}
+      )} */}
       {elementsList.map((element: CanvasElementItem, i: number) => (
         <CanvasElement
           key={i}
