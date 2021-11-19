@@ -4,9 +4,9 @@ import { ElementListState, SelectedElementIdState } from "../data/atoms";
 import { CanvasElementItem } from "../types/elements";
 
 import CanvasElement from "../components/CanvasElement";
+import CanvasAddTooltip from "../components/CanvasAddTooltip";
 
 import styles from "../styles/layers.module.css";
-import CanvasAdd from "../components/CanvasAdd";
 import useViewControl from "../hooks/useViewControl";
 import { MURAL_DIMENSION } from "../config";
 import TouchLayer from "./TouchLayer";
@@ -57,7 +57,7 @@ const ElementsLayer = () => {
       }}
     >
       {/* {modify.active && (
-        <CanvasAdd
+        <CanvasAddTooltip
           modify={modify}
           setActive={(a) => setModify({ ...modify, active: a })}
           onAdd={() => setModify({ ...modify, active: false })}
