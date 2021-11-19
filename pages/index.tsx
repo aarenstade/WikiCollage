@@ -6,6 +6,7 @@ import GlobalCollabView from "../views/GlobalCollabView";
 import styles from "../styles/Home.module.css";
 
 import useCollage from "../hooks/useCollage";
+import { HOME_TOPIC_NAME } from "../config";
 
 interface HomeProps {
   addition?: AdditionItem;
@@ -13,7 +14,7 @@ interface HomeProps {
 
 const Home: VFC<HomeProps> = () => {
   const auth = useAuth();
-  const collage = useCollage("WikiCollage-Home");
+  const collage = useCollage(HOME_TOPIC_NAME);
 
   return (
     <div className={styles.container}>
