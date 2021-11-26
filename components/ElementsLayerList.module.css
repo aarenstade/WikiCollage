@@ -1,30 +1,68 @@
-.layerList {
+.layerListContainer {
+  display: flex;
+  align-items: center;
+  --layer-list-width: 300px;
+}
+
+.expandButton {
   position: absolute;
   top: var(--navbar-offset);
   right: 0;
-  height: 100vw;
-  width: 300px;
+  z-index: 99;
+  transition: all 150ms;
+}
+
+.expandButtonExpanded {
+  right: var(--layer-list-width);
+}
+
+.layerList {
+  position: fixed;
+  top: var(--navbar-offset);
+  right: 0;
+
+  width: var(--layer-list-width);
+  height: 100%;
+
   background-color: white;
-  border-left: 2px solid black;
+  z-index: 90;
+  transition: all 150ms;
 }
 
 .layerList ul {
   width: 200px;
+  z-index: 91;
 }
 
 .layerList li {
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  width: 300px;
+
+  width: var(--layer-list-width);
   padding: 8px;
   font-size: 14px;
+
   background-color: antiquewhite;
   transform: translateX(-40px);
-  /* line-height: 0; */
+  z-index: 92;
 }
 
 .layerList li * {
   padding: 0;
   margin: 0;
+}
+
+.expanded {
+  right: 0;
+}
+
+.hidden {
+  right: calc(var(--layer-list-width) * -1);
+}
+
+@media screen and (max-width: 1000px) {
+  .layerListContainer {
+    --layer-list-width: 200px;
+  }
 }
