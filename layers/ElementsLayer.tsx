@@ -4,7 +4,7 @@ import { ElementListState, SelectedElementIdState } from "../data/atoms";
 import { CanvasElementItem } from "../types/elements";
 
 import CanvasElement from "../components/CanvasElement";
-import CanvasAddTooltip from "../components/CanvasAddTooltip";
+// import CanvasAddTooltip from "../components/CanvasAddTooltip";
 
 import styles from "../styles/layers.module.css";
 import useViewControl from "../hooks/useViewControl";
@@ -16,27 +16,20 @@ const ElementsLayer = () => {
   const view = useViewControl();
 
   const [elementsList, setElementsList] = useRecoilState(ElementListState);
-  const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
-  const [modify, setModify] = useState({ active: false, x: 0, y: 0 });
+  const [selectedId, setSelectedId] = useRecoilState(SelectedElementIdState);
+  // const [modify, setModify] = useState({ active: false, x: 0, y: 0 });
 
   const elements = useElements();
 
   const handleClick = (e: React.MouseEvent) => {
     elements.addImageElement({ x: e.pageX, y: e.pageY });
-
-    // if (modify.active) {
-    //   setModify({ ...modify, active: false });
-    // } else {
-    //   setModify({ active: true, x: e.pageX, y: e.pageY });
-    //   setSelectedId(null);
-    // }
+    // setSelectedId({ id: elementsList.length - 1, editing: true });
   };
 
-  const saveElement = (i: number, e: CanvasElementItem) => {
+  const updateElement = (i: number, e: CanvasElementItem) => {
     let newElements = [...elementsList];
     newElements[i] = e;
     setElementsList(newElements);
-    setSelectedId(null);
   };
 
   const deleteElement = (i: number) => {
@@ -68,7 +61,7 @@ const ElementsLayer = () => {
           key={i}
           id={i}
           element={element}
-          onSave={(e) => saveElement(i, e)}
+          onUpdate={(e) => updateElement(i, e)}
           onDelete={() => deleteElement(i)}
         />
       ))}
