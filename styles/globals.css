@@ -11,6 +11,8 @@ body {
   --background-color: rgb(50, 50, 50);
 
   background-color: var(--background-color);
+
+  --navbar-offset: 40px;
 }
 
 a {

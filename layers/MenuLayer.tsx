@@ -142,13 +142,13 @@ const MenuLayer = () => {
 
   return (
     <div className={styles.menuLayer}>
-      <p style={{ backgroundColor: "white", fontSize: "12px", top: "50px", left: 0 }}>
+      <p style={{ backgroundColor: "white", fontSize: "12px", top: "var(--navbar-offset)", left: 0 }}>
         Scale: {Math.round(view.view.scale * 100) / 100}
       </p>
-      <button style={{ top: 0 }} onClick={() => view.zoomIn()}>
+      <button style={{ top: "calc(var(--navbar-offset) + 20px)" }} onClick={() => view.zoomIn()}>
         Zoom In
       </button>
-      <button style={{ top: "30px" }} onClick={() => view.zoomOut()}>
+      <button style={{ top: "calc(var(--navbar-offset) + 50px)" }} onClick={() => view.zoomOut()}>
         Zoom Out
       </button>
       {!ready && (

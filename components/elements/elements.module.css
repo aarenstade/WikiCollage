@@ -22,3 +22,8 @@
   width: auto;
   height: 100%;
 }
+
+.textElement {
+  display: flex;
+  align-items: center;
+}

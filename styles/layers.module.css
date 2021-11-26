@@ -1,8 +1,13 @@
 .full {
   position: absolute;
-  top: 0;
+  top: var(--navbar-offset);
   left: 0;
   background-color: none;
+}
+
+.menuLayer {
+  position: absolute;
+  top: var(--navbar-offset);
 }
 
 .menuLayer * {
@@ -14,7 +19,7 @@
 
 .touchLayer {
   position: absolute;
-  top: 0;
+  top: var(--navbar-offset);
   left: 0;
   background-color: transparent;
 }
