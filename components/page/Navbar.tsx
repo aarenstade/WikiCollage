@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <div className={styles.navbar}>
-      <h1>CollageWiki</h1>
+      <h1>WikiCollage</h1>
       <SearchBar
         topic={collage.topic?.topic}
         onSearch={(topic: string) => router.push(`${topic ? `${BASE_URL}/t/${topic}` : `${BASE_URL}`}`)}

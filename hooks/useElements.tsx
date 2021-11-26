@@ -8,9 +8,9 @@ import useViewControl from "./useViewControl";
 
 interface UseElementsHook {
   elements: CanvasElementItem[];
-  addImageElement: (pos: Pos) => void;
-  addTextElement: (pos: Pos) => void;
-  addDrawElement: (pos: Pos) => void;
+  addImageElement: (pos: Pos) => CanvasElementItem;
+  addTextElement: (pos: Pos) => CanvasElementItem;
+  // addDrawElement: (pos: Pos) => CanvasElementItem;
 }
 
 const useElements = (): UseElementsHook => {
@@ -36,10 +36,11 @@ const useElements = (): UseElementsHook => {
       height: height / view.view.scale,
       scaledWidth: width,
       scaledHeight: height,
-      x: Math.round(pos.x / view.view.scale),
-      y: Math.round(pos.y / view.view.scale),
+      x: Math.round(pos.x / view.view.scale) - width / 2,
+      y: Math.round(pos.y / view.view.scale) - width / 2,
     };
     addAndSelectNewElement(newImageElement);
+    return newImageElement;
   };
 
   const addTextElement = (pos: Pos) => {
@@ -66,14 +67,14 @@ const useElements = (): UseElementsHook => {
       },
     };
     addAndSelectNewElement(newTextElement);
+    return newTextElement;
   };
-  const addDrawElement = (pos: Pos) => {};
 
   return {
     elements: elementList,
     addImageElement,
     addTextElement,
-    addDrawElement,
+    // addDrawElement,
   };
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, VFC } from "react";
+import { useEffect, useRef, VFC } from "react";
 import { CanvasElementItem } from "../types/elements";
 import { Rnd } from "react-rnd";
 import styles from "./CanvasElement.module.css";
@@ -26,17 +26,17 @@ const resizeHandleStyles = {
 interface CanvasElementProps {
   id: number;
   element: CanvasElementItem;
-  onSave: (e: CanvasElementItem) => void;
+  onUpdate: (e: CanvasElementItem) => void;
   onDelete: () => void;
 }
 
 interface CanvasElementHeaderProps {
   id: number;
-  onSave: () => void;
+  onUpdate: () => void;
   onDelete: () => void;
 }
 
-const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onSave, onDelete }) => {
+const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onUpdate, onDelete }) => {
   const element = useSelectedElement(id);
   return (
     <div className={styles.elementHeader}>
@@ -44,37 +44,35 @@ const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onSave, onDele
       {element.selected && !element.editing && (
         <button onClick={() => element.setId({ id, editing: true })}>Edit</button>
       )}
-      {element.selected && element.editing && <button onClick={() => onSave()}>Save</button>}
+      {element.selected && element.editing && <button onClick={() => onUpdate()}>Save</button>}
     </div>
   );
 };
 
-const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete }) => {
+const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelete }) => {
   const rndRef = useRef<any>();
 
   const viewControl = useViewControl();
   const selection = useSelectedElement(id);
 
-  const [localElement, setLocalElement] = useState(element);
-
   const handleSave = () => {
-    onSave(localElement);
+    onUpdate(element);
     selection.setId(null);
   };
 
   useEffect(() => {
-    if (!selection.editing) onSave(localElement);
+    if (!selection.editing) onUpdate(element);
   }, [selection.editing]);
 
   useEffect(() => {
     const scale = viewControl.view.scale;
-    const scaledWidth = localElement.width * scale;
-    const scaledHeight = localElement.height * scale;
-    const relativeX = localElement.x * scale;
-    const relativeY = localElement.y * scale;
-    setLocalElement({ ...localElement, scaledWidth, scaledHeight });
+    const scaledWidth = element.width * scale;
+    const scaledHeight = element.height * scale;
+    const relativeX = element.x * scale;
+    const relativeY = element.y * scale;
     rndRef.current.updateSize({ width: scaledWidth, height: scaledHeight });
     rndRef.current.updatePosition({ x: relativeX, y: relativeY });
+    onUpdate({ ...element, scaledWidth, scaledHeight });
   }, [viewControl.view.scale]);
 
   const updatePosition = (d: any) => {
@@ -83,7 +81,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
     const absX = Math.round(x / scale);
     const absY = Math.round(y / scale);
     rndRef.current.updatePosition({ x, y });
-    setLocalElement({ ...localElement, x: absX, y: absY });
+    onUpdate({ ...element, x: absX, y: absY });
   };
 
   const handleResize = (s: any) => {
@@ -93,7 +91,8 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
     const absWidth = Math.round(scaledWidth / scale);
     const absHeight = Math.round(scaledHeight / scale);
     rndRef.current.updateSize({ width: scaledWidth, height: scaledHeight });
-    setLocalElement({ ...localElement, width: absWidth, height: absHeight, scaledWidth, scaledHeight });
+    const newElement = { ...element, width: absWidth, height: absHeight, scaledWidth, scaledHeight };
+    onUpdate(newElement);
   };
 
   return (
@@ -101,10 +100,10 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
       id={element.html_id}
       ref={rndRef}
       default={{
-        width: localElement.width || "auto",
-        height: localElement.height || "auto",
-        x: localElement.x,
-        y: localElement.y,
+        width: element.width || "auto",
+        height: element.height || "auto",
+        x: element.x,
+        y: element.y,
       }}
       onDrag={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
@@ -115,19 +114,19 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onSave, onDelete 
       <div
         className={styles.elementContainer}
         style={{
-          width: localElement.scaledWidth,
-          height: localElement.scaledHeight,
+          width: element.scaledWidth,
+          height: element.scaledHeight,
         }}
         onDoubleClick={() => selection.setId({ id, editing: true })}
       >
-        <CanvasElementHeader id={id} onSave={handleSave} onDelete={onDelete} />
+        <CanvasElementHeader id={id} onUpdate={handleSave} onDelete={onDelete} />
         {element.type === "text" && (
-          <TextElement editing={selection.editing} element={localElement} onUpdate={(e) => setLocalElement(e)} />
+          <TextElement editing={selection.editing} element={element} onUpdate={(e) => onUpdate(e)} />
         )}
         {element.type === "image" && (
-          <ImageElement editing={selection.editing} element={localElement} onUpdate={(e) => setLocalElement(e)} />
+          <ImageElement editing={selection.editing} element={element} onUpdate={(e) => onUpdate(e)} />
         )}
-        {/* {element.type === "draw" && <DrawElement element={localElement} onDraw={(e) => setLocalElement(e)} />} */}
+        {/* {element.type === "draw" && <DrawElement element={element\} onDraw={(e) => onUpdate\(e)} />} */}
       </div>
     </Rnd>
   );

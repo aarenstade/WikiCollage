@@ -4,6 +4,7 @@ import ElementsLayer from "../layers/ElementsLayer";
 import MenuLayer from "../layers/MenuLayer";
 import { AdditionItem } from "../types/schemas";
 import Navbar from "../components/page/Navbar";
+import ElementsLayerList from "../components/ElementsLayerList";
 
 interface Props {
   addition: AdditionItem | null;
@@ -13,10 +14,13 @@ const GlobalCollabView: VFC<Props> = ({ addition }) => {
   return (
     <div>
       <Navbar />
-      <div>
-        <MenuLayer />
-        <ElementsLayer />
-        <MuralLayer mural={addition?.url} />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <ElementsLayerList />
+        <div>
+          <MenuLayer />
+          <ElementsLayer />
+          <MuralLayer mural={addition?.url} />
+        </div>
       </div>
     </div>
   );

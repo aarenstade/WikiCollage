@@ -1,0 +1,30 @@
+.layerList {
+  position: absolute;
+  top: var(--navbar-offset);
+  right: 0;
+  height: 100vw;
+  width: 300px;
+  background-color: white;
+  border-left: 2px solid black;
+}
+
+.layerList ul {
+  width: 200px;
+}
+
+.layerList li {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  width: 300px;
+  padding: 8px;
+  font-size: 14px;
+  background-color: antiquewhite;
+  transform: translateX(-40px);
+  /* line-height: 0; */
+}
+
+.layerList li * {
+  padding: 0;
+  margin: 0;
+}
