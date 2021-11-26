@@ -43,7 +43,6 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
           value={element.data}
           onChange={(e) => onUpdate({ ...element, data: e.target.value })}
           disabled={!editing}
-          className={styles.textElement}
           style={{
             overflowWrap: "anywhere",
             ...element.textParams,
@@ -63,7 +62,6 @@ const TextElement: VFC<TextElementProps> = ({ element, editing, onUpdate }) => {
   } else {
     return (
       <div
-        className={styles.textElement}
         style={{
           overflowWrap: "anywhere",
           width: element.scaledWidth,

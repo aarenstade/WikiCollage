@@ -3,7 +3,6 @@ import MuralLayer from "../layers/MuralLayer";
 import ElementsLayer from "../layers/ElementsLayer";
 import MenuLayer from "../layers/MenuLayer";
 import { AdditionItem } from "../types/schemas";
-import Navbar from "../components/page/Navbar";
 
 interface Props {
   addition: AdditionItem | null;
@@ -12,12 +11,9 @@ interface Props {
 const GlobalCollabView: VFC<Props> = ({ addition }) => {
   return (
     <div>
-      <Navbar />
-      <div>
-        <MenuLayer />
-        <ElementsLayer />
-        <MuralLayer mural={addition?.url} />
-      </div>
+      <MenuLayer />
+      <ElementsLayer />
+      <MuralLayer mural={addition?.url} />
     </div>
   );
 };
