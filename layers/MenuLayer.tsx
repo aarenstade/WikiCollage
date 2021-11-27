@@ -10,11 +10,13 @@ import { useRouter } from "next/dist/client/router";
 import { UploadStatus } from "../types/general";
 import { convertBase64ToBytes, uploadImage } from "../image-utils";
 import { buildImageFromElement, embedNewMural, insertNewAddition } from "../upload";
+import { BigButton, NormalButton } from "../components/Buttons";
 
 import Popup from "../components/Popup";
 import styles from "../styles/layers.module.css";
 
 import container from "../styles/containers.module.css";
+import ScaleSlider from "../components/menu/ScaleSlider";
 
 const MenuLayer = () => {
   const auth = useAuth();
@@ -33,9 +35,13 @@ const MenuLayer = () => {
   const elementsList = useRecoilValue(ElementListState);
 
   const handleReady = () => {
-    setReady(true);
-    setSelectedId(null);
-    view.setScale(1);
+    if (elementsList.length > 0) {
+      setReady(true);
+      setSelectedId(null);
+      view.setScale(1);
+    } else {
+      alert("No Elements Added...");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,7 +91,6 @@ const MenuLayer = () => {
             console.log({ addition });
             if (addition._id) {
               setUploadStatus({ ...uploadStatus, message: "Success!" });
-              setProcessing(false);
               router.push(`/success?topic=${collage.topic?.topic}`);
             } else {
               setUploadStatus({ ...uploadStatus, message: "Error!" });
@@ -111,12 +116,8 @@ const MenuLayer = () => {
       <Popup noExit={processing} onToggle={() => setReady(false)}>
         {!processing && (
           <div>
-            <h3>Upload Your Additions</h3>
-            <form
-              onSubmit={handleSubmit}
-              style={{ width: "100%", gap: "20px" }}
-              className={container.simpleColumnContainer}
-            >
+            <h2>Upload Your Additions</h2>
+            <form onSubmit={handleSubmit} style={{ gap: "20px" }} className={container.simpleColumnContainer}>
               <input
                 type="text"
                 name="creator"
@@ -127,35 +128,40 @@ const MenuLayer = () => {
               <textarea
                 name="description"
                 placeholder="Describe what you added..."
+                style={{ width: "90%", height: "100px" }}
                 onChange={(e) => setDescription(e.target.value)}
               />
-              <button type="submit">Submit</button>
+              <BigButton submit onClick={() => null} text="Submit" />
             </form>
           </div>
         )}
         {processing && <p>Processing...</p>}
         {processing && <p>{uploadStatus.message}</p>}
-        {processing && uploadStatus.image && <img src={uploadStatus.image} alt="element" width="300px" height="auto" />}
+        {processing && (
+          <div
+            style={{
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {uploadStatus.image ? (
+              <img src={uploadStatus.image} alt="element" width="300px" height="auto" />
+            ) : (
+              <div style={{ backgroundColor: "lightgray", width: "300px", height: "300px" }} />
+            )}
+          </div>
+        )}
       </Popup>
     );
   }
 
   return (
     <div className={styles.menuLayer}>
-      <p style={{ backgroundColor: "white", fontSize: "12px", top: "var(--navbar-offset)", left: 0 }}>
-        Scale: {Math.round(view.view.scale * 100) / 100}
-      </p>
-      <button style={{ top: "calc(var(--navbar-offset) + 20px)" }} onClick={() => view.zoomIn()}>
-        Zoom In
-      </button>
-      <button style={{ top: "calc(var(--navbar-offset) + 50px)" }} onClick={() => view.zoomOut()}>
-        Zoom Out
-      </button>
-      {!ready && (
-        <button style={{ bottom: 0, right: 0 }} onClick={handleReady}>
-          Prepare for Submission
-        </button>
-      )}
+      <ScaleSlider />
+      {!ready && <BigButton style={{ bottom: 0, right: 0 }} onClick={handleReady} text="Submit" />}
     </div>
   );
 };
