@@ -1,0 +1,61 @@
+.bigButton {
+  outline: none;
+  border: none;
+  background-color: var(--transparent-black);
+  /* border: 3px solid var(--transparent-white); */
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  transition: all 150ms;
+}
+
+.bigButton:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+
+.bigButton:active {
+  background-color: var(--color1-light);
+}
+
+.normalButton {
+  outline: none;
+  border: none;
+  background-color: lightgrey;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 4px;
+  transition: all 150ms;
+}
+
+.normalButton:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.smallButton {
+}
+
+.iconButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  border: none;
+  background-color: var(--transparent-white);
+  padding: 10px;
+  border-radius: 5px 0 0 5px;
+  transition: all 150ms;
+}
+
+.iconButton svg {
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+}
+
+.iconButton:hover {
+  cursor: pointer;
+}
