@@ -1,0 +1,29 @@
+.scaleSliderContainer {
+  position: fixed;
+  background-color: var(--transparent-white);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 5px;
+
+  height: 200px;
+  width: 40px;
+}
+
+.scaleSlider {
+  width: 150px;
+  height: 20px;
+  margin: 0;
+  transform-origin: 60px 40px;
+  transform: rotate(-90deg);
+}
+
+.scaleReadout {
+  transform: translateY(-80px);
+  width: 40px;
+  text-align: center;
+  font-size: 12px;
+}
