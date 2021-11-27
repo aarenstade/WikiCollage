@@ -1,13 +1,17 @@
-import { ChangeEvent, KeyboardEventHandler, useEffect, useState, VFC } from "react";
+import { ChangeEvent, useEffect, useState, VFC } from "react";
 import { HOME_TOPIC_NAME } from "../../config";
 import styles from "./SearchBar.module.css";
 
+import { IconButton } from "../Buttons";
+import SearchIcon from "../icons/search.svg";
+
 interface Props {
   topic?: string;
+  loading: boolean;
   onSearch: (topic: string) => void;
 }
 
-const SearchBar: VFC<Props> = ({ topic, onSearch }) => {
+const SearchBar: VFC<Props> = ({ topic, loading, onSearch }) => {
   const [newTopic, setTopic] = useState(topic);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +37,10 @@ const SearchBar: VFC<Props> = ({ topic, onSearch }) => {
         onChange={handleInputChange}
         onKeyDown={(e) => e.key === "Enter" && newTopic != topic && onSearch(newTopic || "")}
       />
-      <button onClick={() => newTopic && newTopic != topic && onSearch(newTopic)}>Search</button>
+      {!loading && (
+        <IconButton icon={<SearchIcon />} onClick={() => newTopic && newTopic != topic && onSearch(newTopic)} />
+      )}
+      {loading && <p style={{ margin: "4px" }}>...</p>}
     </div>
   );
 };
