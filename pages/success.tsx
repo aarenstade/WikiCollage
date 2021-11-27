@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/dist/client/router";
 import { useEffect, useState } from "react";
+import FlexibleCard from "../components/FlexibleCard";
 import { BASE_URL } from "../config";
 import useCollage from "../hooks/useCollage";
 
@@ -17,12 +18,14 @@ const SuccessPage = () => {
 
   return (
     <div>
-      <h1>Thank You!</h1>
-      <p>Your additions {topic && `to "${topic}"`} was recieved and embedded into the collage.</p>
-      {collage.addition?.url && <img src={collage.addition.url} alt="Collage" width="500px" />}
-      <p>
-        Check it out: <a href={finalLink}>{finalLink}</a>
-      </p>
+      <FlexibleCard>
+        <h1 style={{ fontSize: "50px", margin: "0" }}>Thank You</h1>
+        <p>Your additions {topic && `to "${topic}"`} was recieved and embedded into the collage.</p>
+        {collage.addition?.url && <img src={collage.addition.url} alt="Collage" width="500px" />}
+        <p>
+          <a href={finalLink}>Check it out here!</a>
+        </p>
+      </FlexibleCard>
       {/* TODO share links */}
     </div>
   );
