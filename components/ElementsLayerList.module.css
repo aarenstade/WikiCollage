@@ -4,18 +4,6 @@
   --layer-list-width: 300px;
 }
 
-.expandButton {
-  position: absolute;
-  top: var(--navbar-offset);
-  right: 0;
-  z-index: 99;
-  transition: all 150ms;
-}
-
-.expandButtonExpanded {
-  right: var(--layer-list-width);
-}
-
 .layerList {
   position: fixed;
   top: var(--navbar-offset);
@@ -24,13 +12,14 @@
   width: var(--layer-list-width);
   height: 100%;
 
-  background-color: white;
+  background-color: var(--transparent-white);
   z-index: 90;
   transition: all 150ms;
 }
 
 .layerList ul {
   width: 200px;
+  margin: 0;
   z-index: 91;
 }
 
@@ -43,7 +32,8 @@
   padding: 8px;
   font-size: 14px;
 
-  background-color: antiquewhite;
+  color: white;
+  background-color: var(--transparent-black);
   transform: translateX(-40px);
   z-index: 92;
 }

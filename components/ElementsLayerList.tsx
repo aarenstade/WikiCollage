@@ -1,7 +1,9 @@
-import styles from "./ElementsLayerList.module.css";
+import { useState } from "react";
 import useElements from "../hooks/useElements";
 import { CanvasElementItem } from "../types/elements";
-import { useState } from "react";
+import { IconButton } from "./Buttons";
+import LayerIcon from "./icons/layers.svg";
+import styles from "./ElementsLayerList.module.css";
 
 const ElementsLayerList = () => {
   const elements = useElements();
@@ -9,12 +11,16 @@ const ElementsLayerList = () => {
 
   return (
     <div className={styles.layerListContainer}>
-      <button
-        className={`${styles.expandButton} ${expanded && styles.expandButtonExpanded}`}
+      <IconButton
+        style={{
+          zIndex: 99,
+          position: "fixed",
+          top: "var(--navbar-offset)",
+          right: expanded ? `var(--layer-list-width)` : "0",
+        }}
+        icon={<LayerIcon />}
         onClick={() => setExpanded(!expanded)}
-      >
-        Expand
-      </button>
+      />
       <div className={`${styles.layerList} ${expanded ? styles.expanded : styles.hidden}`}>
         <ul>
           {elements.elements.map((element: CanvasElementItem, i: number) => (
