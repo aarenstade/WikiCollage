@@ -36,12 +36,18 @@ const useCollage = (topicString?: string, page?: number, limit?: number): Collag
 
   useEffect(() => {
     if (auth?.token && topicString) {
-      fetchTopicAndAdditions(auth.token, topicString, page, limit).then((res) => {
-        const topic: TopicItem = res.topic
-          ? { ...res.topic, topic: topicString }
-          : { topic: topicString, created_at: new Date(), updated_at: new Date() };
-        setCollage({ topic, addition: res.addition, loading: false });
-      });
+      setCollage({ ...collage, loading: true });
+      fetchTopicAndAdditions(auth.token, topicString, page, limit)
+        .then((res) => {
+          const topic: TopicItem = res.topic
+            ? { ...res.topic, topic: topicString }
+            : { topic: topicString, created_at: new Date(), updated_at: new Date() };
+          setCollage({ topic, addition: res.addition, loading: false });
+        })
+        .catch((err) => {
+          console.log({ err });
+          setCollage({ ...collage, loading: false });
+        });
     }
   }, [auth?.token, topicString]);
 
