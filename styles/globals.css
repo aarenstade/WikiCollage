@@ -9,10 +9,19 @@ body {
   font-family: var(--global-font-family);
 
   --background-color: rgb(50, 50, 50);
-
   background-color: var(--background-color);
 
   --navbar-offset: 40px;
+
+  --primary-color: white;
+
+  --transparent-white: rgba(255, 255, 255, 0.608);
+  --transparent-black: rgba(0, 0, 0, 0.608);
+
+  --color1-main: #2c7dff;
+  --color1-light: #cbd2f3;
+  --color2-main: #ff9f1c;
+  --color2-light: #ffbf69;
 }
 
 a {
@@ -27,9 +36,10 @@ a {
 input {
   font-family: var(--global-font-family);
   outline: none;
-  border: none;
+  border: 1px solid gray;
+  border-radius: 5px;
   margin: 0;
-  padding: 0;
+  padding: 4px;
 }
 
 textarea {
@@ -37,5 +47,8 @@ textarea {
   outline: none;
   border: none;
   margin: 0;
-  padding: 0;
+  padding: 4px;
+  resize: none;
+  border: 1px solid gray;
+  border-radius: 5px;
 }

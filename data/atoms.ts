@@ -11,7 +11,7 @@ export const CollageState = atom<Collage>({
 
 export const ViewControlState = atom<ViewControl>({
   key: "ViewControlState",
-  default: { x: 0, y: 0, scale: 1 },
+  default: { x: 0, y: 0, scale: 0.3 },
 });
 
 export const ElementListState = atom<CanvasElementItem[]>({
