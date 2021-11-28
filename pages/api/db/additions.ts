@@ -21,8 +21,6 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       .skip(page * limit)
       .lean();
 
-    console.log({ additions });
-
     if (additions.length > 0) {
       if (additions.length > 1) {
         res.status(200).send(additions);

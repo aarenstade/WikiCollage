@@ -10,7 +10,7 @@ const CollagePage: NextPage = () => {
 
   const collage = useCollage(topicString);
 
-  return <div>{!collage.loading ? <GlobalCollabView addition={collage.addition} /> : <p>Loading...</p>}</div>;
+  return <GlobalCollabView collage={collage} />;
 };
 
 export default CollagePage;

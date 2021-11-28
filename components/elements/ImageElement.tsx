@@ -43,7 +43,7 @@ const ImageData: VFC<ImageDataProps> = ({ element, loading }) => {
       <div
         className={styles.imageData}
         style={{
-          backgroundColor: "gray",
+          backgroundColor: "black",
           width: element.scaledWidth,
           height: element.scaledHeight,
         }}
@@ -103,7 +103,7 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
         className={styles.imageElement}
         style={{
           width: element.scaledWidth,
-          height: element.scaledHeight && element.scaledHeight + 45,
+          height: element.scaledHeight && element.scaledHeight + 50,
         }}
       >
         <ImageData element={element} loading={loading} />

@@ -3,7 +3,7 @@ import { AdditionItem, TopicItem } from "./schemas";
 export interface Collage {
   addition: AdditionItem | null;
   topic: TopicItem | null;
-  loading?: boolean;
+  loading: boolean;
 }
 
 export interface CollageHistory {

@@ -8,19 +8,23 @@ import useViewControl from "../hooks/useViewControl";
 import useSelectedElement from "../hooks/useSelectedElement";
 import ImageElement from "./elements/ImageElement";
 
+import DeleteIcon from "./icons/delete-dark.svg";
+import { NormalButton, IconButton } from "./Buttons";
+
 const cornerHandle = {
   backgroundColor: "white",
   width: "10px",
   height: "10px",
-  borderRadius: "6px",
+  borderRadius: "0 0 0px 6px",
+  margin: "0",
   padding: "0",
 };
 
 const resizeHandleStyles = {
-  bottomLeft: cornerHandle,
-  topLeft: cornerHandle,
-  topRight: cornerHandle,
-  bottomRight: cornerHandle,
+  bottomLeft: { ...cornerHandle, transform: "rotate(0deg)" },
+  topLeft: { ...cornerHandle, transform: "rotate(90deg)" },
+  topRight: { ...cornerHandle, transform: "rotate(180deg)" },
+  bottomRight: { ...cornerHandle, transform: "rotate(270deg)" },
 };
 
 interface CanvasElementProps {
@@ -30,21 +34,18 @@ interface CanvasElementProps {
   onDelete: () => void;
 }
 
-interface CanvasElementHeaderProps {
+interface CanvasElementControlButtonsProps {
   id: number;
   onUpdate: () => void;
   onDelete: () => void;
 }
 
-const CanvasElementHeader: VFC<CanvasElementHeaderProps> = ({ id, onUpdate, onDelete }) => {
+const CanvasElementControlButtons: VFC<CanvasElementControlButtonsProps> = ({ id, onUpdate, onDelete }) => {
   const element = useSelectedElement(id);
   return (
-    <div className={styles.elementHeader}>
-      {element.editing && <button onClick={() => onDelete()}>Delete</button>}
-      {element.selected && !element.editing && (
-        <button onClick={() => element.setId({ id, editing: true })}>Edit</button>
-      )}
-      {element.selected && element.editing && <button onClick={() => onUpdate()}>Save</button>}
+    <div className={styles.elementControlButtons}>
+      {element.editing && <IconButton onClick={() => onDelete()} icon={<DeleteIcon />} />}
+      {element.selected && element.editing && <NormalButton onClick={() => onUpdate()} text="Save" />}
     </div>
   );
 };
@@ -108,7 +109,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
       onDrag={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
       resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
-      style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
+      style={{ zIndex: 3 }}
       enableResizing={selection.editing}
     >
       <div
@@ -119,7 +120,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
         }}
         onDoubleClick={() => selection.setId({ id, editing: true })}
       >
-        <CanvasElementHeader id={id} onUpdate={handleSave} onDelete={onDelete} />
+        <CanvasElementControlButtons id={id} onUpdate={handleSave} onDelete={onDelete} />
         {element.type === "text" && (
           <TextElement editing={selection.editing} element={element} onUpdate={(e) => onUpdate(e)} />
         )}
