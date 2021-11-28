@@ -33,7 +33,7 @@ a {
   box-sizing: border-box;
 }
 
-input {
+input[type="text"] {
   font-family: var(--global-font-family);
   outline: none;
   border: 1px solid gray;
