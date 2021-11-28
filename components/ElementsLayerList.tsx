@@ -17,12 +17,20 @@ const ElementsLayerList = () => {
           position: "fixed",
           top: "var(--navbar-offset)",
           right: expanded ? `var(--layer-list-width)` : "0",
+          borderRadius: "5px 0 0 5px",
+          padding: "8px",
         }}
         icon={<LayerIcon />}
         onClick={() => setExpanded(!expanded)}
       />
       <div className={`${styles.layerList} ${expanded ? styles.expanded : styles.hidden}`}>
         <ul>
+          {elements.elements.length < 1 && (
+            <li className={styles.layerRow}>
+              <h3>No Elements</h3>
+              <p>Click anywhere on the image to create one!</p>
+            </li>
+          )}
           {elements.elements.map((element: CanvasElementItem, i: number) => (
             <li key={i} className={styles.layerRow}>
               <h3>
