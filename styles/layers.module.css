@@ -13,7 +13,6 @@
 .menuLayer * {
   position: fixed;
   z-index: 6;
-  margin: 10px;
 }
 
 .touchLayer {
