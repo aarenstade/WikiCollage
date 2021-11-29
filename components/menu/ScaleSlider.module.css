@@ -19,6 +19,7 @@
   margin: 0;
   transform-origin: 60px 40px;
   transform: rotate(-90deg);
+  left: 0;
 }
 
 .scaleReadout {
