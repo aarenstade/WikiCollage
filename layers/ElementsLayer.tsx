@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { CollageOpenState, ElementListState, SelectedElementIdState } from "../data/atoms";
 import { CanvasElementItem } from "../types/elements";
