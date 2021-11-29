@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
 import useViewControl from "../hooks/useViewControl";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { CollageState, ElementListState, SelectedElementIdState } from "../data/atoms";
+import { useRecoilState } from "recoil";
+import { SelectedElementIdState } from "../data/atoms";
 import { ElementToEmbed } from "../types/elements";
 import { AdditionItem } from "../types/schemas";
 import { useAuth } from "../services/AuthProvider";
@@ -10,19 +10,22 @@ import { useRouter } from "next/dist/client/router";
 import { UploadStatus } from "../types/general";
 import { convertBase64ToBytes, uploadImage } from "../image-utils";
 import { buildImageFromElement, embedNewMural, insertNewAddition } from "../upload";
-import { BigButton, NormalButton } from "../components/Buttons";
+import { BigButton } from "../components/Buttons";
 
 import Popup from "../components/Popup";
 import styles from "../styles/layers.module.css";
 
 import container from "../styles/containers.module.css";
 import ScaleSlider from "../components/menu/ScaleSlider";
+import SubmitControlArea from "../components/menu/SubmitControlArea";
+import useCollage from "../hooks/useCollage";
+import useElements from "../hooks/useElements";
 
 const MenuLayer = () => {
   const auth = useAuth();
   const router = useRouter();
   const view = useViewControl();
-  const collage = useRecoilValue(CollageState);
+  const collage = useCollage();
   const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
 
   const [creator, setCreator] = useState("");
@@ -32,10 +35,10 @@ const MenuLayer = () => {
   const [processing, setProcessing] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>({ message: "Starting Upload..." });
 
-  const elementsList = useRecoilValue(ElementListState);
+  const elements = useElements();
 
   const handleReady = () => {
-    if (elementsList.length > 0) {
+    if (elements.elements.length > 0) {
       setReady(true);
       setSelectedId(null);
       view.setScale(1);
@@ -52,9 +55,8 @@ const MenuLayer = () => {
         setProcessing(true);
         setUploadStatus({ message: "Starting Upload..." });
 
+        const elementsList = [...elements.elements];
         let elementObjects: ElementToEmbed[] = [];
-
-        console.log({ elementsList });
 
         for (let i = 0; i < elementsList.length; i++) {
           console.log(`element ${i}`);
@@ -161,7 +163,7 @@ const MenuLayer = () => {
   return (
     <div className={styles.menuLayer}>
       <ScaleSlider />
-      {!ready && <BigButton style={{ bottom: 0, right: 0 }} onClick={handleReady} text="Submit" />}
+      <SubmitControlArea timestamp={collage.addition?.timestamp} onClick={handleReady} />
     </div>
   );
 };

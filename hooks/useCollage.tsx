@@ -5,6 +5,7 @@ import { useAuth } from "../services/AuthProvider";
 import { fetchAdditions, fetchTopic } from "../services/fetch";
 import { Collage } from "../types/collage";
 import { AdditionItem, TopicItem } from "../types/schemas";
+import { isTopicOpen } from "../utils";
 
 const fetchTopicAndAdditions = async (
   token: string,
@@ -42,7 +43,8 @@ const useCollage = (topicString?: string, page?: number, limit?: number): Collag
           const topic: TopicItem = res.topic
             ? { ...res.topic, topic: topicString }
             : { topic: topicString, created_at: new Date(), updated_at: new Date() };
-          setCollage({ topic, addition: res.addition, loading: false });
+          const { isOpen } = isTopicOpen(res.addition?.timestamp && new Date(res.addition.timestamp).getTime());
+          setCollage({ topic, addition: res.addition, open: isOpen, loading: false });
         })
         .catch((err) => {
           console.log({ err });
@@ -51,7 +53,7 @@ const useCollage = (topicString?: string, page?: number, limit?: number): Collag
     }
   }, [auth?.token, topicString]);
 
-  return { topic: collage.topic, addition: collage.addition, loading: collage.loading };
+  return { topic: collage.topic, addition: collage.addition, open: collage.open, loading: collage.loading };
 };
 
 export default useCollage;
