@@ -3,6 +3,7 @@ import { WAIT_PERIOD } from "../../config";
 
 import CountdownTimer from "./CountdownTimer";
 import { BigButton } from "../Buttons";
+import { isTopicOpen } from "../../utils";
 
 interface SubmitControlAreaProps {
   timestamp?: Date;
@@ -13,25 +14,19 @@ const SubmitControlArea: VFC<SubmitControlAreaProps> = ({ timestamp, onClick }) 
   const [openTime, setOpenTime] = useState(timestamp ? new Date(timestamp).getTime() + WAIT_PERIOD : null);
   const [openForSubmissions, setOpenForSubmissions] = useState(true);
 
+  const submitButtonStyle = { bottom: 0, left: 0, margin: "10px" };
+
   useEffect(() => {
-    if (timestamp) {
-      const newOpenTime = new Date(timestamp).getTime() + WAIT_PERIOD;
-      setOpenTime(newOpenTime);
-      if (newOpenTime > Date.now()) {
-        setOpenForSubmissions(false);
-      } else {
-        setOpenForSubmissions(true);
-      }
-    } else {
-      setOpenForSubmissions(true);
-    }
+    const { isOpen, openTime } = isTopicOpen(timestamp && new Date(timestamp).getTime());
+    setOpenForSubmissions(isOpen);
+    openTime && setOpenTime(openTime);
   }, [timestamp]);
 
   if (openForSubmissions) {
-    return <BigButton style={{ bottom: 0, left: 0 }} onClick={onClick} text="Submit" />;
+    return <BigButton style={submitButtonStyle} onClick={onClick} text="Submit Additions" />;
   } else {
-    if (openTime) return <CountdownTimer destination={openTime} />;
-    return <BigButton style={{ bottom: 0, left: 0 }} onClick={onClick} text="Submit" />;
+    if (openTime) return <CountdownTimer destination={openTime} onTimerComplete={() => setOpenForSubmissions(true)} />;
+    return <BigButton style={submitButtonStyle} onClick={onClick} text="Submit Additions" />;
   }
 };
 

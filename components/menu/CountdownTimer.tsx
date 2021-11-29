@@ -1,23 +1,32 @@
 import { useEffect, useState, VFC } from "react";
 import { formatMillisecondsToReadableTimestamp } from "../../utils";
 
+import styles from "./menu.module.css";
+
 interface Props {
   destination: number;
+  onTimerComplete: () => void;
 }
 
-const CountdownTimer: VFC<Props> = ({ destination }) => {
+const CountdownTimer: VFC<Props> = ({ destination, onTimerComplete }) => {
   const [milliseconds, setMilliseconds] = useState(destination - Date.now());
 
   useEffect(() => {
     const countInterval = setInterval(() => {
-      setMilliseconds(destination - Date.now());
+      const now = Date.now();
+      if (destination > now) {
+        setMilliseconds(destination - now);
+      } else {
+        setMilliseconds(0);
+        onTimerComplete();
+      }
     }, 1000);
     return () => clearInterval(countInterval);
   }, []);
 
   return (
-    <div style={{ bottom: "40px", backgroundColor: "white", left: 0, zIndex: 500 }}>
-      <h3>Open for Additions in {formatMillisecondsToReadableTimestamp(milliseconds)}</h3>
+    <div className={styles.countdownTimer}>
+      <h3>Open for additions in {formatMillisecondsToReadableTimestamp(milliseconds)}</h3>
     </div>
   );
 };
