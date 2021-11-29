@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { ElementListState, SelectedElementIdState } from "../data/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { CollageOpenState, ElementListState, SelectedElementIdState } from "../data/atoms";
 import { CanvasElementItem } from "../types/elements";
 
 import CanvasElement from "../components/CanvasElement";
@@ -14,6 +14,7 @@ import useElements from "../hooks/useElements";
 
 const ElementsLayer = () => {
   const view = useViewControl();
+  const collageOpen = useRecoilValue(CollageOpenState);
 
   const [elementsList, setElementsList] = useRecoilState(ElementListState);
   const [selectedId, setSelectedId] = useRecoilState(SelectedElementIdState);
@@ -22,7 +23,7 @@ const ElementsLayer = () => {
   const elements = useElements();
 
   const handleClick = (e: React.MouseEvent) => {
-    elements.addImageElement({ x: e.pageX, y: e.pageY });
+    collageOpen && elements.addImageElement({ x: e.pageX, y: e.pageY });
     // setSelectedId({ id: elementsList.length - 1, editing: true });
   };
 

@@ -9,6 +9,11 @@ export const CollageState = atom<Collage>({
   default: defaultCollage,
 });
 
+export const CollageOpenState = selector({
+  key: "CollageOpenState",
+  get: ({ get }) => get(CollageState).open,
+});
+
 export const ViewControlState = atom<ViewControl>({
   key: "ViewControlState",
   default: { x: 0, y: 0, scale: 0.3 },
