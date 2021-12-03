@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import apiHandler from "../../../server/api-middleware";
 
-import { Addition, Topic } from "../../../types/models";
-import { AdditionItem, TopicItem } from "../../../types/schemas";
+import { Addition, Topic } from "../../../types/mongodb/models";
+import { AdditionItem, TopicItem } from "../../../types/mongodb/schemas";
 
 const handler = apiHandler();
 

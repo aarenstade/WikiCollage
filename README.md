@@ -1,6 +1,6 @@
-# WikiCollage
+# VisualWiki
 
-WikiCollge is a simple graphics editor with an open access contribution model.
+VisualWiki is a simple graphics editor with an open access contribution model.
 Join a large scale internet collaboration of topics, images and outbound links!
 Earn tokens for making good contributions.
 View each topic's full history of images.
