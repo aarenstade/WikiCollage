@@ -1,8 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import axios from "axios";
 import { useRef, useState, VFC } from "react";
-import { BASE_URL, MAX_FILE_SIZE } from "../../config";
+import { v4 } from "uuid";
+import { MAX_FILE_SIZE } from "../../config";
 import { CanvasElementItem } from "../../types/elements";
+import { convertBase64ToBytes, uploadImage } from "../../utils/image-utils";
+import { matchUrl } from "../../utils/utils";
 import styles from "./elements.module.css";
 
 interface ImageElementProps {
@@ -55,29 +57,9 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
   const [loading, setLoading] = useState(false);
   const inputFileRef = useRef<HTMLInputElement>(null);
 
-  const onInputUrl = async (url: string) => {
-    let data = url;
-
-    const matchUrl = (val: string) =>
-      val.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
-    const matchBase64 = (val: string) => val.startsWith("data:image");
-
-    const finish = (data?: string) => {
-      setLoading(false);
-      data && onUpdate({ ...element, data });
-      return;
-    };
-
-    setLoading(true);
-    if (matchUrl(url)) {
-      const res = await axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url }, method: "POST" });
-      if (res.data) data = res.data;
-      finish(data);
-    }
-
-    if (matchBase64(url)) finish(data);
-
-    finish();
+  const onInputUrl = (url: string) => {
+    const valid = matchUrl(url);
+    if (valid) onUpdate({ ...element, data: url });
   };
 
   const onFileChangeCapture = (e: any) => {
@@ -91,7 +73,19 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
     const reader = new FileReader();
     reader.addEventListener("load", async () => {
       const result = reader.result;
-      if (result && typeof result === "string") onUpdate({ ...element, data: result });
+      const path = `/tmp/${v4()}.jpg`;
+
+      if (result) {
+        if (typeof result === "string") {
+          const bytes = convertBase64ToBytes(result);
+          const url = await uploadImage(bytes, path);
+          if (url) onUpdate({ ...element, data: url });
+        } else {
+          const url = await uploadImage(result, path);
+          if (url) onUpdate({ ...element, data: url });
+        }
+      }
+
       setLoading(false);
     });
     reader.readAsDataURL(files[0]);

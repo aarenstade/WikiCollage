@@ -26,8 +26,6 @@ const useFirebaseAuth = () => {
 
   const handleUser = async (user: User | null) => {
     if (user) {
-      console.log(`user signed in`);
-      console.log({ user });
       const token = await user.getIdToken();
       setUser(user);
       setToken(token);

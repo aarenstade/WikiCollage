@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/layers.module.css";
 import ScaleSlider from "../menu/ScaleSlider";
 import SubmitControlArea from "../menu/SubmitControlArea";
@@ -12,6 +12,9 @@ const MenuLayer = () => {
   const collage = useCollage();
   const submit = useSubmitHandler();
 
+  const [submitReady, setSubmitReady] = useState(false);
+  const [processing, setProcessing] = useState(false);
+
   const [formValues, setFormValues] = useState<AdditionSubmitFormValues>({ creator: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,25 +22,45 @@ const MenuLayer = () => {
     await submit.handleSubmission(formValues);
   };
 
-  if (submit.status.ready && !submit.status.processing) {
+  if (submitReady && !processing) {
     return (
       <SubmissionFormPopup
         values={formValues}
         setFormValues={(v) => setFormValues(v)}
-        onClose={() => submit.setStatus({ ...submit.status, ready: false })}
-        onSubmit={handleSubmit}
+        onClose={() => setSubmitReady(false)}
+        onSubmit={(e) => {
+          setProcessing(true);
+          handleSubmit(e);
+        }}
       />
     );
   }
 
-  if (submit.status.ready && submit.status.processing) {
-    return <SubmissionStatusPopup status={submit.status} topic={collage.topic} />;
+  if (submitReady && processing) {
+    return (
+      <SubmissionStatusPopup
+        status={{
+          processing,
+          ready: submitReady,
+          image: submit.liveImage,
+          message: submit.message,
+          success: submit.success,
+        }}
+        topic={collage.topic.topic}
+      />
+    );
   }
 
   return (
     <div className={styles.menuLayer}>
       <ScaleSlider />
-      <SubmitControlArea timestamp={collage.addition?.timestamp} onClick={() => submit.validateSubmission()} />
+      <SubmitControlArea
+        timestamp={collage.addition?.timestamp}
+        onClick={() => {
+          const validation = submit.validateSubmission();
+          setSubmitReady(validation);
+        }}
+      />
     </div>
   );
 };

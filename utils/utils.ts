@@ -25,3 +25,6 @@ export function isTopicOpen(timestamp?: number): { isOpen: boolean; openTime?: n
   if (openTime > Date.now()) return { isOpen: false, openTime };
   return { isOpen: true, openTime };
 }
+
+export const matchUrl = (val: string) =>
+  val.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
