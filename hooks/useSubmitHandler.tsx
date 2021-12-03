@@ -4,7 +4,7 @@ import { SelectedElementIdState } from "../data/atoms";
 import { useAuth } from "../services/AuthProvider";
 import { ElementToEmbed } from "../types/elements";
 import { AdditionSubmitFormValues, SubmissionStatus } from "../types/general";
-import { AdditionItem } from "../types/schemas";
+import { AdditionItem } from "../types/mongodb/schemas";
 import { buildImageFromElement, embedNewMural, insertNewAddition } from "../upload";
 import { convertBase64ToBytes, uploadImage } from "../utils/image-utils";
 import useCollage from "./useCollage";

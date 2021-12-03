@@ -31,7 +31,7 @@ const MenuLayer = () => {
   }
 
   if (submit.status.ready && submit.status.processing) {
-    return <SubmissionStatusPopup status={submit.status} />;
+    return <SubmissionStatusPopup status={submit.status} topic={collage.topic} />;
   }
 
   return (
