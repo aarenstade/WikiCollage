@@ -15,11 +15,16 @@ const mergeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     // download images and build list object for sharp composite
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
-      const path = `/tmp/${v4()}.png`;
-      await writeImageFile(element.uri, path);
+      const fullImagePath = `/tmp/${v4()}.png`;
+      const resizedImagePath = `/tmp/${v4()}.png`;
+      await writeImageFile(element.uri, fullImagePath);
+      await sharp(fullImagePath)
+        .resize({ width: Math.ceil(element.width), height: Math.ceil(element.height), fit: "fill" })
+        .toFile(resizedImagePath);
+      fs.rmSync(fullImagePath);
 
       compositeElements.push({
-        input: path,
+        input: resizedImagePath,
         gravity: "northwest",
         top: element.y,
         left: element.x,
@@ -52,7 +57,6 @@ const mergeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (!collage) fs.rmSync(emptyCollagePath);
 
-    console.log({ storagePath });
     // return storagePath
     res.status(200).send(storagePath);
   } catch (error) {
