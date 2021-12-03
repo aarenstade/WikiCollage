@@ -5,7 +5,7 @@ import { useAuth } from "../services/AuthProvider";
 import { fetchAdditions, fetchTopic } from "../services/fetch";
 import { Collage } from "../types/collage";
 import { AdditionItem, TopicItem } from "../types/schemas";
-import { isTopicOpen } from "../utils";
+import { isTopicOpen } from "../utils/utils";
 
 const fetchTopicAndAdditions = async (
   token: string,

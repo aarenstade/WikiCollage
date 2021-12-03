@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
-import { STORAGE_REF } from "./client/firebase";
-import { BASE_URL } from "./config";
+import { STORAGE_REF } from "../client/firebase";
+import { BASE_URL } from "../config";
 
 export function encodeImageFileAsURL(e: HTMLInputElement): string | null {
   if (e.files) {

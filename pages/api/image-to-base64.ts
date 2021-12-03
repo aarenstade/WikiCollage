@@ -1,6 +1,6 @@
 import fs from "fs";
 import { v4 } from "uuid";
-import { writeImageFile } from "../../server/utils";
+import { writeImageFile } from "../../server/server-utils";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const imageToBase64Handler = async (req: NextApiRequest, res: NextApiResponse) => {

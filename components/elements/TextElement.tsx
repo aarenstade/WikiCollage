@@ -1,6 +1,6 @@
 import { useEffect, VFC } from "react";
 import { CanvasElementItem } from "../../types/elements";
-import { nextInArrayRotate } from "../../utils";
+import { nextInArrayRotate } from "../../utils/utils";
 import { FONTS, TEXT_COLORS } from "../../styles/text";
 
 import styles from "./elements.module.css";
