@@ -7,6 +7,10 @@ import { Collage } from "../types/collage";
 import { AdditionItem, TopicItem } from "../types/schemas";
 import { isTopicOpen } from "../utils/utils";
 
+interface UseCollageHook extends Collage {
+  setLoading: (v: boolean) => void;
+}
+
 const fetchTopicAndAdditions = async (
   token: string,
   topicString: string,
@@ -31,9 +35,11 @@ const fetchTopicAndAdditions = async (
   return { topic, addition };
 };
 
-const useCollage = (topicString?: string, page?: number, limit?: number): Collage => {
+const useCollage = (topicString?: string, page?: number, limit?: number): UseCollageHook => {
   const auth = useAuth();
   const [collage, setCollage] = useRecoilState(CollageState);
+
+  const setLoading = (v: boolean) => setCollage({ ...collage, loading: v });
 
   useEffect(() => {
     if (auth?.token && topicString) {
@@ -53,7 +59,13 @@ const useCollage = (topicString?: string, page?: number, limit?: number): Collag
     }
   }, [auth?.token, topicString]);
 
-  return { topic: collage.topic, addition: collage.addition, open: collage.open, loading: collage.loading };
+  return {
+    topic: collage.topic,
+    addition: collage.addition,
+    open: collage.open,
+    loading: collage.loading,
+    setLoading,
+  };
 };
 
 export default useCollage;

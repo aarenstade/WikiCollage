@@ -9,6 +9,11 @@ const Navbar = () => {
   const router = useRouter();
   const collage = useCollage();
 
+  const handleSearch = (topic: string) => {
+    collage.setLoading(true);
+    router.push(`${BASE_URL}/t/${topic}`);
+  };
+
   return (
     <div className={styles.navbar}>
       <div className={styles.menu}>
@@ -24,7 +29,7 @@ const Navbar = () => {
       <SearchBar
         topic={collage.topic?.topic}
         loading={collage.loading}
-        onSearch={(topic: string) => router.push(`${topic ? `${BASE_URL}/t/${topic}` : `${BASE_URL}`}`)}
+        onSearch={(topic: string) => handleSearch(topic)}
       />
     </div>
   );

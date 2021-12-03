@@ -26,7 +26,7 @@ const GlobalCollabView: VFC<Props> = ({ collage }) => {
           <div>
             <MenuLayer />
             <ElementsLayer />
-            <MuralLayer mural={collage?.addition?.url} />
+            <MuralLayer mural={!collage.loading ? collage?.addition?.url : undefined} />
           </div>
         </div>
       </div>
