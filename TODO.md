@@ -1,1 +1,0 @@
-- send image urls over request to /api/merge-mural instead of base64 data
