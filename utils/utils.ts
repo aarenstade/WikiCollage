@@ -1,4 +1,4 @@
-import { WAIT_PERIOD } from "./config";
+import { WAIT_PERIOD } from "../config";
 
 export function nextInArrayRotate<T>(array: T[], item: T) {
   const index = array.indexOf(item);

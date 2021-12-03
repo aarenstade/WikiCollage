@@ -3,7 +3,7 @@ import { WAIT_PERIOD } from "../../config";
 
 import CountdownTimer from "./CountdownTimer";
 import { BigButton } from "../Buttons";
-import { isTopicOpen } from "../../utils";
+import { isTopicOpen } from "../../utils/utils";
 
 interface SubmitControlAreaProps {
   timestamp?: Date;

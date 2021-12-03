@@ -11,3 +11,6 @@ export const DEFAULT_MURAL_BACKGROUND_COLOR = "gray";
 export const HOME_TOPIC_NAME = "WikiCollage-Home";
 
 export const WAIT_PERIOD = 10 * 60 * 1000;
+
+export const EMPTY_COLLAGE_URI =
+  "https://firebasestorage.googleapis.com/v0/b/visual-collab.appspot.com/o/empty-collage.png?alt=media&token=76160648-0897-481a-95e9-68ab5960f604";

@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { VFC } from "react";
-import useViewControl from "../hooks/useViewControl";
-import styles from "../styles/layers.module.css";
+import useViewControl from "../../hooks/useViewControl";
+import styles from "../../styles/layers.module.css";
 
-import { DEFAULT_MURAL_BACKGROUND_COLOR, MURAL_DIMENSION } from "../config";
+import { DEFAULT_MURAL_BACKGROUND_COLOR, MURAL_DIMENSION } from "../../config";
 
 interface Props {
   mural?: string;

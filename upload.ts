@@ -3,7 +3,7 @@ import { getDownloadURL } from "@firebase/storage";
 import { STORAGE_REF } from "./client/firebase";
 import { authPostRequest } from "./client/requests";
 import { BASE_URL } from "./config";
-import { convertAllHtmlImagesToBase64, convertBase64ToBytes } from "./image-utils";
+import { convertAllHtmlImagesToBase64 } from "./utils/image-utils";
 import { CanvasElementItem, ElementToEmbed } from "./types/elements";
 import { AdditionItem, TopicItem } from "./types/schemas";
 

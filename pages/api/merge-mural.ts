@@ -1,21 +1,16 @@
 import fs from "fs";
 import { v4 } from "uuid";
 import { ADMIN_ST } from "../../server/firebase";
-import { writeImageFile } from "../../server/utils";
+import { writeImageFile } from "../../server/server-utils";
 import sharp, { OverlayOptions } from "sharp";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const emptyCollageUri =
-  "https://firebasestorage.googleapis.com/v0/b/visual-collab.appspot.com/o/empty-collage.png?alt=media&token=76160648-0897-481a-95e9-68ab5960f604";
+import { EMPTY_COLLAGE_URI } from "../../config";
 
 const mergeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const elements = req.body.elements;
     const collage = req.body.collage;
     const compositeElements: OverlayOptions[] = [];
-
-    console.log({ elements });
-    console.log({ collage });
 
     // download images and build list object for sharp composite
     for (let i = 0; i < elements.length; i++) {
@@ -41,11 +36,9 @@ const mergeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       await sharp(muralPath).composite(compositeElements).toFile(newMuralPath);
     } else {
       // create blank square and embed
-      await writeImageFile(emptyCollageUri, emptyCollagePath);
+      await writeImageFile(EMPTY_COLLAGE_URI, emptyCollagePath);
       await sharp(emptyCollagePath).composite(compositeElements).toFile(newMuralPath);
     }
-
-    console.log("elements composited");
 
     // upload new mural
     const storagePath = `murals/mural_${v4()}.png`;

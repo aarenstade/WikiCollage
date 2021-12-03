@@ -1,7 +1,7 @@
 import React, { VFC } from "react";
-import MuralLayer from "../layers/MuralLayer";
-import ElementsLayer from "../layers/ElementsLayer";
-import MenuLayer from "../layers/MenuLayer";
+import MuralLayer from "../components/layers/MuralLayer";
+import ElementsLayer from "../components/layers/ElementsLayer";
+import MenuLayer from "../components/layers/MenuLayer";
 import Navbar from "../components/page/Navbar";
 import ElementsLayerList from "../components/ElementsLayerList";
 import { Collage } from "../types/collage";
@@ -26,7 +26,7 @@ const GlobalCollabView: VFC<Props> = ({ collage }) => {
           <div>
             <MenuLayer />
             <ElementsLayer />
-            <MuralLayer mural={collage?.addition?.url} />
+            <MuralLayer mural={!collage.loading ? collage?.addition?.url : undefined} />
           </div>
         </div>
       </div>

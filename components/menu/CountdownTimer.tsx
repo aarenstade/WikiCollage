@@ -1,5 +1,5 @@
 import { useEffect, useState, VFC } from "react";
-import { formatMillisecondsToReadableTimestamp } from "../../utils";
+import { formatMillisecondsToReadableTimestamp } from "../../utils/utils";
 
 import styles from "./menu.module.css";
 

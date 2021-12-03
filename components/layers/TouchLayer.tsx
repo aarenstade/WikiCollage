@@ -1,8 +1,8 @@
 import { useEffect, useState, VFC } from "react";
-import { MURAL_DIMENSION } from "../config";
-import useViewControl from "../hooks/useViewControl";
+import { MURAL_DIMENSION } from "../../config";
+import useViewControl from "../../hooks/useViewControl";
 
-import styles from "../styles/layers.module.css";
+import styles from "../../styles/layers.module.css";
 
 interface Props {
   onClick: (e: React.MouseEvent) => void;

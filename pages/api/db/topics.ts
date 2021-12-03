@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import apiHandler from "../../../server/api-middleware";
-import { Topic } from "../../../types/models";
-import { TopicItem } from "../../../types/schemas";
+import { Topic } from "../../../types/mongodb/models";
+import { TopicItem } from "../../../types/mongodb/schemas";
 
 const handler = apiHandler();
 // fetch a single topic
