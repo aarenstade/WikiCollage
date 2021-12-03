@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from "axios";
-import { useState, VFC } from "react";
-import { v4 } from "uuid";
+import { useRef, useState, VFC } from "react";
 import { BASE_URL, MAX_FILE_SIZE } from "../../config";
 import { CanvasElementItem } from "../../types/elements";
 import styles from "./elements.module.css";
@@ -54,6 +53,7 @@ const ImageData: VFC<ImageDataProps> = ({ element, loading }) => {
 
 const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) => {
   const [loading, setLoading] = useState(false);
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   const onInputUrl = async (url: string) => {
     let data = url;
@@ -80,7 +80,7 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
     finish();
   };
 
-  const onSelectFile = (e: any) => {
+  const onFileChangeCapture = (e: any) => {
     const files = e.target.files;
     if (files && files.length > 0 && files[0].size > MAX_FILE_SIZE) {
       alert("File is bigger than 3.0MB");
@@ -97,6 +97,10 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
     reader.readAsDataURL(files[0]);
   };
 
+  const triggerSelectFile = () => {
+    if (inputFileRef.current) inputFileRef.current.click();
+  };
+
   if (editing) {
     return (
       <div
@@ -109,12 +113,14 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
         <ImageData element={element} loading={loading} />
         <div className={styles.elementBottomButtonsStack}>
           <input
+            ref={inputFileRef}
             name="imageinput"
             type="file"
             accept="image/*"
             className={styles.imageInput}
-            onChange={(e) => onSelectFile(e)}
+            onChangeCapture={onFileChangeCapture}
           />
+          <button onClick={triggerSelectFile}>Select file</button>
           <input name="image-url" type="text" placeholder="Image Url" onChange={(e) => onInputUrl(e.target.value)} />
         </div>
       </div>
