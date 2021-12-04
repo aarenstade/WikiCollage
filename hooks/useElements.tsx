@@ -9,7 +9,6 @@ interface UseElementsHook {
   elements: CanvasElementItem[];
   addImageElement: (pos: Pos) => CanvasElementItem;
   addTextElement: (pos: Pos) => CanvasElementItem;
-  // addDrawElement: (pos: Pos) => CanvasElementItem;
 }
 
 const useElements = (): UseElementsHook => {
@@ -40,7 +39,6 @@ const useElements = (): UseElementsHook => {
     elements: elementList,
     addImageElement,
     addTextElement,
-    // addDrawElement,
   };
 };
 

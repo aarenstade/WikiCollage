@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 
-export type CanvasElementType = "text" | "draw" | "image";
+export type CanvasElementType = "text" | "image";
 
 export interface TextElementParams {
   fontFamily: string;

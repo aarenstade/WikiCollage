@@ -5,7 +5,7 @@ const LoadingOverlay = () => {
         zIndex: 500,
         position: "absolute",
         width: "100%",
-        height: "100%",
+        height: "500%",
         top: "var(--navbar-offset)",
         left: 0,
         backgroundColor: "var(--transparent-black)",

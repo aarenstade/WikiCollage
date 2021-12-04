@@ -6,6 +6,9 @@ import { FONTS, TEXT_COLORS } from "../../styles/text";
 import styles from "./elements.module.css";
 import useViewControl from "../../hooks/useViewControl";
 
+// TODO - debug text offset on conversion with html2canvas
+// CURRENTLY EXCLUDED
+
 interface TextElementProps {
   element: CanvasElementItem;
   editing: boolean;

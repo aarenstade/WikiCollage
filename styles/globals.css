@@ -7,7 +7,7 @@ body {
 
   font-family: var(--global-font-family);
 
-  --background-color: rgb(50, 50, 50);
+  --background-color: black;
   background-color: var(--background-color);
 
   --navbar-offset: 40px;
@@ -37,21 +37,23 @@ button {
 }
 
 input[type="text"] {
-  font-family: var(--global-font-family);
+  width: 90%;
+  padding: 8px;
+  margin: 0;
   outline: none;
   border: 1px solid gray;
-  border-radius: 5px;
-  margin: 0;
-  padding: 4px;
+  border-radius: 3px;
+  font-family: var(--global-font-family);
 }
 
 textarea {
-  font-family: var(--global-font-family);
+  width: 90%;
+  resize: none;
   outline: none;
   border: none;
   margin: 0;
   padding: 4px;
-  resize: none;
   border: 1px solid gray;
-  border-radius: 5px;
+  border-radius: 3px;
+  font-family: var(--global-font-family);
 }

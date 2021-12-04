@@ -1,5 +1,6 @@
 {
   "name": "visual-wiki",
+  "author": "Aaren Stade",
   "version": "0.1.0",
   "private": true,
   "scripts": {

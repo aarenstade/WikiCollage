@@ -27,7 +27,7 @@ const GlobalCollabView: VFC<Props> = ({ collage }) => {
             {auth?.role === GlobalRoles.view && <MenuLayerView />}
             {auth?.role === GlobalRoles.edit && <MenuLayerEdit />}
             <ElementsLayer />
-            <MuralLayer mural={!collage.loading && collage?.addition?.url} />
+            <MuralLayer mural={!collage.loading ? collage?.addition?.url : undefined} />
           </div>
         </div>
       </div>

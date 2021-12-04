@@ -1,4 +1,4 @@
-import { AdditionItem, TopicItem } from "./schemas";
+import { AdditionItem, TopicItem } from "./mongodb/schemas";
 
 export interface Collage {
   addition: AdditionItem | null;

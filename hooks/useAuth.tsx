@@ -16,7 +16,9 @@ const useAuth = (): AuthHook => {
   const [role, setRole] = useState<GlobalRoles>(GlobalRoles.view);
 
   useEffect(() => {
-    if (account && firebase?.user) {
+    // TODO, restrict editing to only connected wallets
+    // if (firebase?.user && acccount)
+    if (firebase?.user) {
       setRole(GlobalRoles.edit);
     } else {
       setRole(GlobalRoles.view);

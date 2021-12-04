@@ -5,6 +5,7 @@ import serviceAccount from "../creds/service-account.json";
 const account = serviceAccount as ServiceAccount;
 
 if (!admin.apps.length) {
+  // TODO for when deployed
   //   if (process.env.FIREBASE_SERVICE_ACCOUNT) {
   try {
     //   const config = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);

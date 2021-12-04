@@ -50,6 +50,3 @@
 .hidden {
   right: calc(var(--layer-list-width) * -1);
 }
-
-.layerListButton {
-}

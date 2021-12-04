@@ -57,6 +57,8 @@ export const uploadImage = async (file: ArrayBuffer | Uint8Array, path: string):
   }
 };
 
+// this function will prob be removed, was required to convert images for html2canvas CORS restrictions...
+// but we're bypassing that by downloading images in /api/merge-mural, so this is un-used.
 export const convertAllHtmlImagesToBase64 = (clone: Document) => {
   const pendingImagesPromises = [];
   const pendingPromisesData: any[] = [];
@@ -65,7 +67,7 @@ export const convertAllHtmlImagesToBase64 = (clone: Document) => {
   const images = Array.from(imageNodes).filter((img) => !img.src.startsWith("data:image"));
 
   for (let i = 0; i < images.length; i += 1) {
-    // First we create an empty promise for each image
+    // empty promise for each image
     const promise = new Promise((resolve, reject) => {
       pendingPromisesData.push({
         index: i,
@@ -73,7 +75,6 @@ export const convertAllHtmlImagesToBase64 = (clone: Document) => {
         reject,
       });
     });
-    // We save the promise for later resolve them
     pendingImagesPromises.push(promise);
   }
 
@@ -92,6 +93,5 @@ export const convertAllHtmlImagesToBase64 = (clone: Document) => {
       });
   }
 
-  // This will resolve only when all the promises resolve
   return Promise.all(pendingImagesPromises);
 };
