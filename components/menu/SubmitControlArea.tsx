@@ -14,20 +14,23 @@ const SubmitControlArea: VFC<SubmitControlAreaProps> = ({ timestamp, onClick }) 
   const [openTime, setOpenTime] = useState(timestamp ? new Date(timestamp).getTime() + WAIT_PERIOD : null);
   const [openForSubmissions, setOpenForSubmissions] = useState(true);
 
-  const submitButtonStyle = { bottom: 0, left: 0, margin: "10px" };
-
   useEffect(() => {
     const { isOpen, openTime } = isTopicOpen(timestamp && new Date(timestamp).getTime());
     setOpenForSubmissions(isOpen);
     openTime && setOpenTime(openTime);
   }, [timestamp]);
 
-  if (openForSubmissions) {
-    return <BigButton style={submitButtonStyle} onClick={onClick} text="Submit Additions" />;
-  } else {
-    if (openTime) return <CountdownTimer destination={openTime} onTimerComplete={() => setOpenForSubmissions(true)} />;
-    return <BigButton style={submitButtonStyle} onClick={onClick} text="Submit Additions" />;
-  }
+  return (
+    <div style={{ position: "fixed", bottom: 0, left: 0, margin: "10px" }}>
+      {openForSubmissions ? (
+        <BigButton onClick={onClick} text="Submit Additions" />
+      ) : openTime ? (
+        <CountdownTimer destination={openTime} onTimerComplete={() => setOpenForSubmissions(true)} />
+      ) : (
+        <BigButton onClick={onClick} text="Submit Additions" />
+      )}
+    </div>
+  );
 };
 
 export default SubmitControlArea;

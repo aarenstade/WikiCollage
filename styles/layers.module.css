@@ -6,13 +6,9 @@
 }
 
 .menuLayer {
-  position: absolute;
-  top: var(--navbar-offset);
-}
-
-.menuLayer * {
   position: fixed;
-  z-index: 6;
+  top: var(--navbar-offset);
+  z-index: 500;
 }
 
 .touchLayer {

@@ -12,20 +12,26 @@
   height: 200px;
   width: 40px;
   margin: 10px;
+  transition: 200ms;
+}
+
+.scaleSliderContainer:hover {
+  transform: scale(1.01);
+}
+.scaleSliderContainer:active {
+  transform: scale(1.03);
 }
 
 .scaleSlider {
-  width: 150px;
-  height: 20px;
+  width: 200px 20px;
+  transform: rotate(-90deg) translateX(-15px);
   margin: 0;
-  transform-origin: 60px 40px;
-  transform: rotate(-90deg);
-  left: 0;
 }
 
 .scaleReadout {
-  transform: translateY(-80px);
-  width: 40px;
-  text-align: center;
-  font-size: 12px;
+  position: fixed;
+  font-size: 14px;
+  margin-bottom: 150px;
+  /* top: 70px; */
+  /* margin: 0; */
 }
