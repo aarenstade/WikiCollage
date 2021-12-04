@@ -19,6 +19,7 @@ Every topic has a unique 5000 x 5000 pixel image which anyone can contribute to.
 - Admin control with whitelisted wallet addresses.
 - Mechanism for admins to mint NFTs w/ shared contributor ownership (proportional to area contributed).
 - Scrollable history to view previous additions and permalinks for each.
+- Query text field to list topics under search bar.
 
 # Other stuff to do
 
