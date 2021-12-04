@@ -1,4 +1,4 @@
-import { useEffect, useRef, VFC } from "react";
+import { useEffect, useRef, useState, VFC } from "react";
 import { CanvasElementItem } from "../types/elements";
 import { Rnd } from "react-rnd";
 import styles from "./CanvasElement.module.css";
@@ -7,7 +7,6 @@ import TextElement from "./elements/TextElement";
 import useViewControl from "../hooks/useViewControl";
 import useSelectedElement from "../hooks/useSelectedElement";
 import ImageElement from "./elements/ImageElement";
-
 import DeleteIcon from "./icons/delete-dark.svg";
 import { NormalButton, IconButton } from "./Buttons";
 
@@ -56,24 +55,26 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
   const viewControl = useViewControl();
   const selection = useSelectedElement(id);
 
+  const [localElement, setLocalElement] = useState(element);
+
   const handleSave = () => {
-    onUpdate(element);
+    onUpdate(localElement);
     selection.setId(null);
   };
 
   useEffect(() => {
-    if (!selection.editing) onUpdate(element);
+    if (!selection.editing) onUpdate(localElement);
   }, [selection.editing]);
 
   useEffect(() => {
     const scale = viewControl.view.scale;
-    const scaledWidth = element.width * scale;
-    const scaledHeight = element.height * scale;
-    const relativeX = element.x * scale;
-    const relativeY = element.y * scale;
+    const scaledWidth = localElement.width * scale;
+    const scaledHeight = localElement.height * scale;
+    const relativeX = localElement.x * scale;
+    const relativeY = localElement.y * scale;
+    setLocalElement({ ...localElement, scaledWidth, scaledHeight });
     rndRef.current.updateSize({ width: scaledWidth, height: scaledHeight });
     rndRef.current.updatePosition({ x: relativeX, y: relativeY });
-    onUpdate({ ...element, scaledWidth, scaledHeight });
   }, [viewControl.view.scale]);
 
   const updatePosition = (d: any) => {
@@ -82,7 +83,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
     const absX = Math.round(x / scale);
     const absY = Math.round(y / scale);
     rndRef.current.updatePosition({ x, y });
-    onUpdate({ ...element, x: absX, y: absY });
+    setLocalElement({ ...localElement, x: absX, y: absY });
   };
 
   const handleResize = (s: any) => {
@@ -92,42 +93,40 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
     const absWidth = Math.round(scaledWidth / scale);
     const absHeight = Math.round(scaledHeight / scale);
     rndRef.current.updateSize({ width: scaledWidth, height: scaledHeight });
-    const newElement = { ...element, width: absWidth, height: absHeight, scaledWidth, scaledHeight };
-    onUpdate(newElement);
+    setLocalElement({ ...localElement, width: absWidth, height: absHeight, scaledWidth, scaledHeight });
   };
 
   return (
     <Rnd
-      id={element.html_id}
       ref={rndRef}
       default={{
-        width: element.width || "auto",
-        height: element.height || "auto",
-        x: element.x,
-        y: element.y,
+        width: localElement.width || "auto",
+        height: localElement.height || "auto",
+        x: localElement.x,
+        y: localElement.y,
       }}
       onDrag={(_, d) => updatePosition(d)}
       onResize={(_, direction, ref) => handleResize(ref)}
-      resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
-      style={{ zIndex: 3 }}
       enableResizing={selection.editing}
+      resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
+      style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
+      disableDragging={!selection.editing}
     >
       <div
         className={styles.elementContainer}
         style={{
-          width: element.scaledWidth,
-          height: element.scaledHeight,
+          width: localElement.scaledWidth,
+          height: localElement.scaledHeight,
         }}
         onDoubleClick={() => selection.setId({ id, editing: true })}
       >
         <CanvasElementControlButtons id={id} onUpdate={handleSave} onDelete={onDelete} />
         {element.type === "text" && (
-          <TextElement editing={selection.editing} element={element} onUpdate={(e) => onUpdate(e)} />
+          <TextElement editing={selection.editing} element={localElement} onUpdate={(e) => setLocalElement(e)} />
         )}
         {element.type === "image" && (
-          <ImageElement editing={selection.editing} element={element} onUpdate={(e) => onUpdate(e)} />
+          <ImageElement editing={selection.editing} element={localElement} onUpdate={(e) => setLocalElement(e)} />
         )}
-        {/* {element.type === "draw" && <DrawElement element={element\} onDraw={(e) => onUpdate\(e)} />} */}
       </div>
     </Rnd>
   );
