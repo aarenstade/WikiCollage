@@ -4,6 +4,7 @@ import { BASE_URL } from "../../config";
 import SearchBar from "./SearchBar";
 import useCollage from "../../hooks/useCollage";
 import styles from "./Navbar.module.css";
+import WalletBar from "./WalletBar";
 
 const Navbar = () => {
   const router = useRouter();
@@ -26,11 +27,14 @@ const Navbar = () => {
         />
         <a href="/about">About</a>
       </div>
-      <SearchBar
-        topic={collage.topic?.topic}
-        loading={collage.loading}
-        onSearch={(topic: string) => handleSearch(topic)}
-      />
+      <div style={{ display: "flex", gap: 0, justifyContent: "flex-end", alignItems: "center" }}>
+        <WalletBar />
+        <SearchBar
+          topic={collage.topic?.topic}
+          loading={collage.loading}
+          onSearch={(topic: string) => handleSearch(topic)}
+        />
+      </div>
     </div>
   );
 };
