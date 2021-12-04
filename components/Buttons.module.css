@@ -3,9 +3,9 @@
   border: none;
   background-color: var(--transparent-white);
   color: var(--transparent-black);
-  padding: 7px;
+  padding: 8px;
   border-radius: 12px;
-  font-size: 20px;
+  font-size: 18px;
   transition: all 150ms;
 }
 

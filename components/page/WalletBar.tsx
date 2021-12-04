@@ -12,12 +12,15 @@ const WalletBar: VFC = () => {
       <div className={styles.walletBar}>
         <p>{balance?.toString().trimRight()}</p>
         <p>ETH</p>
-        <p>{account.slice(0, 15)}...</p>
+        <p>{account.slice(0, 12)}...</p>
       </div>
     );
   } else {
     return (
-      <div className={styles.walletBar} onClick={() => activateBrowserWallet((err) => console.error({ err }))}>
+      <div
+        className={`${styles.walletBar} ${styles.notConnected}`}
+        onClick={() => activateBrowserWallet((err) => console.error({ err }))}
+      >
         <p>Connect Your Wallet</p>
       </div>
     );

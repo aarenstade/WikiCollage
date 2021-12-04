@@ -4,9 +4,9 @@ import { CanvasElementItem } from "../../types/elements";
 import CanvasElement from "../CanvasElement";
 import styles from "../../styles/layers.module.css";
 import useViewControl from "../../hooks/useViewControl";
-import { MURAL_DIMENSION } from "../../config";
 import TouchLayer from "./TouchLayer";
 import useElements from "../../hooks/useElements";
+import { MURAL_DIMENSION } from "../../config";
 
 const ElementsLayer = () => {
   const view = useViewControl();
@@ -17,7 +17,8 @@ const ElementsLayer = () => {
 
   const elements = useElements();
 
-  const handleClick = (e: React.MouseEvent) => collageOpen && elements.addImageElement({ x: e.pageX, y: e.pageY });
+  const handleClick = (e: React.MouseEvent) =>
+    collageOpen && elements.addImageElement({ x: e.pageX - 50, y: e.pageY - 50 });
 
   const updateElement = (i: number, e: CanvasElementItem) => {
     let newElements = [...elementsList];
