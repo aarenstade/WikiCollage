@@ -13,7 +13,9 @@ export interface AdditionItem {
   _id?: ObjectId;
   url: string;
   topic_id?: ObjectId;
-  creator: string;
+  address?: string;
+  name: string;
+  email?: string;
   description?: string;
   timestamp: Date;
 }
@@ -29,7 +31,9 @@ export const TopicSchema = new Schema({
 export const AdditionSchema = new Schema({
   url: { type: String, required: true },
   topic_id: { type: String, required: true },
-  creator: { type: String, required: true },
+  address: { type: String, required: false },
+  name: { type: String, required: true },
+  email: { type: String, required: false },
   description: { type: String, required: false },
   timestamp: { type: Date, default: now() },
 });

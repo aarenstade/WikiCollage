@@ -19,14 +19,20 @@ const SubmissionFormPopup: VFC<Props> = ({ values, setFormValues, onClose, onSub
         <form onSubmit={onSubmit} style={{ gap: "20px" }} className={container.simpleColumnContainer}>
           <input
             type="text"
-            name="creator"
+            name="name"
             placeholder="Your Name"
             required
-            onChange={(e) => setFormValues({ ...values, creator: e.target.value })}
+            onChange={(e) => setFormValues({ ...values, name: e.target.value })}
+          />
+          <input
+            type="text"
+            name="email"
+            placeholder="Your Email (optional, for updates, never made public)"
+            onChange={(e) => setFormValues({ ...values, email: e.target.value })}
           />
           <textarea
             name="description"
-            placeholder="Describe what you added..."
+            placeholder="Describe what you added... (optional)"
             style={{ width: "90%", height: "100px" }}
             onChange={(e) => setFormValues({ ...values, description: e.target.value })}
           />

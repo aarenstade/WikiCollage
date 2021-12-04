@@ -54,14 +54,14 @@ const useSubmitHandler = (): SubmitHandlerHook => {
           elementObjects.push({ uri: data, x, y, width, height });
         });
 
-        // for (let i = 0; i < elementsList.length; i++) {
-        //   const base64 = await buildImageFromElement(elementsList[i]);
+        // TODO - once text offset bug is fixed, this uses html2canvas to generate image then uploads
+        // for (let i = 0; i < textElements.length; i++) {
+        //   const base64 = await buildImageFromElement(textElements[i]);
         //   if (base64) {
-        //     setStatus({ ...status, message: `Processing Element ${i + 1} of ${elementsList.length}`, image: base64 });
         //     const bytes = convertBase64ToBytes(base64);
-        //     const uri = await uploadImage(bytes, `tmp/${elementsList[i].html_id}.png`);
+        //     const uri = await uploadImage(bytes, `tmp/${textElements[i].html_id}.png`);
         //     if (uri) {
-        //       const { x, y, width, height } = elementsList[i];
+        //       const { x, y, width, height } = textElements[i];
         //       elementObjects.push({ uri, x, y, width, height });
         //     }
         //   }
@@ -76,8 +76,10 @@ const useSubmitHandler = (): SubmitHandlerHook => {
             let newAddition: AdditionItem = {
               topic_id: collage.topic?._id,
               url: mural,
-              creator: form.creator,
+              name: form.name,
+              email: form.email,
               description: form.description,
+              address: auth.eth.account,
               timestamp: new Date(),
             };
             const addition = await insertNewAddition(auth.firebase.token, newAddition, collage.topic);
@@ -95,7 +97,6 @@ const useSubmitHandler = (): SubmitHandlerHook => {
       }
     } catch (error) {
       setMessage(`Uh oh... an error occurred: ${error}`);
-      // TODO reset upload dialogs
     }
   };
 

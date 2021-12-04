@@ -16,7 +16,7 @@ const MenuLayerEdit = () => {
   const [submitReady, setSubmitReady] = useState(false);
   const [processing, setProcessing] = useState(false);
 
-  const [formValues, setFormValues] = useState<AdditionSubmitFormValues>({ creator: "" });
+  const [formValues, setFormValues] = useState<AdditionSubmitFormValues>({ name: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

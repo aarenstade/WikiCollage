@@ -7,6 +7,7 @@ export interface SubmissionStatus {
 }
 
 export interface AdditionSubmitFormValues {
-  creator: string;
+  name: string;
   description?: string;
+  email?: string;
 }
