@@ -1,13 +1,14 @@
 import React, { VFC } from "react";
 import MuralLayer from "../components/layers/MuralLayer";
 import ElementsLayer from "../components/layers/ElementsLayer";
-import MenuLayer from "../components/layers/MenuLayer";
 import Navbar from "../components/page/Navbar";
-import ElementsLayerList from "../components/ElementsLayerList";
-import { Collage } from "../types/collage";
-import { useAuth } from "../services/AuthProvider";
 import LoadingSplashView from "./LoadingSplashView";
 import LoadingOverlay from "./LoadingOverlay";
+import { Collage } from "../types/collage";
+import { GlobalRoles } from "../types/auth";
+import MenuLayerView from "../components/layers/MenuLayerView";
+import MenuLayerEdit from "../components/layers/MenuLayerEdit";
+import useAuth from "../hooks/useAuth";
 
 interface Props {
   collage: Collage | null;
@@ -16,17 +17,17 @@ interface Props {
 const GlobalCollabView: VFC<Props> = ({ collage }) => {
   const auth = useAuth();
 
-  if (auth?.user && collage?.addition) {
+  if (collage?.addition) {
     return (
       <div>
         <Navbar />
         {collage.loading && <LoadingOverlay />}
         <div style={{ display: "flex", alignItems: "center" }}>
-          <ElementsLayerList />
           <div>
-            <MenuLayer />
+            {auth?.role === GlobalRoles.view && <MenuLayerView />}
+            {auth?.role === GlobalRoles.edit && <MenuLayerEdit />}
             <ElementsLayer />
-            <MuralLayer mural={!collage.loading ? collage?.addition?.url : undefined} />
+            <MuralLayer mural={!collage.loading && collage?.addition?.url} />
           </div>
         </div>
       </div>
