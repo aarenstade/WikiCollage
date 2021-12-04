@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { SelectedElementIdState } from "../data/atoms";
-import { useAuth } from "../services/AuthProvider";
 import { ElementToEmbed } from "../types/elements";
 import { AdditionSubmitFormValues } from "../types/general";
 import { AdditionItem } from "../types/mongodb/schemas";
 import { embedNewMural, insertNewAddition } from "../upload";
+import useAuth from "./useAuth";
 import useCollage from "./useCollage";
 import useElements from "./useElements";
 import useViewControl from "./useViewControl";
@@ -35,14 +35,14 @@ const useSubmitHandler = (): SubmitHandlerHook => {
       setSelectedId(null);
       return true;
     } else {
-      alert("No Elements Added... Click Anywhere to Add an Element");
+      alert("Click Anywhere to Add an Element");
       return false;
     }
   };
 
   const handleSubmission = async (form: AdditionSubmitFormValues) => {
     try {
-      if (auth?.token) {
+      if (auth?.firebase?.token && auth?.eth.account) {
         setMessage("Preparing...");
         const elementsList = [...elements.elements];
         let elementObjects: ElementToEmbed[] = [];
@@ -69,7 +69,7 @@ const useSubmitHandler = (): SubmitHandlerHook => {
 
         if (elementObjects.length > 0) {
           setMessage("Embedding...");
-          const mural = await embedNewMural(auth.token, elementObjects, collage.addition?.url);
+          const mural = await embedNewMural(auth.firebase.token, elementObjects, collage.addition?.url);
           if (mural) {
             setMessage("Processing");
             setLiveImage(mural);
@@ -80,7 +80,7 @@ const useSubmitHandler = (): SubmitHandlerHook => {
               description: form.description,
               timestamp: new Date(),
             };
-            const addition = await insertNewAddition(auth.token, newAddition, collage.topic);
+            const addition = await insertNewAddition(auth.firebase.token, newAddition, collage.topic);
             if (addition._id) {
               setSuccess(true);
               setMessage("Success!");

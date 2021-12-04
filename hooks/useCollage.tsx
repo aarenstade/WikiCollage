@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { CollageState } from "../data/atoms";
-import { useAuth } from "../services/AuthProvider";
 import { fetchAdditions, fetchTopic } from "../services/fetch";
 import { Collage } from "../types/collage";
-import { AdditionItem, TopicItem } from "../types/schemas";
+import { AdditionItem, TopicItem } from "../types/mongodb/schemas";
 import { isTopicOpen } from "../utils/utils";
+import useAuth from "./useAuth";
 
 interface UseCollageHook extends Collage {
   setLoading: (v: boolean) => void;
@@ -42,9 +42,9 @@ const useCollage = (topicString?: string, page?: number, limit?: number): UseCol
   const setLoading = (v: boolean) => setCollage({ ...collage, loading: v });
 
   useEffect(() => {
-    if (auth?.token && topicString) {
+    if (auth?.firebase?.token && topicString) {
       setCollage({ ...collage, loading: true });
-      fetchTopicAndAdditions(auth.token, topicString, page, limit)
+      fetchTopicAndAdditions(auth.firebase.token, topicString, page, limit)
         .then((res) => {
           const topic: TopicItem = res.topic
             ? { ...res.topic, topic: topicString }
@@ -57,7 +57,7 @@ const useCollage = (topicString?: string, page?: number, limit?: number): UseCol
           setCollage({ ...collage, loading: false });
         });
     }
-  }, [auth?.token, topicString]);
+  }, [auth?.firebase, topicString]);
 
   return {
     topic: collage.topic,
