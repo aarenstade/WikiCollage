@@ -1,7 +1,7 @@
 .layerListContainer {
   display: flex;
   align-items: center;
-  --layer-list-width: 300px;
+  --layer-list-width: 200px;
 }
 
 .layerList {
@@ -51,8 +51,5 @@
   right: calc(var(--layer-list-width) * -1);
 }
 
-@media screen and (max-width: 1000px) {
-  .layerListContainer {
-    --layer-list-width: 200px;
-  }
+.layerListButton {
 }
