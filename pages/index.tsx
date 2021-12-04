@@ -1,5 +1,5 @@
 import { VFC } from "react";
-import { AdditionItem } from "../types/schemas";
+import { AdditionItem } from "../types/mongodb/schemas";
 
 import GlobalCollabView from "../views/GlobalCollabView";
 
