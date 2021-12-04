@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../../styles/layers.module.css";
 import ScaleSlider from "../menu/ScaleSlider";
 import SubmitControlArea from "../menu/SubmitControlArea";
@@ -7,8 +7,9 @@ import useSubmitHandler from "../../hooks/useSubmitHandler";
 import SubmissionFormPopup from "../popups/SubmissionFormPopup";
 import { AdditionSubmitFormValues } from "../../types/general";
 import SubmissionStatusPopup from "../popups/SubmissionStatusPopup";
+import ElementsLayerList from "../menu/ElementsLayerList";
 
-const MenuLayer = () => {
+const MenuLayerEdit = () => {
   const collage = useCollage();
   const submit = useSubmitHandler();
 
@@ -53,6 +54,7 @@ const MenuLayer = () => {
 
   return (
     <div className={styles.menuLayer}>
+      <ElementsLayerList />
       <ScaleSlider />
       <SubmitControlArea
         timestamp={collage.addition?.timestamp}
@@ -65,4 +67,4 @@ const MenuLayer = () => {
   );
 };
 
-export default MenuLayer;
+export default MenuLayerEdit;
