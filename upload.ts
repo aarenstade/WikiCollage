@@ -5,17 +5,7 @@ import { authPostRequest } from "./client/requests";
 import { BASE_URL } from "./config";
 import { convertAllHtmlImagesToBase64 } from "./utils/image-utils";
 import { CanvasElementItem, ElementToEmbed } from "./types/elements";
-import { AdditionItem, TopicItem } from "./types/schemas";
-
-// what would it take to perform all of this serverside?
-
-// html2canvas --> sending html element parameters in some schema then rebuilding server side?
-
-// but all the database updates and stuff?
-// well we'd have to authenticate the server
-// it just all takes server requests
-
-// id like to optimize this flow,
+import { AdditionItem, TopicItem } from "./types/mongodb/schemas";
 
 export const buildImageFromElement = async (element: CanvasElementItem): Promise<string | null> => {
   const elementRoot = document.getElementById(element.html_id);
