@@ -1,9 +1,6 @@
 import { CSSProperties } from "react";
 import styles from "./Buttons.module.css";
 
-// some general buttons
-// This to create a standard set of buttons (with custom styles) to use across the whole project
-
 interface ButtonProps {
   text?: string;
   disabled?: boolean;
