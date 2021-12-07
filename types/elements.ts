@@ -17,6 +17,7 @@ export interface CanvasElementItem {
   height: number;
   scaledWidth?: number;
   scaledHeight?: number;
+  aspectRatio?: number;
   x: number;
   y: number;
   textParams?: CSSProperties;

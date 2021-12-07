@@ -9,6 +9,7 @@ import useSelectedElement from "../hooks/useSelectedElement";
 import ImageElement from "./elements/ImageElement";
 import DeleteIcon from "./icons/delete-dark.svg";
 import { NormalButton, IconButton } from "./Buttons";
+import { MAX_ELEMENT_PIXEL_AREA } from "../config";
 
 const cornerHandle = {
   backgroundColor: "white",
@@ -66,6 +67,7 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
     if (!selection.editing) onUpdate(localElement);
   }, [selection.editing]);
 
+  // respond to scale changes
   useEffect(() => {
     const scale = viewControl.view.scale;
     const scaledWidth = localElement.width * scale;
@@ -83,18 +85,50 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
     const absX = Math.round(x / scale);
     const absY = Math.round(y / scale);
     rndRef.current.updatePosition({ x, y });
-    setLocalElement({ ...localElement, x: absX, y: absY });
+    const newElement = { ...localElement, x: absX, y: absY };
+    setLocalElement(newElement);
+    onUpdate(newElement);
+  };
+
+  const setSize = (w: number, h: number, sw: number, sh: number) => {
+    const newElement = { ...localElement, width: w, height: h, scaledWidth: sw, scaledHeight: sh };
+    rndRef.current.updateSize({ width: sw, height: sh });
+    setLocalElement(newElement);
+    onUpdate(newElement);
+  };
+
+  const calcMaxImageDim = (aspect: number): { width: number; height: number } => {
+    const width = Math.round(Math.sqrt(MAX_ELEMENT_PIXEL_AREA / (1 / aspect)));
+    const height = Math.round(width / aspect);
+    return { width, height };
   };
 
   const handleResize = (s: any) => {
-    const scaledWidth = s.offsetWidth;
-    const scaledHeight = s.offsetHeight;
     const scale = viewControl.view.scale;
-    const absWidth = Math.round(scaledWidth / scale);
-    const absHeight = Math.round(scaledHeight / scale);
-    rndRef.current.updateSize({ width: scaledWidth, height: scaledHeight });
-    setLocalElement({ ...localElement, width: absWidth, height: absHeight, scaledWidth, scaledHeight });
+    const absW = Math.round(s.offsetWidth / scale);
+    const absH = Math.round(s.offsetHeight / scale);
+    if (absW * absH >= MAX_ELEMENT_PIXEL_AREA) {
+      const aspect = element.aspectRatio ? element.aspectRatio : 1;
+      const { width, height } = calcMaxImageDim(aspect);
+      const scaledWidth = width * scale;
+      const scaledHeight = height * scale;
+      setSize(width, height, scaledWidth, scaledHeight);
+    } else {
+      setSize(absW, absH, s.offsetWidth, s.offsetHeight);
+    }
   };
+
+  // respond to image changes
+  // TODO (bug not responding to state change when new image is added)
+  useEffect(() => {
+    if (element.data && element.type === "image") {
+      const { width, height } = calcMaxImageDim(element.aspectRatio ? element.aspectRatio : 1);
+      const scale = viewControl.view.scale;
+      const scaledWidth = width * scale;
+      const scaledHeight = height * scale;
+      setSize(width, height, scaledWidth, scaledHeight);
+    }
+  }, [element.data]);
 
   return (
     <Rnd
@@ -105,12 +139,12 @@ const CanvasElement: VFC<CanvasElementProps> = ({ id, element, onUpdate, onDelet
         x: localElement.x,
         y: localElement.y,
       }}
-      onDrag={(_, d) => updatePosition(d)}
-      onResize={(_, direction, ref) => handleResize(ref)}
+      onDragStop={(_, d) => updatePosition(d)}
+      onResizeStop={(_, d, ref) => handleResize(ref)}
+      lockAspectRatio={localElement.aspectRatio ? localElement.aspectRatio : false}
       enableResizing={selection.editing}
       resizeHandleStyles={selection.selected ? resizeHandleStyles : {}}
       style={{ zIndex: 3, border: `${selection.selected ? "0.5px solid gray" : "none"}` }}
-      disableDragging={!selection.editing}
     >
       <div
         className={styles.elementContainer}
