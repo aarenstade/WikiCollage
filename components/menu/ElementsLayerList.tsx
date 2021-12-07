@@ -38,7 +38,6 @@ const ElementsLayerList = () => {
                 <h3>
                   {element.type.toUpperCase()} {Math.round(i + 1)}
                 </h3>
-                {element.data && <p>{element.data.slice(0, 10).padEnd(3, ".")}</p>}
                 <p>
                   x: {Math.round(element.x)}, y: {Math.round(element.y)}
                 </p>
