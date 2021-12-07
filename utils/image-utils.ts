@@ -57,6 +57,16 @@ export const uploadImage = async (file: ArrayBuffer | Uint8Array, path: string):
   }
 };
 
+export const imageUrlToBase64Endpoint = async (url: string): Promise<string | null> => {
+  try {
+    const res = await axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url }, method: "POST" });
+    if (res.data) return res.data;
+    return null;
+  } finally {
+    return null;
+  }
+};
+
 // this function will prob be removed, was required to convert images for html2canvas CORS restrictions...
 // but we're bypassing that by downloading images in /api/merge-mural, so this is un-used.
 export const convertAllHtmlImagesToBase64 = (clone: Document) => {
