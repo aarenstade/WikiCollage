@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
+import { convertBase64ToBytes, convertImageToBase64, uploadImage } from "../../utils/image-utils";
 import { useRef, useState, VFC } from "react";
 import { v4 } from "uuid";
 import { MAX_FILE_SIZE } from "../../config";
-import { CanvasElementItem } from "../../types/elements";
-import { convertBase64ToBytes, uploadImage } from "../../utils/image-utils";
 import { matchUrl } from "../../utils/utils";
+import { CanvasElementItem } from "../../types/elements";
+import useViewControl from "../../hooks/useViewControl";
 import styles from "./elements.module.css";
 
 interface ImageElementProps {
@@ -54,12 +55,40 @@ const ImageData: VFC<ImageDataProps> = ({ element, loading }) => {
 };
 
 const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) => {
+  const view = useViewControl();
   const [loading, setLoading] = useState(false);
   const inputFileRef = useRef<HTMLInputElement>(null);
 
-  const onInputUrl = (url: string) => {
+  const handleNewImage = async (imageData: string) => {
+    setLoading(true);
+    let data: string = imageData;
+    let width = 500;
+    let height = 500;
+    let scaledWidth, scaledHeight, aspectRatio;
+
+    if (imageData.startsWith("data:image")) {
+      const image = new Image();
+      image.onload = () => {
+        width = image.width;
+        height = image.height;
+        aspectRatio = width / height;
+      };
+      image.src = imageData;
+      const bytes = convertBase64ToBytes(imageData);
+      const url = await uploadImage(bytes, `/tmp/${v4()}.jpg`);
+      data = url ? url : imageData;
+    }
+
+    const scale = view.view.scale;
+    scaledWidth = width * scale;
+    scaledHeight = height * scale;
+    onUpdate({ ...element, data, width, height, scaledWidth, scaledHeight, aspectRatio });
+    setLoading(false);
+  };
+
+  const onInputUrl = async (url: string) => {
     const valid = matchUrl(url);
-    if (valid) onUpdate({ ...element, data: url });
+    if (valid) await handleNewImage(url);
   };
 
   const onFileChangeCapture = (e: any) => {
@@ -69,24 +98,13 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
       return;
     }
 
-    setLoading(true);
     const reader = new FileReader();
     reader.addEventListener("load", async () => {
-      const result = reader.result;
-      const path = `/tmp/${v4()}.jpg`;
-
-      if (result) {
-        if (typeof result === "string") {
-          const bytes = convertBase64ToBytes(result);
-          const url = await uploadImage(bytes, path);
-          if (url) onUpdate({ ...element, data: url });
-        } else {
-          const url = await uploadImage(result, path);
-          if (url) onUpdate({ ...element, data: url });
-        }
+      if (reader.result) {
+        let data = reader.result;
+        if (typeof data != "string") data = convertImageToBase64(data);
+        await handleNewImage(data);
       }
-
-      setLoading(false);
     });
     reader.readAsDataURL(files[0]);
   };
@@ -105,18 +123,20 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
         }}
       >
         <ImageData element={element} loading={loading} />
-        <div className={styles.elementBottomButtonsStack}>
-          <input
-            ref={inputFileRef}
-            name="imageinput"
-            type="file"
-            accept="image/*"
-            className={styles.imageInput}
-            onChangeCapture={onFileChangeCapture}
-          />
-          <button onClick={triggerSelectFile}>Select file</button>
-          <input name="image-url" type="text" placeholder="Image Url" onChange={(e) => onInputUrl(e.target.value)} />
-        </div>
+        {!element.data && (
+          <div className={styles.elementBottomButtonsStack}>
+            <input
+              ref={inputFileRef}
+              name="imageinput"
+              type="file"
+              accept="image/*"
+              className={styles.imageInput}
+              onChangeCapture={onFileChangeCapture}
+            />
+            <button onClick={triggerSelectFile}>Select file</button>
+            <input name="image-url" type="text" placeholder="Image Url" onChange={(e) => onInputUrl(e.target.value)} />
+          </div>
+        )}
       </div>
     );
   } else {

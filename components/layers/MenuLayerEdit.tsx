@@ -47,7 +47,7 @@ const MenuLayerEdit = () => {
           message: submit.message,
           success: submit.success,
         }}
-        topic={collage.topic.topic}
+        topic={collage.topic?.topic}
       />
     );
   }
