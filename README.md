@@ -14,8 +14,6 @@ Every topic has a unique 5000 x 5000 pixel image which anyone can contribute to.
 
 ## Things to build / being built:
 
-- Smart contract to issue ERC20 "WC" tokens.
-- Formula to evaulate contributions (collages or code) to issue WC tokens.
 - Admin control with whitelisted wallet addresses.
 - Mechanism for admins to mint NFTs w/ shared contributor ownership (proportional to area contributed).
 - Scrollable history to view previous additions and permalinks for each.
