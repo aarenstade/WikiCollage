@@ -9,6 +9,8 @@ import { GlobalRoles } from "../types/auth";
 import MenuLayerView from "../components/layers/MenuLayerView";
 import MenuLayerEdit from "../components/layers/MenuLayerEdit";
 import useAuth from "../hooks/useAuth";
+import HelperDialog from "../components/HelperDialog";
+import TopicBar from "../components/TopicBar";
 
 interface Props {
   collage: Collage | null;
@@ -21,7 +23,14 @@ const GlobalCollabView: VFC<Props> = ({ collage }) => {
     return (
       <div>
         <Navbar />
+        {/* {collage.topic && <TopicBar topic={collage.topic} />} */}
         {collage.loading && <LoadingOverlay />}
+        {!collage.loading && !collage.addition.url && (
+          <HelperDialog top="var(--navbar-offset)" right={0}>
+            <h3>New Topic!</h3>
+            <p>{`You're the first here, make a meaningful contribution!`}</p>
+          </HelperDialog>
+        )}
         <div style={{ display: "flex", alignItems: "center" }}>
           <div>
             {auth?.role === GlobalRoles.view && <MenuLayerView />}

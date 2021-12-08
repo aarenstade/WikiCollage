@@ -1,0 +1,24 @@
+@keyframes fade-out {
+  from {
+    opacity: 100;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.helperDialogContainer * {
+  margin: 0;
+}
+
+.helperDialog {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity linear 2s;
+}
+
+.helperDialogHidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
