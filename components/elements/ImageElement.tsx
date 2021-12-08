@@ -62,7 +62,7 @@ const ImageElement: VFC<ImageElementProps> = ({ element, editing, onUpdate }) =>
   const handleNewImage = async (imageData: string) => {
     setLoading(true);
     let data: string = imageData;
-    let width = 500;
+    let width = 500; // default size
     let height = 500;
     let scaledWidth, scaledHeight, aspectRatio;
 
