@@ -8,30 +8,33 @@ import { CanvasElementItem, ElementToEmbed } from "./types/elements";
 import { AdditionItem, TopicItem } from "./types/mongodb/schemas";
 
 export const buildImageFromElement = async (element: CanvasElementItem): Promise<string | null> => {
-  const elementRoot = document.getElementById(element.html_id);
-  console.log({ elementRoot });
-  if (elementRoot) {
-    elementRoot.style["backgroundColor"] = "blue";
+  try {
+    const elementRoot = document.getElementById(element.html_id);
+    if (elementRoot) {
+      elementRoot.style["backgroundColor"] = "blue";
 
-    const elementCanvas = await html2canvas(elementRoot, {
-      scale: 1,
-      width: element.width,
-      height: element.height,
-      backgroundColor: null,
-      onclone: async (clone) => await convertAllHtmlImagesToBase64(clone),
-    });
+      const elementCanvas = await html2canvas(elementRoot, {
+        scale: 1,
+        width: element.width,
+        height: element.height,
+        backgroundColor: null,
+        onclone: async (clone) => await convertAllHtmlImagesToBase64(clone),
+      });
 
-    return elementCanvas.toDataURL("image/png", 0.8);
+      return elementCanvas.toDataURL("image/png", 0.8);
+    }
+    return null;
+  } catch (error) {
+    return null;
   }
-  return null;
 };
 
 export const embedNewMural = async (token: string, elementObjects: ElementToEmbed[], collage?: string) => {
   const muralRes = await authPostRequest(token, `${BASE_URL}/api/merge-mural`, { elements: elementObjects, collage });
-  if (muralRes.data) return await getDownloadURL(STORAGE_REF(muralRes.data));
+  if (muralRes && muralRes.data) return await getDownloadURL(STORAGE_REF(muralRes.data));
 };
 
 export const insertNewAddition = async (token: string, addition: AdditionItem, topic: TopicItem | null) => {
   const response = await authPostRequest(token, `${BASE_URL}/api/db/additions`, { addition, topic });
-  if (response.data) return response.data;
+  if (response && response.data) return response.data;
 };

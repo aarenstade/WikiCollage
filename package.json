@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --debug",
+    "build": "next build --trace-warnings",
     "start": "next start",
     "lint": "next lint"
   },

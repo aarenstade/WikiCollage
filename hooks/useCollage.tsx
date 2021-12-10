@@ -23,10 +23,10 @@ const fetchTopicAndAdditions = async (
   try {
     if (token) {
       const topicRes = await fetchTopic(token, topicString);
-      topic = topicRes.data;
+      topic = topicRes && topicRes.data;
 
       const additionRes = await fetchAdditions(token, topic._id, page, limit);
-      addition = additionRes.data;
+      addition = additionRes && additionRes.data;
     }
   } catch (error) {
     console.error({ error });
