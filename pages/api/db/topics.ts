@@ -7,9 +7,14 @@ const handler = apiHandler();
 // fetch a single topic
 // INPUT --> ?topic={String}
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  const topic = req.query.topic.toString();
-  const response: TopicItem | null = await Topic.findOne({ topic: { $regex: topic } });
-  res.send(response);
+  try {
+    const topic = req.query.topic.toString();
+    const response: TopicItem | null = await Topic.findOne({ topic: { $regex: topic } });
+    res.send(response);
+  } catch (error) {
+    console.error({ error });
+    res.status(500).send(error);
+  }
 });
 
 export default handler;
