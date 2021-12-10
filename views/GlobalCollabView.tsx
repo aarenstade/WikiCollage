@@ -1,7 +1,6 @@
 import React, { VFC } from "react";
 import MuralLayer from "../components/layers/MuralLayer";
 import ElementsLayer from "../components/layers/ElementsLayer";
-import Navbar from "../components/page/Navbar";
 import LoadingSplashView from "./LoadingSplashView";
 import LoadingOverlay from "./LoadingOverlay";
 import { Collage } from "../types/collage";
