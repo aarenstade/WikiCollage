@@ -1,3 +1,22 @@
+.pageContainer {
+  position: absolute;
+  top: var(--navbar-offset);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  background-color: white;
+  border-top: 1px solid black;
+}
+
+.contentContainer {
+  max-width: 800px;
+  width: 90%;
+  border-bottom: 1px solid black;
+}
+
 .simpleColumnContainer {
   display: flex;
   flex-direction: column;
