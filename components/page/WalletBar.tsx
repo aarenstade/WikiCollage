@@ -1,5 +1,5 @@
 import { useEtherBalance, useEthers } from "@usedapp/core";
-import { useState, VFC } from "react";
+import { VFC } from "react";
 import styles from "./WalletBar.module.css";
 
 const WalletBar: VFC = () => {
