@@ -1,10 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref as stRef } from "firebase/storage";
 import { getDatabase, ref as dbRef } from "firebase/database";
-import { firebaseConfig } from "../firebase-client";
 import { getAuth } from "firebase/auth";
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(JSON.parse(process.env.FIREBASE_CLIENT_CONFIG || ""));
 
 const storage = getStorage(app, "gs://visual-collab.appspot.com");
 export const STORAGE_REF = (path: string) => stRef(storage, path);
