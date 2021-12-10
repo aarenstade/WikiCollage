@@ -8,4 +8,5 @@ module.exports = {
 
     return config;
   },
+  extends: ["eslint:recommended", "plugin:react/recommended"],
 };
