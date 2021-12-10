@@ -10,7 +10,6 @@ import MenuLayerView from "../components/layers/MenuLayerView";
 import MenuLayerEdit from "../components/layers/MenuLayerEdit";
 import useAuth from "../hooks/useAuth";
 import HelperDialog from "../components/HelperDialog";
-import TopicBar from "../components/TopicBar";
 
 interface Props {
   collage: Collage | null;
@@ -22,7 +21,6 @@ const GlobalCollabView: VFC<Props> = ({ collage }) => {
   if (collage?.addition) {
     return (
       <div>
-        <Navbar />
         {/* {collage.topic && <TopicBar topic={collage.topic} />} */}
         {collage.loading && <LoadingOverlay />}
         {!collage.loading && !collage.addition.url && (
