@@ -10,3 +10,5 @@ export const WAIT_PERIOD = 10 * 60 * 1000;
 export const MAX_FILE_SIZE = 3072000;
 export const MAX_ELEMENT_PIXEL_AREA = 1000000;
 export const DEFAULT_MURAL_BACKGROUND_COLOR = "gray";
+
+export const GITHUB_URL = "https://github.com/aarenstade/WikiCollage";
