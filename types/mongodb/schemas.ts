@@ -5,6 +5,7 @@ export interface TopicItem {
   topic: string;
   description?: string;
   wikipedia_url?: string;
+  locked?: boolean;
   created_at: Date;
   updated_at: Date;
 }
@@ -24,6 +25,7 @@ export const TopicSchema = new Schema({
   topic: { type: String, required: true },
   description: { type: String, required: false },
   wikipedia_url: { type: String, required: false },
+  locked: { type: Boolean, required: false },
   created_at: { type: Date, default: now() },
   updated_at: { type: Date, default: now() },
 });

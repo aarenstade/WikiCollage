@@ -20,7 +20,6 @@ const GlobalCollabView: VFC<Props> = ({ collage }) => {
   if (collage?.addition) {
     return (
       <div>
-        {/* {collage.topic && <TopicBar topic={collage.topic} />} */}
         {collage.loading && <LoadingOverlay />}
         {!collage.loading && !collage.addition.url && (
           <HelperDialog top="var(--navbar-offset)" right={0}>
@@ -30,9 +29,8 @@ const GlobalCollabView: VFC<Props> = ({ collage }) => {
         )}
         <div style={{ display: "flex", alignItems: "center" }}>
           <div>
-            {auth?.role === GlobalRoles.view && <MenuLayerView />}
-            {auth?.role === GlobalRoles.edit && <MenuLayerEdit />}
-            <ElementsLayer />
+            {auth?.role === GlobalRoles.view || collage.topic?.locked ? <MenuLayerView /> : <MenuLayerEdit />}
+            {!collage.topic?.locked && <ElementsLayer />}
             <MuralLayer mural={!collage.loading ? collage?.addition?.url : undefined} />
           </div>
         </div>
