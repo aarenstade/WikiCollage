@@ -13,6 +13,7 @@
   height: 100%;
 
   background-color: var(--transparent-white);
+  border-left: 1px solid gray;
   z-index: 90;
   transition: all 150ms;
 }
