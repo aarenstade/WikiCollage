@@ -10,16 +10,13 @@ const AboutPage: NextPage = () => {
         <h3>About WikiCollage</h3>
         <p>WikiCollage is a simple image layout editor with an open access contribution model.</p>
         <p>Anyone can create topics and add images. Each topic starts with an empty 5000 x 5000 pixel image.</p>
-        <p>
-          The goal is to build a unique image collage for every topic, idea, or word, and mint those as collectively
-          owned NFTs.
-        </p>
+        <p>The goal is to build a unique image collage for every topic, idea, or word.</p>
       </div>
       <div className={container.contentContainer}>
         <h3>Notes About Project Development</h3>
 
         <p>WikiCollage was started by Aaren Stade in November 2021.</p>
-        <p>The values of this project are open-access, decentralized control, and collective ownership.</p>
+        <p>The values of this project are open-access and decentralized control.</p>
         <p>As soon as possible, all code will be open sourced and steps made to decentralize this project.</p>
       </div>
       {/* <div className={container.contentContainer}>
@@ -60,7 +57,7 @@ const AboutPage: NextPage = () => {
       <div className={container.contentContainer}>
         <h3>Want to help?</h3>
         <p>{`Make collage additions! That's the best way to contribute.`}</p>
-        <p>Make sure to connect your crypto wallet in case of any future NFT sales.</p>
+        {/* <p>Make sure to connect your crypto wallet in case of any future NFT sales.</p> */}
         <p>
           Join the <a href="https://discord.gg/hhtvt4qTRs">Discord</a>
         </p>
