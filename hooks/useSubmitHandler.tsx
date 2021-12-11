@@ -79,7 +79,7 @@ const useSubmitHandler = (): SubmitHandlerHook => {
               name: form.name,
               email: form.email,
               description: form.description,
-              // address: auth.eth.account,
+              address: auth.eth.account || undefined,
               timestamp: new Date(),
             };
             const addition = await insertNewAddition(auth.firebase.token, newAddition, collage.topic);
