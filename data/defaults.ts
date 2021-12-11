@@ -11,14 +11,15 @@ interface NewCanvasElementInput {
 }
 
 export const newImageElement = ({ width, height, scale, pos }: NewCanvasElementInput): CanvasElementItem => {
+  // TODO set element to max width height and adusted scaledWidth & scaledHeight
   return {
     html_id: v4(),
     type: "image",
     data: "",
-    width: width,
-    height: height,
-    scaledWidth: width * scale,
-    scaledHeight: height * scale,
+    width: width / scale,
+    height: height / scale,
+    scaledWidth: width,
+    scaledHeight: height,
     x: Math.round(pos.x / scale) - width / 2,
     y: Math.round(pos.y / scale) - width / 2,
   };

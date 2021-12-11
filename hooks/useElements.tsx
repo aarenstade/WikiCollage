@@ -26,8 +26,8 @@ const useElements = (): UseElementsHook => {
 
   const addImageElement = (pos: Pos) => {
     const imageElement = newImageElement({
-      width: MAX_ELEMENT_PIXEL_AREA * view.view.scale,
-      height: MAX_ELEMENT_PIXEL_AREA * view.view.scale,
+      width: 200,
+      height: 200,
       scale: view.view.scale,
       pos,
     });
