@@ -42,7 +42,7 @@ const useSubmitHandler = (): SubmitHandlerHook => {
 
   const handleSubmission = async (form: AdditionSubmitFormValues) => {
     try {
-      if (auth?.firebase?.token && auth?.eth.account) {
+      if (auth?.firebase?.token) {
         setMessage("Preparing...");
         const elementsList = [...elements.elements];
         let elementObjects: ElementToEmbed[] = [];
@@ -79,7 +79,7 @@ const useSubmitHandler = (): SubmitHandlerHook => {
               name: form.name,
               email: form.email,
               description: form.description,
-              address: auth.eth.account,
+              // address: auth.eth.account,
               timestamp: new Date(),
             };
             const addition = await insertNewAddition(auth.firebase.token, newAddition, collage.topic);

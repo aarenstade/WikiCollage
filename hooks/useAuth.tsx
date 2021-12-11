@@ -1,18 +1,18 @@
-import { useEtherBalance, useEthers } from "@usedapp/core";
+// import { useEtherBalance, useEthers } from "@usedapp/core";
 import { useEffect, useState } from "react";
 import { useFirebaseContext } from "../services/FirebaseAuthProvider";
 import { FirebaseAuth, GlobalRoles } from "../types/auth";
 
 interface AuthHook {
   firebase: FirebaseAuth | null;
-  eth: { account: string | null | undefined; balance: any };
+  // eth: { account: string | null | undefined; balance: any };
   role: GlobalRoles;
 }
 
 const useAuth = (): AuthHook => {
   const firebase = useFirebaseContext();
-  const { account } = useEthers();
-  const balance = useEtherBalance(account);
+  // const { account } = useEthers();
+  // const balance = useEtherBalance(account);
   const [role, setRole] = useState<GlobalRoles>(GlobalRoles.view);
 
   useEffect(() => {
@@ -23,9 +23,9 @@ const useAuth = (): AuthHook => {
     } else {
       setRole(GlobalRoles.view);
     }
-  }, [account, firebase?.user]);
+  }, [firebase?.user]);
 
-  return { firebase, eth: { account, balance }, role };
+  return { firebase, role };
 };
 
 export default useAuth;
