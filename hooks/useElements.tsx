@@ -4,6 +4,7 @@ import { newImageElement, newTextElement } from "../data/defaults";
 import { CanvasElementItem } from "../types/elements";
 import useViewControl from "./useViewControl";
 import { Pos } from "../types/view";
+import { MAX_ELEMENT_PIXEL_AREA } from "../config";
 
 interface UseElementsHook {
   elements: CanvasElementItem[];
@@ -24,7 +25,12 @@ const useElements = (): UseElementsHook => {
   };
 
   const addImageElement = (pos: Pos) => {
-    const imageElement = newImageElement({ width: 200, height: 200, scale: view.view.scale, pos });
+    const imageElement = newImageElement({
+      width: MAX_ELEMENT_PIXEL_AREA * view.view.scale,
+      height: MAX_ELEMENT_PIXEL_AREA * view.view.scale,
+      scale: view.view.scale,
+      pos,
+    });
     addAndSelectNewElement(imageElement);
     return imageElement;
   };
