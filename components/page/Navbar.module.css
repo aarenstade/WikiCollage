@@ -12,6 +12,7 @@
   width: 100vw;
   height: var(--navbar-offset);
   background-color: white;
+  border-bottom: 1px solid black;
 }
 
 .menu {
