@@ -1,14 +1,16 @@
-import { initializeApp } from "firebase/app";
-import { getStorage, ref as stRef } from "firebase/storage";
-import { getDatabase, ref as dbRef } from "firebase/database";
+import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { FirebaseStorage, getStorage, ref as stRef, StorageReference } from "firebase/storage";
 
-const app = initializeApp(JSON.parse(process.env.FIREBASE_CLIENT_CONFIG || "{}"));
+let app: FirebaseApp;
+let storage: FirebaseStorage;
 
-const storage = getStorage(app, "gs://visual-collab.appspot.com");
-export const STORAGE_REF = (path: string) => stRef(storage, path);
+try {
+  app = initializeApp(JSON.parse(process.env.FIREBASE_CLIENT_CONFIG || "{}"));
+  storage = getStorage(app, "gs://visual-collab.appspot.com");
+} catch (error) {
+  console.error({ error });
+}
 
-const database = getDatabase(app);
-export const DATABASE_REF = (path: string) => dbRef(database, path);
-
+export const STORAGE_REF = (path: string): StorageReference => stRef(storage, path);
 export const auth = getAuth();
