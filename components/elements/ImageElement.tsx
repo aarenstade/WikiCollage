@@ -45,7 +45,7 @@ const ImageData: VFC<ImageDataProps> = ({ element, loading }) => {
       <div
         className={styles.imageData}
         style={{
-          backgroundColor: "black",
+          backgroundColor: "lightgray",
           width: element.scaledWidth,
           height: element.scaledHeight,
         }}
