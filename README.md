@@ -14,6 +14,7 @@ Every topic has a unique 5000 x 5000 pixel image which anyone can contribute to.
 
 ## Things to build / being built:
 
+- Topic history list viewer.
 - Admin control with whitelisted wallet addresses.
 - Mechanism for admins to mint NFTs w/ shared contributor ownership (proportional to area contributed).
 - Scrollable history to view previous additions and permalinks for each.
