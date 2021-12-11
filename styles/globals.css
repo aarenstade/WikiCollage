@@ -7,7 +7,7 @@ body {
 
   font-family: var(--global-font-family);
 
-  --background-color: black;
+  --background-color: rgb(50, 50, 50);
   background-color: var(--background-color);
 
   --navbar-offset: 40px;
