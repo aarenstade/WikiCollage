@@ -1,16 +1,9 @@
-import { VFC } from "react";
-import { AdditionItem } from "../types/mongodb/schemas";
-
+import { NextPage } from "next";
 import GlobalCollabView from "../views/GlobalCollabView";
-
 import useCollage from "../hooks/useCollage";
 import { HOME_TOPIC_NAME } from "../config";
 
-interface HomeProps {
-  addition?: AdditionItem;
-}
-
-const Home: VFC<HomeProps> = () => {
+const Home: NextPage = () => {
   const collage = useCollage(HOME_TOPIC_NAME);
 
   return <GlobalCollabView collage={collage} />;
