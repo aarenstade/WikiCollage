@@ -26,5 +26,10 @@ export function isTopicOpen(timestamp?: number): { isOpen: boolean; openTime?: n
   return { isOpen: true, openTime };
 }
 
-export const matchUrl = (val: string) =>
-  val.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+export const matchUrl = (val: string) => {
+  const httpsRegex =
+    /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+  if (val.match(httpsRegex)) return true;
+  if (val.startsWith("data:image")) return true;
+  return false;
+};
