@@ -4,6 +4,7 @@ import { BASE_URL } from "../../config";
 import SearchBar from "./SearchBar";
 import useCollage from "../../hooks/useCollage";
 import styles from "./Navbar.module.css";
+import Link from "next/link";
 // import WalletBar from "./WalletBar";
 
 const Navbar = () => {
@@ -25,7 +26,7 @@ const Navbar = () => {
           className={styles.logo}
           onClick={() => router.push("/")}
         />
-        <a href="/about">About</a>
+        <Link href="/about">About</Link>
       </div>
       <div style={{ display: "flex", gap: 0, justifyContent: "flex-end", alignItems: "center" }}>
         {/* <WalletBar /> */}
