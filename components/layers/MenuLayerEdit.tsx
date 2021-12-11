@@ -8,6 +8,7 @@ import SubmissionFormPopup from "../popups/SubmissionFormPopup";
 import { AdditionSubmitFormValues } from "../../types/general";
 import SubmissionStatusPopup from "../popups/SubmissionStatusPopup";
 import ElementsLayerList from "../menu/ElementsLayerList";
+import HelpButton from "../menu/HelpButton";
 
 const MenuLayerEdit = () => {
   const collage = useCollage();
@@ -63,6 +64,7 @@ const MenuLayerEdit = () => {
           setSubmitReady(validation);
         }}
       />
+      <HelpButton />
     </div>
   );
 };
