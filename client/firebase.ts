@@ -1,9 +1,15 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { FirebaseStorage, getStorage, ref as stRef, StorageReference } from "firebase/storage";
-
+import {
+  FirebaseStorage,
+  getStorage,
+  ref as stRef,
+  StorageReference,
+} from "firebase/storage";
+import { Functions, getFunctions, httpsCallable } from "firebase/functions";
 let app: FirebaseApp;
 let storage: FirebaseStorage;
+let functions: Functions;
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDAkzjzyyWLIdShZmx-djzobXYDVKt-9ok",
@@ -18,9 +24,15 @@ export const firebaseConfig = {
 try {
   app = initializeApp(firebaseConfig);
   storage = getStorage(app, "gs://visual-collab.appspot.com");
+  functions = getFunctions(app);
 } catch (error) {
   console.error({ error });
 }
 
-export const STORAGE_REF = (path: string): StorageReference => stRef(storage, path);
+export const STORAGE_REF = (path: string): StorageReference =>
+  stRef(storage, path);
+
+export const CALL_CLOUD_FUNCTION = async <T>(name: string, data: T) =>
+  await httpsCallable<T, any>(functions, name)(data);
+
 export const auth = getAuth();
