@@ -1,4 +1,5 @@
-export const BASE_URL = "https://www.wikicollage.org";
+// export const BASE_URL = "https://www.wikicollage.org";
+export const BASE_URL = "http://localhost:3000";
 export const MURAL_DIMENSION = 5000;
 
 export const HOME_TOPIC_NAME = "WikiCollage-Home";
@@ -12,3 +13,5 @@ export const MAX_ELEMENT_PIXEL_AREA = 1000000;
 export const DEFAULT_MURAL_BACKGROUND_COLOR = "black";
 
 export const GITHUB_URL = "https://github.com/aarenstade/WikiCollage";
+
+export const GOOGLE_STORAGE_BUCKET = "gs://visual-collab.appspot.com";
