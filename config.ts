@@ -1,5 +1,5 @@
-// export const BASE_URL = "https://www.wikicollage.org";
-export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://www.wikicollage.org";
+// export const BASE_URL = "http://localhost:3000";
 export const MURAL_DIMENSION = 5000;
 
 export const HOME_TOPIC_NAME = "WikiCollage-Home";
