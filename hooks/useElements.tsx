@@ -4,12 +4,12 @@ import { newImageElement, newTextElement } from "../data/defaults";
 import { CanvasElementItem } from "../types/elements";
 import useViewControl from "./useViewControl";
 import { Pos } from "../types/view";
-import { MAX_ELEMENT_PIXEL_AREA } from "../config";
 
 interface UseElementsHook {
   elements: CanvasElementItem[];
   addImageElement: (pos: Pos) => CanvasElementItem;
   addTextElement: (pos: Pos) => CanvasElementItem;
+  clearElements: () => void;
 }
 
 const useElements = (): UseElementsHook => {
@@ -41,10 +41,13 @@ const useElements = (): UseElementsHook => {
     return textElement;
   };
 
+  const clearElements = () => setElementList([]);
+
   return {
     elements: elementList,
     addImageElement,
     addTextElement,
+    clearElements,
   };
 };
 
