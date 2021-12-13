@@ -39,3 +39,6 @@ firebase-client.ts
 creds
 
 misc
+
+functions/node_modules
+functions/lib
