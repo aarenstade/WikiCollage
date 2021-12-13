@@ -67,41 +67,39 @@ export const imageUrlToBase64Endpoint = async (url: string): Promise<string | nu
   }
 };
 
-// this function will prob be removed, was required to convert images for html2canvas CORS restrictions...
-// but we're bypassing that by downloading images in /api/merge-mural, so this is un-used.
-// export const convertAllHtmlImagesToBase64 = (clone: Document) => {
-//   const pendingImagesPromises = [];
-//   const pendingPromisesData: any[] = [];
+export const convertAllHtmlImagesToBase64 = (clone: Document) => {
+  const pendingImagesPromises = [];
+  const pendingPromisesData: any[] = [];
 
-//   const imageNodes = clone.getElementsByTagName("img");
-//   const images = Array.from(imageNodes).filter((img) => !img.src.startsWith("data:image"));
+  const imageNodes = clone.getElementsByTagName("img");
+  const images = Array.from(imageNodes).filter((img) => !img.src.startsWith("data:image"));
 
-//   for (let i = 0; i < images.length; i += 1) {
-//     // empty promise for each image
-//     const promise = new Promise((resolve, reject) => {
-//       pendingPromisesData.push({
-//         index: i,
-//         resolve,
-//         reject,
-//       });
-//     });
-//     pendingImagesPromises.push(promise);
-//   }
+  for (let i = 0; i < images.length; i += 1) {
+    // empty promise for each image
+    const promise = new Promise((resolve, reject) => {
+      pendingPromisesData.push({
+        index: i,
+        resolve,
+        reject,
+      });
+    });
+    pendingImagesPromises.push(promise);
+  }
 
-//   for (let i = 0; i < images.length; i += 1) {
-//     axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url: images[i].src }, method: "POST" })
-//       .then((response) => {
-//         const data = response.data;
-//         const pending = pendingPromisesData.find((p) => p.index === i);
-//         images[i].src = data;
-//         pending.resolve(data);
-//       })
-//       .catch((e) => {
-//         const pending = pendingPromisesData.find((p) => p.index === i);
-//         images[i].remove();
-//         pending.reject(e);
-//       });
-//   }
+  for (let i = 0; i < images.length; i += 1) {
+    axios({ url: `${BASE_URL}/api/image-to-base64`, data: { url: images[i].src }, method: "POST" })
+      .then((response) => {
+        const data = response.data;
+        const pending = pendingPromisesData.find((p) => p.index === i);
+        images[i].src = data;
+        pending.resolve(data);
+      })
+      .catch((e) => {
+        const pending = pendingPromisesData.find((p) => p.index === i);
+        images[i].remove();
+        pending.reject(e);
+      });
+  }
 
-//   return Promise.all(pendingImagesPromises);
-// };
+  return Promise.all(pendingImagesPromises);
+};
