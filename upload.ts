@@ -1,14 +1,23 @@
 // import html2canvas from "html2canvas";
 import { getDownloadURL } from "@firebase/storage";
-import { STORAGE_REF } from "./client/firebase";
+import { CALL_CLOUD_FUNCTION, STORAGE_REF } from "./client/firebase";
 import { authPostRequest } from "./client/requests";
 import { BASE_URL } from "./config";
 import { AdditionItem, TopicItem } from "./types/mongodb/schemas";
 
-export const embedNewCollage = async (token: string, addition_url: string, collage_url?: string) => {
+export const embedNewCollage = async (
+  additionUrl: string,
+  collageUrl?: string
+): Promise<{ id: string; url: string } | undefined> => {
   try {
-    const res = await authPostRequest(token, `${BASE_URL}/api/merge-collage`, { addition_url, collage_url });
-    if (res && res.data) return await getDownloadURL(STORAGE_REF(res.data));
+    const res = await CALL_CLOUD_FUNCTION("embedCollage", {
+      additionUrl,
+      collageUrl,
+    });
+    if (res.data.success) {
+      const url = await getDownloadURL(STORAGE_REF(res.data));
+      return { url, id: res.data.id };
+    }
   } catch (error) {
     console.error({ error });
   }

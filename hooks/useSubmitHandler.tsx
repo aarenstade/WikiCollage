@@ -1,6 +1,6 @@
+import html2canvas from "html2canvas";
 import { convertAllHtmlImagesToBase64, convertBase64ToBytes, uploadImage } from "../utils/image-utils";
 import { embedNewCollage, insertNewAddition } from "../upload";
-import html2canvas from "html2canvas";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { SelectedElementIdState } from "../data/atoms";
@@ -70,11 +70,11 @@ const useSubmitHandler = (): SubmitHandlerHook => {
           console.log({ additionsUrl });
 
           if (additionsUrl) {
-            const newCollage = await embedNewCollage(auth.firebase.token, additionsUrl, collage.addition?.url);
+            const newCollage = await embedNewCollage(additionsUrl, collage.addition?.url);
             if (newCollage) {
               let newAddition: AdditionItem = {
                 topic_id: collage.topic?._id,
-                url: newCollage,
+                url: newCollage.url,
                 name: form.name,
                 email: form.email,
                 description: form.description,
@@ -83,7 +83,7 @@ const useSubmitHandler = (): SubmitHandlerHook => {
               };
               const addition = await insertNewAddition(auth.firebase.token, newAddition, collage.topic);
               if (addition._id) {
-                setLiveImage(newCollage);
+                setLiveImage(newCollage.url);
                 setSuccess(true);
                 setMessage("Success!");
               }
