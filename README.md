@@ -2,6 +2,7 @@
 
 WikiCollage is a simple graphics (collage) editor with an open access contribution model.
 Every topic has a unique 5000 x 5000 pixel image which anyone can contribute to.
+(https://wikicollage.org)[https://wikicollage.org]
 
 ## Current functionality:
 
