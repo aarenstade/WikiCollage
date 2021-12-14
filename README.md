@@ -27,3 +27,4 @@ Making image collages for every topic, idea, or word, each with a unique 5000 x 
 # Other stuff to do
 
 - General code organization and better commenting.
+- More effective devops tools.
