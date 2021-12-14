@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useState, VFC } from "react";
-import { HOME_TOPIC_NAME } from "../../config";
-import styles from "./SearchBar.module.css";
-
-import { IconButton } from "../Buttons";
+import { useEffect, useState, VFC } from "react";
+import { BASE_URL, HOME_TOPIC_NAME } from "../../config";
 import SearchIcon from "../icons/search.svg";
+import QueryTextField from "../QueryTextField";
+import { IconButton } from "../Buttons";
+import styles from "./SearchBar.module.css";
 
 interface Props {
   topic?: string;
@@ -13,11 +13,6 @@ interface Props {
 
 const SearchBar: VFC<Props> = ({ topic, loading, onSearch }) => {
   const [newTopic, setTopic] = useState(topic);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setTopic(e.target.value);
-  };
 
   useEffect(() => {
     if (!topic || topic === HOME_TOPIC_NAME) {
@@ -29,13 +24,13 @@ const SearchBar: VFC<Props> = ({ topic, loading, onSearch }) => {
 
   return (
     <div className={styles.searchBar}>
-      <input
+      <QueryTextField
         value={newTopic}
-        type="text"
-        name="topic"
-        placeholder="Search"
-        onChange={handleInputChange}
-        onKeyDown={(e) => e.key === "Enter" && newTopic != topic && onSearch(newTopic || "")}
+        onChange={(v) => setTopic(v)}
+        onSelect={(v) => onSearch(v)}
+        endpointUrl={`${BASE_URL}/api/db/topics`}
+        paramName="search"
+        selectOnEnter
       />
       {!loading && (
         <IconButton icon={<SearchIcon />} onClick={() => newTopic && newTopic != topic && onSearch(newTopic)} />
