@@ -4,7 +4,7 @@ import { CollageState } from "../data/atoms";
 import { fetchAdditions, fetchTopic } from "../services/fetch";
 import { Collage } from "../types/collage";
 import { AdditionItem, TopicItem } from "../types/mongodb/schemas";
-import { isTopicOpen } from "../utils/utils";
+import { encodeTopicUrlParam, isTopicOpen } from "../utils/utils";
 import useAuth from "./useAuth";
 
 interface UseCollageHook extends Collage {
@@ -48,7 +48,12 @@ const useCollage = (topicString?: string, page?: number, limit?: number): UseCol
         .then((res) => {
           const topic: TopicItem = res.topic
             ? { ...res.topic, topic: topicString }
-            : { topic: topicString, created_at: new Date(), updated_at: new Date() };
+            : {
+                topic: topicString.toLowerCase(),
+                slug: encodeTopicUrlParam(topicString),
+                created_at: new Date(),
+                updated_at: new Date(),
+              };
           const { isOpen } = isTopicOpen(res.addition?.timestamp && new Date(res.addition.timestamp).getTime());
           setCollage({ topic, addition: res.addition, open: isOpen, loading: false });
         })

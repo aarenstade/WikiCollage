@@ -3,6 +3,7 @@ import { now, ObjectId, Schema } from "mongoose";
 export interface TopicItem {
   _id?: ObjectId;
   topic: string;
+  slug: string;
   description?: string;
   wikipedia_url?: string;
   locked?: boolean;
@@ -23,6 +24,7 @@ export interface AdditionItem {
 
 export const TopicSchema = new Schema({
   topic: { type: String, required: true },
+  slug: { type: String, required: true },
   description: { type: String, required: false },
   wikipedia_url: { type: String, required: false },
   locked: { type: Boolean, required: false },

@@ -38,6 +38,7 @@ button {
 
 input[type="text"] {
   width: 90%;
+  height: 25px;
   padding: 8px;
   margin: 0;
   outline: none;

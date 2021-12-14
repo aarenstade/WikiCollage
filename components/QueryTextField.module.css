@@ -1,0 +1,35 @@
+.queryTextField {
+  width: 250px;
+  height: fit-content;
+  margin-top: 2px;
+}
+
+.queryInputUlStack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.queryResultUl {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  width: 90%;
+}
+
+.queryResultUl li {
+  margin: 0;
+  padding: 4px;
+  font-size: 12px;
+  border-bottom: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  transition: all 150ms;
+}
+
+.queryResultUl li:hover {
+  cursor: pointer;
+  font-size: 14px;
+}
