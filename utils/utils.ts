@@ -36,8 +36,11 @@ export const matchUrl = (val: string) => {
 
 export const encodeTopicUrlParam = (topic: string) => topic.toLowerCase().split(" ").join("-");
 export const decodeTopicUrlParam = (topic: string) => topic.split("-").join(" ");
-export const capitalizeWords = (words: string) =>
-  words
-    .split(" ")
-    .map((word) => `${word.split("")[0].toUpperCase()}${word.split("").slice(1, word.length - 1)} `)
-    .join(" ");
+
+export const capitalizeWords = (value: string) => {
+  const words = value.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+  }
+  return words.join(" ");
+};
