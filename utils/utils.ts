@@ -33,3 +33,11 @@ export const matchUrl = (val: string) => {
   if (val.startsWith("data:image")) return true;
   return false;
 };
+
+export const encodeTopicUrlParam = (topic: string) => topic.toLowerCase().split(" ").join("-");
+export const decodeTopicUrlParam = (topic: string) => topic.split("-").join(" ");
+export const capitalizeWords = (words: string) =>
+  words
+    .split(" ")
+    .map((word) => `${word.split("")[0].toUpperCase()}${word.split("").slice(1, word.length - 1)} `)
+    .join(" ");
