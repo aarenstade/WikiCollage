@@ -1,0 +1,15 @@
+.queryTextFieldContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.queryTextFieldResults {
+  padding: 0;
+}
+
+.queryTextFieldResults li {
+  list-style-type: none;
+  padding: 0;
+}
