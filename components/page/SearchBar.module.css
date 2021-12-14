@@ -1,9 +1,4 @@
 .searchBar {
   display: flex;
-  margin-left: 20px;
   height: 30px;
-}
-
-.searchBar input {
-  margin-right: 8px;
 }
