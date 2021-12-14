@@ -3,7 +3,7 @@ import { BASE_URL } from "../config";
 
 export const fetchTopic = async (token: string, topicString: string) => {
   try {
-    return await authGetRequest(token, `${BASE_URL}/api/db/topics?topic=${topicString}`);
+    return await authGetRequest(token, `${BASE_URL}/api/db/topic?topic=${topicString}`);
   } catch (error) {
     console.error({ error });
   }
