@@ -13,7 +13,7 @@ const Navbar = () => {
 
   const handleSearch = (topic: string) => {
     collage.setLoading(true);
-    router.push(`${BASE_URL}/t/${topic}`);
+    router.push(`/t/${topic}`);
   };
 
   return (
