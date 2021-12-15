@@ -10,7 +10,7 @@ export const embedNewCollage = async (
   collageUrl?: string
 ): Promise<{ id: string; url: string } | undefined> => {
   try {
-    const res = await CALL_CLOUD_FUNCTION("embedCollage", {
+    const res = await CALL_CLOUD_FUNCTION("mergeCollage", {
       additionUrl,
       collageUrl,
     });
