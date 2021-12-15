@@ -88,6 +88,9 @@ const useSubmitHandler = (): SubmitHandlerHook => {
                 setMessage("Success!");
               }
             } else {
+              setSuccess(false);
+              setMessage("ERROR");
+              alert("An unknown error occoured...");
               console.log("collage not created...");
               // TODO better error handling
             }
