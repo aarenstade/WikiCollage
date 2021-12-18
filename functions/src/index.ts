@@ -11,7 +11,7 @@ admin.initializeApp();
 const storage = admin.storage().bucket(GOOGLE_STORAGE_BUCKET);
 
 exports.mergeCollage = functions
-  .runWith({ memory: "256MB", timeoutSeconds: 120, maxInstances: 5 })
+  .runWith({ memory: "256MB", timeoutSeconds: 120, maxInstances: 8 })
   .https.onCall(async (data: any, context: functions.https.CallableContext) => {
     try {
       if (!context.auth) throw new Error("unauthenticated");
