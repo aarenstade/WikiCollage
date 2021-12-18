@@ -14,7 +14,7 @@ const HelpButton = () => {
           <h4>How to use:</h4>
           <ul>
             <li>Click to create an empty image.</li>
-            <li>Save after changes.</li>
+            <li>Paste URL or upload file.</li>
             <li>Double click to re-edit.</li>
           </ul>
         </HelperDialog>
