@@ -1,6 +1,5 @@
-import html2canvas from "html2canvas";
-import { convertAllHtmlImagesToBase64, convertBase64ToBytes, uploadImage } from "../utils/image-utils";
-import { embedNewCollage, insertNewAddition } from "../upload";
+import { uploadImage } from "../utils/image-utils";
+import { createFullAdditionsImage, insertNewAddition, mergeNewCollage } from "../upload";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { SelectedElementIdState } from "../data/atoms";
@@ -10,15 +9,14 @@ import useAuth from "./useAuth";
 import useCollage from "./useCollage";
 import useElements from "./useElements";
 import useViewControl from "./useViewControl";
-import { MURAL_DIMENSION } from "../config";
-import { v4 } from "uuid";
 import { getDownloadURL } from "firebase/storage";
 import { STORAGE_REF } from "../client/firebase";
+import { v4 } from "uuid";
 
 interface SubmitHandlerHook {
   message: string;
   liveImage: string;
-  success: boolean;
+  success?: boolean;
   validateSubmission: () => boolean;
   handleSubmission: (data: AdditionSubmitFormValues) => Promise<void>;
 }
@@ -30,9 +28,9 @@ const useSubmitHandler = (): SubmitHandlerHook => {
   const view = useViewControl();
   const [_, setSelectedId] = useRecoilState(SelectedElementIdState);
 
-  const [message, setMessage] = useState("");
-  const [liveImage, setLiveImage] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState<string>("");
+  const [liveImage, setLiveImage] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>();
 
   const validateSubmission = (): boolean => {
     if (elements.elements.length > 0) {
@@ -48,57 +46,41 @@ const useSubmitHandler = (): SubmitHandlerHook => {
   const handleSubmission = async (form: AdditionSubmitFormValues) => {
     try {
       if (auth?.firebase?.token) {
-        setMessage("Preparing...");
-        const root = document.getElementById("elements-root");
-        if (root) {
-          setMessage("Handling Images...");
-          const canvas = await html2canvas(root, {
-            backgroundColor: null,
-            scale: 1,
-            width: MURAL_DIMENSION,
-            height: MURAL_DIMENSION,
-            onclone: async (clone) => convertAllHtmlImagesToBase64(clone),
-          });
+        setMessage("Handling Images...");
+        const additionsImage = await createFullAdditionsImage();
+        if (!additionsImage) throw new Error("Failed to compile additions...");
 
-          const base64 = canvas.toDataURL("image/png");
-          const bytes = convertBase64ToBytes(base64);
-          setMessage("Merging Additions...");
+        setMessage("Merging Additions...");
+        const additionUrl = await uploadImage(additionsImage, `/tmp/${v4()}.png`);
+        if (!additionUrl) throw new Error("Additions failed to upload...");
 
-          const path = `/tmp/${v4()}.png`;
-          await uploadImage(bytes, path);
-          const additionsUrl = await getDownloadURL(STORAGE_REF(path));
-          console.log({ additionsUrl });
+        // embed new collage
+        const merge = await mergeNewCollage(additionUrl, collage.addition?.url);
+        if (!merge?.storagePath) throw new Error("Error merging additions...");
 
-          if (additionsUrl) {
-            const newCollage = await embedNewCollage(additionsUrl, collage.addition?.url);
-            if (newCollage) {
-              let newAddition: AdditionItem = {
-                topic_id: collage.topic?._id,
-                url: newCollage.url,
-                name: form.name,
-                email: form.email,
-                description: form.description,
-                address: auth.eth.account || undefined,
-                timestamp: new Date(),
-              };
-              const addition = await insertNewAddition(auth.firebase.token, newAddition, collage.topic);
-              if (addition._id) {
-                setLiveImage(newCollage.url);
-                setSuccess(true);
-                setMessage("Success!");
-              }
-            } else {
-              setSuccess(false);
-              setMessage("ERROR");
-              alert("An unknown error occoured...");
-              console.log("collage not created...");
-              // TODO better error handling
-            }
-          }
-        }
+        setMessage("Finalizing...");
+        const newCollage = await getDownloadURL(STORAGE_REF(merge.storagePath));
+        let newAddition: AdditionItem = {
+          topic_id: collage.topic?._id,
+          url: newCollage,
+          name: form.name,
+          email: form.email,
+          description: form.description,
+          address: auth.eth.account || undefined,
+          timestamp: new Date(),
+        };
+
+        const addition = await insertNewAddition(auth.firebase.token, newAddition, collage.topic);
+        if (!addition._id) throw new Error("Addition failed to insert...");
+
+        setLiveImage(newCollage);
+        setSuccess(true);
+        setMessage("Success!");
       }
     } catch (error) {
+      if (typeof error === "string") setMessage(error);
       console.error({ error });
+      setSuccess(false);
     }
   };
 
