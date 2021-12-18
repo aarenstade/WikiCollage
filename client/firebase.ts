@@ -1,12 +1,7 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {
-  FirebaseStorage,
-  getStorage,
-  ref as stRef,
-  StorageReference,
-} from "firebase/storage";
-import { Functions, getFunctions, httpsCallable } from "firebase/functions";
+import { FirebaseStorage, getStorage, ref as stRef, StorageReference } from "firebase/storage";
+import { Functions, getFunctions, httpsCallable, HttpsCallableOptions } from "firebase/functions";
 let app: FirebaseApp;
 let storage: FirebaseStorage;
 let functions: Functions;
@@ -29,10 +24,9 @@ try {
   console.error({ error });
 }
 
-export const STORAGE_REF = (path: string): StorageReference =>
-  stRef(storage, path);
+export const STORAGE_REF = (path: string): StorageReference => stRef(storage, path);
 
-export const CALL_CLOUD_FUNCTION = async <T>(name: string, data: T) =>
-  await httpsCallable<T, any>(functions, name)(data);
+export const CALL_CLOUD_FUNCTION = async <T>(name: string, data: T, options?: HttpsCallableOptions) =>
+  await httpsCallable<T, any>(functions, name, options)(data);
 
 export const auth = getAuth();
