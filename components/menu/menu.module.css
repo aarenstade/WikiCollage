@@ -8,16 +8,16 @@
   height: 45px;
   color: white;
   background-color: black;
-  border-top: 5px solid red;
 }
 
 .countdownTimer * {
   margin: 0;
 }
 
-.helpButton button {
+.helpButton {
   position: fixed;
   right: 0;
   bottom: 0;
+  z-index: 200;
   margin: 10px;
 }
