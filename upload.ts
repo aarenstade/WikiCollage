@@ -10,10 +10,14 @@ export const embedNewCollage = async (
   collageUrl?: string
 ): Promise<{ id: string; url: string } | undefined> => {
   try {
-    const res = await CALL_CLOUD_FUNCTION("mergeCollage", {
-      additionUrl,
-      collageUrl,
-    });
+    const res = await CALL_CLOUD_FUNCTION(
+      "mergeCollage",
+      {
+        additionUrl,
+        collageUrl,
+      },
+      { timeout: 120 }
+    );
     if (res.data.success) {
       const url = await getDownloadURL(STORAGE_REF(res.data));
       return { url, id: res.data.id };
