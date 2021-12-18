@@ -15,7 +15,7 @@ const MuralLayer: VFC<Props> = ({ mural }) => {
   return (
     <div className={styles.full}>
       {mural ? (
-        <img src={mural} alt="mural" style={{ zIndex: 1, width: `${MURAL_DIMENSION * viewControl.view.scale}px` }} />
+        <img src={mural} alt="collage" style={{ zIndex: 1, width: `${MURAL_DIMENSION * viewControl.view.scale}px` }} />
       ) : (
         <div
           style={{
