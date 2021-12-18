@@ -1,7 +1,7 @@
 export interface SubmissionStatus {
   ready: boolean;
   processing: boolean;
-  success: boolean;
+  success?: boolean;
   message?: string;
   image?: string;
 }

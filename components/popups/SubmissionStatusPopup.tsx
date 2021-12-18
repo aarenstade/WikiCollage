@@ -15,7 +15,7 @@ interface Props {
 const SubmissionStatusPopup: VFC<Props> = ({ status, topic }) => {
   const router = useRouter();
   const elements = useElements();
-  if (status.success) {
+  if (status.success === true) {
     return (
       <Popup noExit onToggle={() => null}>
         <h3 style={{ fontSize: "50px", margin: "0" }}>Thank You</h3>
@@ -29,6 +29,23 @@ const SubmissionStatusPopup: VFC<Props> = ({ status, topic }) => {
           }}
         />
         {/* TODO share links */}
+      </Popup>
+    );
+  }
+
+  if (status.success === false) {
+    return (
+      <Popup noExit onToggle={() => null}>
+        <h3 style={{ fontSize: "50px", margin: "0" }}>Uh oh.</h3>
+        <p>An error occured...</p>
+        {status.message && <p>{status.message}</p>}
+        <BigButton
+          text="Done"
+          onClick={() => {
+            elements.clearElements();
+            router.push("/");
+          }}
+        />
       </Popup>
     );
   }
@@ -51,7 +68,6 @@ const SubmissionStatusPopup: VFC<Props> = ({ status, topic }) => {
           ) : (
             //   TODO cool loading icon
             <LoadingIcon />
-            // <div style={{ backgroundColor: "lightgray", width: "300px", height: "300px" }} />
           )}
         </div>
       )}
