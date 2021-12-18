@@ -26,7 +26,7 @@ try {
 
 export const STORAGE_REF = (path: string): StorageReference => stRef(storage, path);
 
-export const CALL_CLOUD_FUNCTION = async <T>(name: string, data: T, options?: HttpsCallableOptions) =>
-  await httpsCallable<T, any>(functions, name, options)(data);
+export const CALL_CLOUD_FUNCTION = <T>(name: string, data: T, options?: HttpsCallableOptions) =>
+  httpsCallable<T, any>(functions, name, options)(data);
 
 export const auth = getAuth();
