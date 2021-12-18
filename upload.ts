@@ -19,7 +19,7 @@ export const embedNewCollage = async (
       { timeout: 120 }
     );
     if (res.data.success) {
-      const url = await getDownloadURL(STORAGE_REF(res.data));
+      const url = await getDownloadURL(STORAGE_REF(res.data.storagePath));
       return { url, id: res.data.id };
     }
   } catch (error) {
